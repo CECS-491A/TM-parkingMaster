@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Services", "ParkingMaster.Services\ParkingMaster.Services.csproj", "{5543F43B-7227-47B8-84C6-04DEEA35406F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Services.Tests", "ParkingMaster.Services.Tests\ParkingMaster.Services.Tests.csproj", "{4D259135-6E6E-4346-A0E2-46ED3DDBDF93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Manager", "ParkingMaster.Manager\ParkingMaster.Manager.csproj", "{050D49A7-1D2A-45EA-992D-BBBBCBCC0AFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Manager.Tests", "ParkingMaster.Manager.Tests\ParkingMaster.Manager.Tests.csproj", "{727D154D-9DFB-44F6-8269-53E43EC5B6AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.DataAccess", "ParkingMaster.DataAccess\ParkingMaster.DataAccess.csproj", "{D2C4413B-8029-4148-AF13-FCC74963BF33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.DataAccess.Tests", "ParkingMaster.DataAccess.Tests\ParkingMaster.DataAccess.Tests.csproj", "{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5543F43B-7227-47B8-84C6-04DEEA35406F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5543F43B-7227-47B8-84C6-04DEEA35406F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5543F43B-7227-47B8-84C6-04DEEA35406F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5543F43B-7227-47B8-84C6-04DEEA35406F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D259135-6E6E-4346-A0E2-46ED3DDBDF93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D259135-6E6E-4346-A0E2-46ED3DDBDF93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D259135-6E6E-4346-A0E2-46ED3DDBDF93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D259135-6E6E-4346-A0E2-46ED3DDBDF93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{050D49A7-1D2A-45EA-992D-BBBBCBCC0AFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{050D49A7-1D2A-45EA-992D-BBBBCBCC0AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{050D49A7-1D2A-45EA-992D-BBBBCBCC0AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{050D49A7-1D2A-45EA-992D-BBBBCBCC0AFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{727D154D-9DFB-44F6-8269-53E43EC5B6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{727D154D-9DFB-44F6-8269-53E43EC5B6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{727D154D-9DFB-44F6-8269-53E43EC5B6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{727D154D-9DFB-44F6-8269-53E43EC5B6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2C4413B-8029-4148-AF13-FCC74963BF33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C4413B-8029-4148-AF13-FCC74963BF33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C4413B-8029-4148-AF13-FCC74963BF33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C4413B-8029-4148-AF13-FCC74963BF33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CB8AD1C7-FD30-47A7-859E-495D0488EA51}
+	EndGlobalSection
+EndGlobal
