@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ParkingMaster.DataAccess.Models
 {
     // Just providing null values, probably going to delete this later
-    class BaseDTO
+    public class BaseDTO
     {
         public static string Email_NullValue = null;
         public static string Password_NullValue = null;
