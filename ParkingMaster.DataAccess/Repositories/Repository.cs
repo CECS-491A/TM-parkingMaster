@@ -39,9 +39,9 @@ namespace ParkingMaster.DataAccess.Repositories
             context.SaveChanges();
         }
 
-        public T GetById(int id)
+        public T GetByEmail(string email)
         {
-            return dbset.Find(id);
+            return dbset.Find(email);
         }
 
         // ???

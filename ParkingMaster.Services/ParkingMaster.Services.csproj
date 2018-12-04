@@ -58,6 +58,12 @@
       <DependentUpon>App.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ParkingMaster.DataAccess\ParkingMaster.DataAccess.csproj">
+      <Project>{d2c4413b-8029-4148-af13-fcc74963bf33}</Project>
+      <Name>ParkingMaster.DataAccess</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

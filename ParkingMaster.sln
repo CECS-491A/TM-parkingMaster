@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Services", "ParkingMaster.Services\ParkingMaster.Services.csproj", "{5543F43B-7227-47B8-84C6-04DEEA35406F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D2C4413B-8029-4148-AF13-FCC74963BF33} = {D2C4413B-8029-4148-AF13-FCC74963BF33}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Services.Tests", "ParkingMaster.Services.Tests\ParkingMaster.Services.Tests.csproj", "{4D259135-6E6E-4346-A0E2-46ED3DDBDF93}"
 EndProject
