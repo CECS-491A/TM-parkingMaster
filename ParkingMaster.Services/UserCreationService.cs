@@ -15,7 +15,7 @@ namespace ParkingMaster.Services
     /// </summary>
     public class UserCreationService
     {
-        public Boolean UserCreationService(object o)
+        public Boolean UserCreation(object o)
         {
             var objlist = new List<object>();
             if (o != null) // check object is null

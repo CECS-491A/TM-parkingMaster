@@ -9,25 +9,10 @@ namespace ParkingMaster.Services.Tests
     public class UserCreationUnitTests
     {
         [TestMethod]
-        public void UserCreation_NullObjectInput_Fail()
-        {
-            //Arrange
-            var user = null;
-            var expected = false;
-            var actual = false;
-            //Act
-            UserCreationService u = new UserCreationService();
-            actual = u.UserCreationService(user);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
         public void UserCreation_ValidInput_Pass()
         {
             //Arrange
-            var user = new UserDTO
+            UserDTO user = new UserDTO
             {
                 Email = "ddd",
                 Password = "123",
@@ -40,11 +25,27 @@ namespace ParkingMaster.Services.Tests
             var actual = false;
 
             //Act
-            actual = actual = u.UserCreationService(user);
+            UserCreationService u = new UserCreationService();
+            actual = u.UserCreation(user);
 
             //Assert
             Assert.AreEqual(expected, actual);
-
         }
+
+        [TestMethod]
+        public void UserCreation_NullObjectInput_Fail()
+        {
+            //Arrange
+            object user = null;
+            var expected = false;
+            var actual = false;
+            //Act
+            UserCreationService u = new UserCreationService();
+            actual = u.UserCreation(user);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
     }
 }

@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,6 +53,10 @@
     <ProjectReference Include="..\ParkingMaster.DataAccess\ParkingMaster.DataAccess.csproj">
       <Project>{d2c4413b-8029-4148-af13-fcc74963bf33}</Project>
       <Name>ParkingMaster.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ParkingMaster.Services\ParkingMaster.Services.csproj">
+      <Project>{5543f43b-7227-47b8-84c6-04deea35406f}</Project>
+      <Name>ParkingMaster.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,7 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Services.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.Manager", "ParkingMaster.Manager\ParkingMaster.Manager.csproj", "{050D49A7-1D2A-45EA-992D-BBBBCBCC0AFA}"
 	ProjectSection(ProjectDependencies) = postProject
-		{D2C4413B-8029-4148-AF13-FCC74963BF33} = {D2C4413B-8029-4148-AF13-FCC74963BF33}
 		{5543F43B-7227-47B8-84C6-04DEEA35406F} = {5543F43B-7227-47B8-84C6-04DEEA35406F}
 	EndProjectSection
 EndProject
