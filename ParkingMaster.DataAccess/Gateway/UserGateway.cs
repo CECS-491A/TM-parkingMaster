@@ -1,27 +1,35 @@
-\\Gateway to communicate with UserContext
+using ParkingMaster.Models;
+namespace ParkingMaster.DataAccess
+{
+    /// methods to communicate with UserContext
+    public class UserGateway
+    {
+        // Open the User context
+        UserContext context = new UserContext();
 
-
-
- public DTO<SomeAccount> GetUserByEmail(string email)
+        //get a user by email
+        public ResponseDto<UserAccount> GetUserByEmail(string email)
         {
             try
             {
-                var SomeAccount = (from account in context.SomeAccount
-                                   where account.email == email
+                var someUser = (from account in context.UserAccounts
+                                   where account.Username == email
                                    select account).FirstOrDefault();
 
-                // Return a DTO with UserAccount model 
-                return new DTO<SomeAccount>()
+                // Return a ResponseDto with a UserAccount model
+                return new ResponseDto<UserAccount>()
                 {
-                    Data = SomeAccount
+                    Data = userAccount
                 };
             }
             catch (Exception)
             {
-                return new DTO<SomeAccount>()
+                return new ResponseDto<UserAccount>()
                 {
-                    Data = new SomeAccount(email),
-                    //Error = idk if we got any error message but we could put one here
+                    Data = new UserAccount(email),
+                    //Error = GeneralErrorMessages.GENERAL_ERROR
                 };
             }
+        }
+    }
 }
