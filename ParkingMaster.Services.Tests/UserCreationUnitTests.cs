@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParkingMaster.Services;
 using ParkingMaster.DataAccess.Models;
+using ParkingMaster.DataAccess.Repositories;
 
 namespace ParkingMaster.Services.Tests
 {
@@ -12,9 +13,11 @@ namespace ParkingMaster.Services.Tests
         public void UserCreation_ValidInput_Pass()
         {
             //Arrange
-            UserDTO user = new UserDTO
+            UserRepository repository = new UserRepository();
+            UserCreationService service = new UserCreationService(repository);
+            User user = new User
             {
-                Email = "ddd",
+                Id = "ddd",
                 Password = "123",
                 DateOfBirth = "11/11/2011",
                 City = "Long Beach",
@@ -25,8 +28,7 @@ namespace ParkingMaster.Services.Tests
             var actual = false;
 
             //Act
-            UserCreationService u = new UserCreationService();
-            actual = u.UserCreation(user);
+            actual = service.UserCreation(user);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -36,12 +38,12 @@ namespace ParkingMaster.Services.Tests
         public void UserCreation_NullObjectInput_Fail()
         {
             //Arrange
-            object user = null;
+            UserCreationService service = new UserCreationService(new UserRepository());
+            User user = null;
             var expected = false;
             var actual = false;
             //Act
-            UserCreationService u = new UserCreationService();
-            actual = u.UserCreation(user);
+            actual = service.UserCreation(user);
 
             //Assert
             Assert.AreEqual(expected, actual);

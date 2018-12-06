@@ -7,7 +7,7 @@ using ParkingMaster.DataAccess.Models;
 
 namespace ParkingMaster.DataAccess.Repositories
 {
-    interface IUserRepository : IRepository<UserDTO>
+    public interface IUserRepository : IRepository<User>
     {
     }
 }
