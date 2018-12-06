@@ -46,8 +46,20 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\EntityClaim.cs" />
+    <Compile Include="Models\Function.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ClaimRepository.cs" />
+    <Compile Include="Repositories\IClaimRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\IUserRepository.cs" />
+    <Compile Include="Repositories\MockClaimRepository.cs" />
+    <Compile Include="Repositories\MockRepository.cs" />
+    <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\UserContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -59,12 +71,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repositories\" />
+    <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
