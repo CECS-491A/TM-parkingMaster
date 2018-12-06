@@ -8,7 +8,7 @@ using ParkingMaster.DataAccess.Models;
 
 namespace ParkingMaster.DataAccess
 {
-    // This is basically our mock database.
+    // This would be our mock database if I could get it to work.
     class UserContext : DbContext
     {
         public DbSet<User> Users { get; set; }

@@ -13,11 +13,10 @@ namespace ParkingMaster.Services.Tests
         public void UserCreation_ValidInput_Pass()
         {
             //Arrange
-            UserRepository repository = new UserRepository();
-            UserCreationService service = new UserCreationService(repository);
+            UserCreationService service = new UserCreationService(new MockRepository());
             User user = new User
             {
-                Id = "ddd",
+                Email = "ddd",
                 Password = "123",
                 DateOfBirth = "11/11/2011",
                 City = "Long Beach",
@@ -38,7 +37,7 @@ namespace ParkingMaster.Services.Tests
         public void UserCreation_NullObjectInput_Fail()
         {
             //Arrange
-            UserCreationService service = new UserCreationService(new UserRepository());
+            UserCreationService service = new UserCreationService(new MockRepository());
             User user = null;
             var expected = false;
             var actual = false;

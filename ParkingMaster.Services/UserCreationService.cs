@@ -19,10 +19,9 @@ namespace ParkingMaster.Services
     /// </summary>
     public class UserCreationService
     {
-        private UserRepository _repository;
+        private IUserRepository _repository;
 
-        // When UserCreationService is instantiated, a UserRepository must have also been instantiated beforehand
-        public UserCreationService(UserRepository repository)
+        public UserCreationService(IUserRepository repository)
         {
             _repository = repository;
         }

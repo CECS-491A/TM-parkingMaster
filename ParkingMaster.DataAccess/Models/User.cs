@@ -11,7 +11,7 @@ namespace ParkingMaster.DataAccess.Models
     public class User
     {
         //[Key]
-        public string Id { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
         public string DateOfBirth { get; set; } // DateTime yyyymmdd
         public string City { get; set; }
@@ -21,7 +21,7 @@ namespace ParkingMaster.DataAccess.Models
         // Constructor with null values
         public User()
         {
-            Id = null;
+            Email = null;
             Password = null;
             DateOfBirth = null;
             City = null;
