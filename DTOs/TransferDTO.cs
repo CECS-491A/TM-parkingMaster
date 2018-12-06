@@ -3,7 +3,7 @@ namespace ParkingMaster.DTOs
    //generic DTO for tranfering
     public class TransferDTO<T>
     {
-        // Automatic Properties
+        // Default Properties
         public T Data { get; set; }
     }
 }
