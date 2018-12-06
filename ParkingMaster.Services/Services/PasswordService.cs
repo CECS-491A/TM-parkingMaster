@@ -6,12 +6,6 @@ namespace ParkingMaster.Services
 {
     public class PasswordService : IPasswordService
     {   
-        public static void Main(string[] args)
-        {
-            PasswordService ps = new PasswordService();
-            Console.WriteLine(ps.CheckIfPasswordBreached("a"));
-            Console.ReadLine();
-        }
 
         /** PWNED PASSWORDS API USES SHA1 HASH **/
         public string Sha1Hash(string pw)
