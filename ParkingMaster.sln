@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.DataAccess", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingMaster.DataAccess.Tests", "ParkingMaster.DataAccess.Tests\ParkingMaster.DataAccess.Tests.csproj", "{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{7AF0C7AE-30E2-4A1F-BE21-73B7FF86DB21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC9EEAFC-46C9-41A4-8804-BF08381EC9FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AF0C7AE-30E2-4A1F-BE21-73B7FF86DB21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AF0C7AE-30E2-4A1F-BE21-73B7FF86DB21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AF0C7AE-30E2-4A1F-BE21-73B7FF86DB21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AF0C7AE-30E2-4A1F-BE21-73B7FF86DB21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
