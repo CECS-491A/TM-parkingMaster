@@ -3,35 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ParkingMaster.DataAccess;
 using ParkingMaster.DataAccess.Repositories;
 using ParkingMaster.DataAccess.Models;
-using System.Reflection;
-
 
 namespace ParkingMaster.Services
 {
-    /// <summary>
-    /// Check nullity of object parameters. 
-    /// Otherwise, return false.
-    /// </summary>
-    public class UserCreationService
+    public class UserConfigurationService
     {
         private IUserRepository _repository;
 
-        public UserCreationService(IUserRepository repository)
+        public UserConfigurationService(IUserRepository repository)
         {
             _repository = repository;
         }
 
-        public Boolean UserCreation(User user)
+        public Boolean UserConfiguration(User user)
         {
 
             if (user != null) // check object is null
             {
                 try
                 {
-                    _repository.Insert(user); // UserRepository.AddUser(user)
+                    _repository.Update(user);
                     return true;
                 }
                 catch (Exception e)

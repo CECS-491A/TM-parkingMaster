@@ -23,11 +23,29 @@ namespace ParkingMaster.DataAccess.Repositories
             {
                 throw new ArgumentNullException("Cannot add null user.");
             }
-            User searchUser = Users.Find(x => x.Email == user.Email);
+            //User searchUser = Users.Find(x => x.Email == user.Email);
             if (!UserExists(user.Email))
             {
                 Users.Add(user);
             }
+            else
+            {
+                throw new ArgumentException("User with this email already exists.");
+            }
+        }
+
+        public Boolean AddUser(User user)
+        {
+            if (user != null)
+            {
+                User searchUser = Users.Find(x => x.Email == user.Email);
+                if (!UserExists(user.Email))
+                {
+                    Users.Add(user);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool UserExists(string email)
@@ -39,7 +57,14 @@ namespace ParkingMaster.DataAccess.Repositories
 
         public void Delete(User user)
         {
-            Users.Remove(user);
+            if (UserExists(user.Email))
+            {
+                Users.Remove(user);
+            }
+            else
+            {
+                throw new ArgumentException("User does not exist.");
+            }
         }
 
         public void Update(User user)

@@ -16,7 +16,7 @@ namespace ParkingMaster.Services.Tests
             UserCreationService service = new UserCreationService(new MockRepository());
             User user = new User
             {
-                Email = "ddd",
+                Email = "coolguy123@gmail.com",
                 Password = "123",
                 DateOfBirth = "11/11/2011",
                 City = "Long Beach",
@@ -46,6 +46,32 @@ namespace ParkingMaster.Services.Tests
 
             //Assert
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserCreation_UserExistsAlready_Fail()
+        {
+            // Arrange
+            UserCreationService service = new UserCreationService(new MockRepository());
+            User user = new User
+            {
+                Email = "coolguy123@gmail.com",
+                Password = "123",
+                DateOfBirth = "11/11/2011",
+                City = "Long Beach",
+                State = "CA",
+                Country = "United States"
+            };
+            service.UserCreation(user);
+            var expected = false;
+            var actual = false;
+
+            //Act
+            actual = service.UserCreation(user);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+
         }
 
     }

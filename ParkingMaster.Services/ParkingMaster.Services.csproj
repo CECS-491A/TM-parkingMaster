@@ -48,7 +48,9 @@
   <ItemGroup>
     <Compile Include="AuthorizationService\AuthorizationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserConfigurationService.cs" />
     <Compile Include="UserCreationService.cs" />
+    <Compile Include="UserDeletionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
