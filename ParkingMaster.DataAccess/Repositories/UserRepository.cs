@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.DataAccess.Models;
+using System.Data.Entity;
 
 namespace ParkingMaster.DataAccess.Repositories
 {
-    /*
-    class UserRepository : Repository<UserDTO>, IUserRepository
+    
+    public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository() : base(new UserDBEntities()) // ... will fix later
+        public UserRepository() : base(new UserContext())
         {
 
         }
-    }*/
+    }
 }

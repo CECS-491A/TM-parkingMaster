@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.Entity;
 
-// Note: Install EntityFramework from the NuGet packages
-
 namespace ParkingMaster.DataAccess.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
@@ -23,7 +21,7 @@ namespace ParkingMaster.DataAccess.Repositories
 
         public void Insert(T entity)
         {
-            context.Entry(entity).State = System.Data.Entity.EntityState.Added; // Something weird is going on here, will fix
+            context.Entry(entity).State = System.Data.Entity.EntityState.Added;
             context.SaveChanges();
         }
 
@@ -42,6 +40,11 @@ namespace ParkingMaster.DataAccess.Repositories
         public T GetByEmail(string email)
         {
             return dbset.Find(email);
+        }
+
+        public IEnumerable<T> GetAll()
+        {
+            return dbset;
         }
 
         // ???
