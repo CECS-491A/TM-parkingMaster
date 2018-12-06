@@ -27,7 +27,7 @@ namespace ParkingMaster.DataAccess
                 return new ResponseDto<UserAccount>()
                 {
                     Data = new UserAccount(email),
-                    //Error = GeneralErrorMessages.GENERAL_ERROR
+                    
                 };
             }
         }
