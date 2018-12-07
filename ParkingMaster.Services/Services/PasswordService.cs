@@ -5,7 +5,7 @@ using System.Text;
 namespace ParkingMaster.Services
 {
     public class PasswordService : IPasswordService
-    {   
+    {
 
         /** PWNED PASSWORDS API USES SHA1 HASH **/
         public string Sha1Hash(string pw)
@@ -14,16 +14,16 @@ namespace ParkingMaster.Services
             SHA1Cng sha = new SHA1Cng();
             temp = sha.ComputeHash(Encoding.UTF8.GetBytes(pw));
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i < temp.Length; i++)
+            for (int i = 0; i < temp.Length; i++)
             {
                 sb.Append(temp[i].ToString("x2")); // X2 formats each char into two hex characters
             }
-            
+
             return sb.ToString();
         }
 
         /** Rfc2898 key derive for securing stored passwords **/
-        public string HashPassword(string pw, byte[] salt)
+        public string RfcHashPassword(string pw, byte[] salt)
         {
             using (Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(pw, salt))
             {
@@ -38,7 +38,7 @@ namespace ParkingMaster.Services
         public byte[] GetSalt()
         {
             byte[] salt = new byte[16];
-            using (RNGCryptoServiceProvider random = new RNGCryptoServiceProvider()) 
+            using (RNGCryptoServiceProvider random = new RNGCryptoServiceProvider())
             {
                 random.GetBytes(salt);
             }
@@ -51,14 +51,19 @@ namespace ParkingMaster.Services
             string prefix = hashedPW.Substring(0, 5);
             string suffix = hashedPW.Substring(5);
             var hashResults = new PwnedPasswords().GetHashListByPrefix(prefix);
+
+            if (hashResults.Length == 0) // Handles the possibility of an empty array being returned into hashResults
+            {
+                return -1;
+            }
             foreach (string s in hashResults)
             {
                 var pair = s.Split(':');
-                if(pair[0].Equals(suffix, StringComparison.InvariantCultureIgnoreCase))
+                if (pair[0].Equals(suffix, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return Int32.Parse(pair[1]);
                 }
-                    
+
             }
             return 0;
         }
