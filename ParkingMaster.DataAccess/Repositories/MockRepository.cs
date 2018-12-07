@@ -69,7 +69,14 @@ namespace ParkingMaster.DataAccess.Repositories
 
         public void Update(User user)
         {
-            // make changes to entity
+            if (UserExists(user.Email))
+            {
+                //
+            }
+            else
+            {
+                throw new ArgumentException("User does not exist.");
+            }
         }
 
         public User GetByEmail(string email)

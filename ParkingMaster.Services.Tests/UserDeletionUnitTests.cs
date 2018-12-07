@@ -61,11 +61,60 @@ namespace ParkingMaster.Services.Tests
         #endregion
 
         [TestMethod]
-        public void TestMethod1()
+        public void UserDeletion_UserExists_Pass()
         {
-            //
-            // TODO: Add test logic here
-            //
+            // Arrange
+            MockRepository mock = new MockRepository();
+            UserCreationService creationService = new UserCreationService(mock);
+            User user = new User
+            {
+                Email = "coolguy123@gmail.com",
+                Password = "123",
+                DateOfBirth = "11/11/2011",
+                City = "Long Beach",
+                State = "CA",
+                Country = "United States"
+            };
+            creationService.UserCreation(user);
+            var expected = true;
+            var actual = false;
+
+            // Act
+            UserDeletionService deletionService = new UserDeletionService(mock);
+            deletionService.UserDeletion(user);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserDeletion_NullObjectInput_Fail()
+        {
+            //Arrange
+            UserDeletionService service = new UserDeletionService(new MockRepository());
+            User user = null;
+            var expected = false;
+            var actual = false;
+            //Act
+            actual = service.UserDeletion(user);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserDeletion_UserDNE_Fail()
+        {
+            //Arrange
+            UserDeletionService service = new UserDeletionService(new MockRepository());
+            User user = null;
+            var expected = false;
+            var actual = false;
+            //Act
+            actual = service.UserDeletion(user);
+
+            //Assert
+            Assert.AreEqual(expected, actual);
         }
     }
 }

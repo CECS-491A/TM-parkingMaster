@@ -62,12 +62,13 @@ namespace ParkingMaster.Services.Tests
                 State = "CA",
                 Country = "United States"
             };
+            // add the user once
             service.UserCreation(user);
             var expected = false;
             var actual = false;
 
             //Act
-            actual = service.UserCreation(user);
+            actual = service.UserCreation(user); // add user a second time
 
             //Assert
             Assert.AreEqual(expected, actual);
