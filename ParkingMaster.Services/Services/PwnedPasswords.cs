@@ -12,15 +12,9 @@ namespace ParkingMaster.Services
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(baseUri);
-            var response = client.GetAsync("range/" + prefix).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                return result.Split(new string[] { Environment.NewLine }, StringSplitOptions.None); // splits string response on current environment's newline format
-            }
-
+            var response = client.GetStringAsync("range/" + prefix).Result;
             client.Dispose();
-            return new string[0];
+            return response.Split(new string[] { Environment.NewLine }, StringSplitOptions.None); // splits string response on current environment's newline format
         }
 
     }

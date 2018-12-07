@@ -23,7 +23,7 @@ namespace ParkingMaster.Services
         }
 
         /** Rfc2898 key derive for securing stored passwords **/
-        public string RfcHashPassword(string pw, byte[] salt)
+        public string HashPassword(string pw, byte[] salt)
         {
             using (Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(pw, salt))
             {
@@ -51,11 +51,6 @@ namespace ParkingMaster.Services
             string prefix = hashedPW.Substring(0, 5);
             string suffix = hashedPW.Substring(5);
             var hashResults = new PwnedPasswords().GetHashListByPrefix(prefix);
-
-            if(hashResults.Length == 0) // Handles the possibility of an empty array being returned into hashResults
-            {
-                return -1; 
-            }
             foreach (string s in hashResults)
             {
                 var pair = s.Split(':');
