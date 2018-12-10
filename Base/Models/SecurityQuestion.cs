@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Base
 {
     // properties for security questions
-    [Table("SecurityQuestions")]
+    [Table("SecurityQuestion")]
     public class SecurityQuestion
     {
         // Automatic Properties
