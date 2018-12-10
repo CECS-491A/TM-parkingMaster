@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ParkingMaster.Base
+namespace Base
 {
     // Properties for user account
     //https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/workflows/new-database
