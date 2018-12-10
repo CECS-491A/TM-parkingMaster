@@ -94,8 +94,8 @@ namespace DataAccess
                 {
                     // undo if it doesnt work
                     dbContextTransaction.Rollback();
-                    // Returns a false ResponseDto
-                    return new ResponseDto<bool>()
+                    // TransferDTO is false
+                    return new TransferDTO<bool>()
                     {
                         Data = false,
                        
