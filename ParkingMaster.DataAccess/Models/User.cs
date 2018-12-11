@@ -19,6 +19,7 @@ namespace ParkingMaster.DataAccess.Models
         public string Country { get; set; }
         public string Role { get; set; }
         public Boolean Activated { get; set; }
+        public ICollection<Claim> UserClaims { get; set; }
 
         // Constructor with null values
         public User()
@@ -31,6 +32,7 @@ namespace ParkingMaster.DataAccess.Models
             Country = null;
             Role = null;
             Activated = false;
+            UserClaims = new List<Claim>();
         }
 
     }
