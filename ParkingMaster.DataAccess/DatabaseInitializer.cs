@@ -8,7 +8,7 @@ using ParkingMaster.DataAccess.Models;
 
 namespace ParkingMaster.DataAccess
 {
-    public class DatabaseInitializer : DropCreateDatabaseAlways<DatabaseContext>
+    public class DatabaseInitializer : DropCreateDatabaseAlways<DatabaseContext>//CreateDatabaseIfNotExists<DatabaseContext>
     {
         protected override void Seed(DatabaseContext context)
         {

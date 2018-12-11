@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="DatabaseInitializer.cs" />
+    <Compile Include="Models\Client.cs" />
     <Compile Include="Models\EntityClaim.cs" />
     <Compile Include="Models\Function.cs" />
     <Compile Include="Models\User.cs" />

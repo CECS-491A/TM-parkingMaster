@@ -12,9 +12,10 @@ namespace ParkingMaster.DataAccess
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Claim> Claims { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
         public DatabaseContext() : base("ParkingMaster") {
-            Database.SetInitializer(new DatabaseInitializer());
+            Database.SetInitializer(new DatabaseInitializer()); // currently DropCreateDatabaseAlways for testing!!!
         }
 
     }

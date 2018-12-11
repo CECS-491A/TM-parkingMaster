@@ -11,9 +11,25 @@ namespace ParkingMaster.DataAccess.Repositories
     
     public class UserRepository : Repository<User>, IUserRepository
     {
-        public UserRepository() : base(new UserContext())
+        public UserRepository(DatabaseContext databaseContext) : base(databaseContext)
         {
-
+            context = databaseContext;
+            dbset = context.Set<User>();
         }
+
+        public User GetByEmail(string email)
+        {
+            return dbset.Find(email);
+        }
+
+        public bool UserExists(string email)
+        {
+            if (GetByEmail(email) == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
     }
 }

@@ -44,13 +44,13 @@ namespace ParkingMaster.Security.Authorization
             string user = null;
             userClaims.ForEach(delegate(Claim uClaim)
             {
-                if (uClaim.title == "Client")
+                if (uClaim.Title == "Client")
                 {
-                    client = uClaim.value;
+                    client = uClaim.Value;
                 }
-                if(uClaim.title == "Username")
+                if(uClaim.Title == "Username")
                 {
-                    user = uClaim.value;
+                    user = uClaim.Value;
                 }
             });
 

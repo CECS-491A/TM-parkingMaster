@@ -20,6 +20,7 @@ namespace ParkingMaster.DataAccess.Models
         public string Role { get; set; }
         public Boolean Activated { get; set; }
         public ICollection<Claim> UserClaims { get; set; }
+        public Client UserClient { get; set; }
 
         // Constructor with null values
         public User()
@@ -33,6 +34,7 @@ namespace ParkingMaster.DataAccess.Models
             Role = null;
             Activated = false;
             UserClaims = new List<Claim>();
+            UserClient = null;
         }
 
     }

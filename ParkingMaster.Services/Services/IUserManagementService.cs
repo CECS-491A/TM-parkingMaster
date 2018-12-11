@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ParkingMaster.DataAccess.Models;
+using ParkingMaster.DataAccess.Repositories;
+using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Services.Services
 {
-    interface IUserManagementService
+    public interface IUserManagementService
     {
+        bool CreateUser(User user);
+        bool DeleteUser(User user);
+        bool DeleteUser(string email);
+        bool UpdateUser(User user);
+        User GetUserByEmail(string email);
+        IEnumerable<User> GetAllUsers();
     }
 }

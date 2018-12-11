@@ -13,6 +13,10 @@ namespace ParkingMaster.DataAccess.Repositories
         protected DbContext context;
         protected DbSet<T> dbset;
 
+        //public Repository()
+        //{
+        //}
+
         public Repository(DbContext context)
         {
             this.context = context;
@@ -37,10 +41,10 @@ namespace ParkingMaster.DataAccess.Repositories
             context.SaveChanges();
         }
 
-        public T GetByEmail(string email)
-        {
-            return dbset.Find(email);
-        }
+        //public T GetByEmail(string email)
+        //{
+        //    return dbset.Find(email);
+        //}
 
         public IEnumerable<T> GetAll()
         {

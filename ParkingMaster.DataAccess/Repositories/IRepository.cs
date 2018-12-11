@@ -14,7 +14,7 @@ namespace ParkingMaster.DataAccess.Repositories
 
         void Update(T entity);
 
-        T GetByEmail(string email);
+        //T GetByEmail(string email);
         //T GetById();
 
         IEnumerable<T> GetAll();
