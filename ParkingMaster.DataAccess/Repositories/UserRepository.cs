@@ -31,5 +31,17 @@ namespace ParkingMaster.DataAccess.Repositories
             return true;
         }
 
+        public List<Claim> GetAllUserClaims(string email)
+        {
+            User  user = dbset.Find(email);
+
+            if(user != null)
+            {
+                return user.UserClaims as List<Claim>;
+            }
+
+            return new List<Claim>();
+        }
+
     }
 }

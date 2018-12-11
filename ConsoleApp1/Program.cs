@@ -28,29 +28,33 @@ namespace ConsoleApp1
             //    };
             //}
 
-            DatabaseContext _databaseContext = new DatabaseContext();
-            UserManagementService _userManagementService = new UserManagementService(_databaseContext);
-
-            var user = new User()
+            using (DatabaseContext _databaseContext = new DatabaseContext())
             {
-                Email = "jonnynguyen@gmail.com",
-                Password = "totallyhashedpw",
-                DateOfBirth = "12/25/1996",
-                City = "Carson",
-                State = "CA",
-                Country = "US",
-                Role = "Standard",
-                Activated = false
-            };
-            _userManagementService.CreateUser(user);
+                UserManagementService _userManagementService = new UserManagementService(_databaseContext);
+                var user = new User()
+                {
+                    Email = "jonnynguyen@gmail.com",
+                    Password = "totallyhashedpw",
+                    DateOfBirth = "12/25/1996",
+                    City = "Carson",
+                    State = "CA",
+                    Country = "US",
+                    Role = "Standard",
+                    Activated = false
+                };
+                _userManagementService.CreateUser(user);
 
-            var all = _userManagementService.GetAllUsers();
-            foreach (User thing in all)
-            {
-                Console.WriteLine(thing.Email);
+                var all = _userManagementService.GetAllUsers();
+                foreach (User thing in all)
+                {
+                    Console.WriteLine(thing.Email);
+                }
+
+                Console.ReadKey();
             }
+                
 
-            Console.ReadKey();
+            
 
         }
     }

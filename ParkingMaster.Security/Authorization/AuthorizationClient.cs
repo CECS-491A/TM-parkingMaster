@@ -4,12 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Security.Authorization.Contracts;
+using ParkingMaster.DataAccess;
 using ParkingMaster.DataAccess.Models;
+using ParkingMaster.DataAccess.Repositories;
 
 namespace ParkingMaster.Security.Authorization
 {
     public class AuthorizationClient : IAuthorizationClient
     {
+        private UserRepository _userRepository;
+
+        public AuthorizationClient(DatabaseContext databaseContext)
+        {
+            _userRepository = new UserRepository(databaseContext);
+        }
 
         public Boolean Authorize(List<Claim> userClaims, Claim functionClaim)
         {
@@ -32,9 +40,7 @@ namespace ParkingMaster.Security.Authorization
                 return true;
             }
 
-
-            // TODO: Check if function is disabled
-            //if (!GetIsFunctionActive(functionClaim.value))
+            //if (!_repository.FunctionIsActive(functionClaim.Value))
             //{
             //    return false;
             //}
@@ -42,30 +48,23 @@ namespace ParkingMaster.Security.Authorization
             // Check if user has a client claim
             string client = null;
             string user = null;
-            userClaims.ForEach(delegate(Claim uClaim)
+            userClaims.ForEach(delegate (Claim uClaim)
             {
                 if (uClaim.Title == "Client")
                 {
                     client = uClaim.Value;
                 }
-                if(uClaim.Title == "Username")
+                if (uClaim.Title == "User")
                 {
                     user = uClaim.Value;
                 }
             });
 
-            // Cannot authenticate a user that does not exist
-            if(user == null)
-            {
-                return false;
-            }
-
             // If the user has a client, check if the client has authorization for the function
-            if(client != null)
+            if (client != null)
             {
                 List<Claim> clientClaims = new List<Claim>();
-                // TODO: Read client claims in persistence
-                //clientClaims = getUserClaims(client);
+                clientClaims = _userRepository.GetAllUserClaims(client);
 
                 if (!clientClaims.Contains(functionClaim))
                 {
@@ -73,8 +72,7 @@ namespace ParkingMaster.Security.Authorization
                 }
             }
 
-            // TODO: Read user claims persistence
-            //userClaims = getUserClaims(user);
+            userClaims = _userRepository.GetAllUserClaims(user);
 
             // Check if user has all claims to use the function
             if (userClaims.Contains(functionClaim))

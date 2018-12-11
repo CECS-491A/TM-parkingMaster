@@ -10,6 +10,8 @@ namespace ParkingMaster.Services.Tests
     [TestClass]
     public class UserManagementUnitTests
     {
+        private DatabaseContext _dbContext;
+
         [TestMethod]
         public void UserCreation_ValidEmail_Pass()
         {
@@ -29,7 +31,7 @@ namespace ParkingMaster.Services.Tests
             var expected = true;
             var actual = false;
             //Act
-            //actual = _userManagementService.CreateUser(user);
+            actual = _userManagementService.CreateUser(user);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -38,7 +40,6 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserCreation_UserAlreadyExists_Fail()
         {
-            UserManagementService _userManagementService = new UserManagementService(new DatabaseContext());
             var user = new User
             {
                 Email = "tnguyen@gmail.com",
@@ -52,9 +53,13 @@ namespace ParkingMaster.Services.Tests
             };
             var expected = false;
             var actual = false;
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
 
-            //Act
-            //actual = _userManagementService.CreateUser(user);
+                // Act
+                actual = _userManagementService.CreateUser(user);
+            }
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -63,7 +68,7 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserDeletion_UserExists_Pass()
         {
-            UserManagementService _userManagementService = new UserManagementService(new DatabaseContext());
+            
             var user = new User
             {
                 Email = "tnguyen@gmail.com",
@@ -75,13 +80,17 @@ namespace ParkingMaster.Services.Tests
                 Role = "Standard",
                 Activated = false
             };
-            //_userManagementService.CreateUser(user);
             
             var expected = true;
             var actual = false;
 
-            //Act
-            //actual = _userManagementService.DeleteUser(user);
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+
+                // Act
+                actual = _userManagementService.DeleteUser(user);
+            }
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -90,7 +99,6 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserDeletion_UserDNE_Fail()
         {
-            UserManagementService _userManagementService = new UserManagementService(new DatabaseContext());
             var user = new User
             {
                 Email = "randomemail@gmail.com",
@@ -105,8 +113,12 @@ namespace ParkingMaster.Services.Tests
             var expected = false;
             var actual = false;
 
-            //Act
-            //actual = _userManagementService.DeleteUser(user);
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+
+                actual = _userManagementService.DeleteUser(user);
+            }
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -115,7 +127,6 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserConfiguration_UserExists_Pass()
         {
-            UserManagementService _userManagementService = new UserManagementService(new DatabaseContext());
             var user = new User
             {
                 Email = "tnguyen@gmail.com",
@@ -132,8 +143,12 @@ namespace ParkingMaster.Services.Tests
             var expected = true;
             var actual = false;
 
-            //Act
-            //actual = _userManagementService.UpdateUser(user);
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+
+                actual = _userManagementService.UpdateUser(user);
+            }
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -142,7 +157,6 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserConfiguration_UserDNE_Fail()
         {
-            UserManagementService _userManagementService = new UserManagementService(new DatabaseContext());
             var user = new User
             {
                 Email = "randomemail@gmail.com",
@@ -157,9 +171,12 @@ namespace ParkingMaster.Services.Tests
             var expected = false;
             var actual = false;
 
-            //Act
-            //actual = _userManagementService.UpdateUser(user);
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
 
+                actual = _userManagementService.UpdateUser(user);
+            }
             //Assert
             Assert.AreEqual(expected, actual);
         }

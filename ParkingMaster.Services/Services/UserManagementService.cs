@@ -124,5 +124,10 @@ namespace ParkingMaster.Services.Services
                 throw e;
             }
         }
+
+        public List<Claim> GetAllUserClaims(string email)
+        {
+            return _userRepository.GetAllUserClaims(email);
+        }
     }
 }

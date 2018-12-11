@@ -23,6 +23,14 @@ namespace ParkingMaster.DataAccess
                     State = "CA",
                     Country = "US",
                     Role = "Standard",
+                    UserClaims={
+                        new Claim("User", "pnguyen@gmail.com"),
+                        new Claim("Action", "DisabledAction"),
+                        new Claim("Action", "CreateOtherUser"),
+                        new Claim("Action", "Logout"),
+                        new Claim("Action", "Client2Action"),
+                        new Claim("Client", "client1@yahoo.com")
+                    },
                     Activated = false
                 },
                 new User
@@ -34,6 +42,13 @@ namespace ParkingMaster.DataAccess
                     State = "NJ",
                     Country = "US",
                     Role = "Standard",
+                    UserClaims={
+                        new Claim("User", "plaurent@yahoo.com"),
+                        new Claim("Action", "DisabledAction"),
+                        new Claim("Action", "CreateOtherUser"),
+                        new Claim("Action", "Logout"),
+                        new Claim("Client", "client1@yahoo.com")
+                    },
                     Activated = false
                 },
                 new User
@@ -45,6 +60,12 @@ namespace ParkingMaster.DataAccess
                     State = "NY",
                     Country = "US",
                     Role = "Standard",
+                    UserClaims={
+                        new Claim("User", "tnguyen@gmail.com"),
+                        new Claim("Action", "Logout"),
+                        new Claim("Action", "Client2Action"),
+                        new Claim("Client", "client2@yahoo.com")
+                    },
                     Activated = false
                 }
             };
