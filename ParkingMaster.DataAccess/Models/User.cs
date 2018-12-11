@@ -17,6 +17,8 @@ namespace ParkingMaster.DataAccess.Models
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
+        public string Role { get; set; }
+        public Boolean Activated { get; set; }
 
         // Constructor with null values
         public User()
@@ -27,6 +29,8 @@ namespace ParkingMaster.DataAccess.Models
             City = null;
             State = null;
             Country = null;
+            Role = null;
+            Activated = false;
         }
 
     }

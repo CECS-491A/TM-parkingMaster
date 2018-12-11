@@ -34,10 +34,10 @@ namespace ParkingMaster.Security.Authorization
 
 
             // TODO: Check if function is disabled
-            if (!GetIsFunctionActive(functionClaim.value))
-            {
-                return false;
-            }
+            //if (!GetIsFunctionActive(functionClaim.value))
+            //{
+            //    return false;
+            //}
 
             // Check if user has a client claim
             string client = null;
@@ -65,7 +65,7 @@ namespace ParkingMaster.Security.Authorization
             {
                 List<Claim> clientClaims = new List<Claim>();
                 // TODO: Read client claims in persistence
-                clientClaims = getUserClaims(client);
+                //clientClaims = getUserClaims(client);
 
                 if (!clientClaims.Contains(functionClaim))
                 {
@@ -74,7 +74,7 @@ namespace ParkingMaster.Security.Authorization
             }
 
             // TODO: Read user claims persistence
-            userClaims = getUserClaims(user);
+            //userClaims = getUserClaims(user);
 
             // Check if user has all claims to use the function
             if (userClaims.Contains(functionClaim))

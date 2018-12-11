@@ -8,19 +8,19 @@ namespace ParkingMaster.DataAccess.Models
 {
     public class Claim : IEquatable<Claim>
     {
-        public string title { get; set; }
-        public string value { get; set; }
+        public string Title { get; set; }
+        public string Value { get; set; }
 
         public Claim(string t, string v)
         {
-            title = t;
-            value = v;
+            Title = t;
+            Value = v;
         }
 
         public Claim()
         {
-            title = "DEFAULT";
-            value = "DEFAULT";
+            Title = "DEFAULT";
+            Value = "DEFAULT";
         }
 
         public Boolean Equals(Claim obj)
@@ -34,9 +34,9 @@ namespace ParkingMaster.DataAccess.Models
 
             if(otherClaim != null)
             {
-                if (this.title.Equals(otherClaim.title))
+                if (this.Title.Equals(otherClaim.Title))
                 {
-                    return this.value.Equals(otherClaim.value);
+                    return this.Value.Equals(otherClaim.Value);
                 };
             }
 

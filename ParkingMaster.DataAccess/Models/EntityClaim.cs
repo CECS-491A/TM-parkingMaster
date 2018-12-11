@@ -26,7 +26,7 @@ namespace ParkingMaster.DataAccess.Models
 
         public override string ToString()
         {
-            return "Owner: " + Owner + " | Claim: " + _Claim.title + " : " + _Claim.value; 
+            return "Owner: " + Owner + " | Claim: " + _Claim.Title + " : " + _Claim.Value; 
         }
 
     }
