@@ -11,7 +11,7 @@ namespace ParkingMaster.DataAccess
     public class DatabaseContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        //public DbSet<Claim> Claims { get; set; }
+        public DbSet<Claim> Claims { get; set; }
 
         public DatabaseContext() : base("ParkingMaster") {
             Database.SetInitializer(new DatabaseInitializer());
