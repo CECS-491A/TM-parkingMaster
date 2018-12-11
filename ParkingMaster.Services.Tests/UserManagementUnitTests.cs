@@ -29,7 +29,7 @@ namespace ParkingMaster.Services.Tests
             var expected = true;
             var actual = false;
             //Act
-            //actual = _userManagementService.CreateUser(user);
+            actual = _userManagementService.CreateUser(user);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -54,7 +54,7 @@ namespace ParkingMaster.Services.Tests
             var actual = false;
 
             //Act
-            //actual = _userManagementService.CreateUser(user);
+            actual = _userManagementService.CreateUser(user);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -133,7 +133,7 @@ namespace ParkingMaster.Services.Tests
             var actual = false;
 
             //Act
-            //actual = _userManagementService.UpdateUser(user);
+            actual = _userManagementService.UpdateUser(user);
 
             //Assert
             Assert.AreEqual(expected, actual);
@@ -158,7 +158,7 @@ namespace ParkingMaster.Services.Tests
             var actual = false;
 
             //Act
-            //actual = _userManagementService.UpdateUser(user);
+            actual = _userManagementService.UpdateUser(user);
 
             //Assert
             Assert.AreEqual(expected, actual);

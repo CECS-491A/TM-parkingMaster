@@ -31,5 +31,19 @@ namespace ParkingMaster.DataAccess.Repositories
             return true;
         }
 
+        public User GetByEmail(User user)
+        {
+            return dbset.Find(user.Email);
+        }
+
+        public bool UserExists(User user)
+        {
+            if (GetByEmail(user.Email) == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
     }
 }

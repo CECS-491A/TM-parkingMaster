@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using ParkingMaster.DataAccess.Models;
 
 namespace ParkingMaster.DataAccess.Models
 {
@@ -11,12 +12,14 @@ namespace ParkingMaster.DataAccess.Models
     {
         [Key]
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Email { get; set; }
+        public ICollection<Claim> ClientClaims { get; set; }
 
         public Client()
         {
             Id = Guid.NewGuid();
-            Name = null;
+            Email = null;
+            ClientClaims = new List<Claim>();
         }
 
     }
