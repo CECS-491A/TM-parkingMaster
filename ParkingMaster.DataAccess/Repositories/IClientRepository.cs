@@ -4,15 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.DataAccess.Models;
-using System.Data.Entity;
 
 namespace ParkingMaster.DataAccess.Repositories
 {
-    public class ClaimRepository : Repository<EntityClaim>, IClaimRepository
+    public interface IClientRepository : IRepository<Client>
     {
-        public ClaimRepository() : base(new UserContext())
-        {
-
-        }
     }
 }
