@@ -3,9 +3,9 @@ using System.Data.Entity;
 namespace ParkingMaster.DataAccess
 {
     //
-    public class IndividualProfileContext : DbContext
+    public class StandardUserContext : DbContext
     {
-        public DbSet<UserProfile> UserProfiles { get; set; }
-        public IndividualProfileContext() : base("ParkingMaster") { }
+        public DbSet<StandardUser> StandardUser { get; set; }
+        public StandardUserContext() : base("ParkingMaster") { }
     }
 }
