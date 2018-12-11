@@ -17,5 +17,6 @@ namespace ParkingMaster.Services.Services
         bool UpdateUser(User user);
         User GetUserByEmail(string email);
         IEnumerable<User> GetAllUsers();
+        void AddUserClaim(User user, Claim claim);
     }
 }

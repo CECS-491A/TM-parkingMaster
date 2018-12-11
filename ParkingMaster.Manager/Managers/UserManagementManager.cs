@@ -12,7 +12,7 @@ namespace ParkingMaster.Manager.Managers
     public class UserManagementManager
     {
         private IUserManagementService _userManagementService;
-        private DatabaseContext _databaseContext;
+        private readonly DatabaseContext _databaseContext;
 
         public UserManagementManager()
         {

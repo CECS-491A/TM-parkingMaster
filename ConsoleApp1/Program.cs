@@ -33,7 +33,7 @@ namespace ConsoleApp1
 
             var user = new User()
             {
-                Email = "jimnguyen@gmail.com",
+                Email = "jonnynguyen@gmail.com",
                 Password = "totallyhashedpw",
                 DateOfBirth = "12/25/1996",
                 City = "Carson",

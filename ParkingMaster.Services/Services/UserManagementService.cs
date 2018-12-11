@@ -110,5 +110,19 @@ namespace ParkingMaster.Services.Services
         {
             return _userRepository.GetAll();
         }
+
+        public void AddUserClaim(User user, Claim claim)
+        {
+            try
+            {
+                user.UserClaims.Add(claim);
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e.ToString());
+                //return false;
+                throw e;
+            }
+        }
     }
 }

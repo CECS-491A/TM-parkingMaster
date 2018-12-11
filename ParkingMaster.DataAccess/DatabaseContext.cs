@@ -15,7 +15,7 @@ namespace ParkingMaster.DataAccess
         public DbSet<Client> Clients { get; set; }
 
         public DatabaseContext() : base("ParkingMaster") {
-            Database.SetInitializer(new DatabaseInitializer()); // currently DropCreateDatabaseAlways for testing!!!
+            //Database.SetInitializer(new DatabaseInitializer()); // currently DropCreateDatabaseAlways for testing!!!
         }
 
     }
