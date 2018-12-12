@@ -28,7 +28,7 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void CheckPassword_InputAsEmptyPassword_Pass()
         {
-            var hashed = pvm.GetHashedPw("");
+            var hashed = pvm.GetHashedPw(" ");
             var result = pvm.CheckPassword(hashed);
             Assert.AreEqual(result, 0);
         }
@@ -38,7 +38,7 @@ namespace ParkingMaster.Services.Tests
         {
 
             var result = pvm.CheckPassword(null);
-            Assert.AreNotEqual(result, 0);
+            Assert.AreEqual(result, -1);
         }
 
         [TestMethod]
