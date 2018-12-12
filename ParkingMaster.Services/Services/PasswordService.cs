@@ -45,27 +45,9 @@ namespace ParkingMaster.Services
             return salt;
         }
 
-        public int CheckIfPasswordBreached(string pw)
+        public string[] GetPwnedPasswords(string prefix)
         {
-            string hashedPW = Sha1Hash(pw);
-            string prefix = hashedPW.Substring(0, 5);
-            string suffix = hashedPW.Substring(5);
-            var hashResults = new PwnedPasswords().GetHashListByPrefix(prefix);
-
-            if (hashResults.Length == 0) // Handles the possibility of an empty array being returned into hashResults
-            {
-                return -1;
-            }
-            foreach (string s in hashResults)
-            {
-                var pair = s.Split(':');
-                if (pair[0].Equals(suffix, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return Int32.Parse(pair[1]);
-                }
-
-            }
-            return 0;
+            return new PwnedPasswords().GetHashListByPrefix(prefix);
         }
     }
 }
