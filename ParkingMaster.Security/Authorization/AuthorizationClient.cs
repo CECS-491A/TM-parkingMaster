@@ -13,10 +13,14 @@ namespace ParkingMaster.Security.Authorization
     public class AuthorizationClient : IAuthorizationClient
     {
         private UserRepository _userRepository;
+        private ClientRepository _clientRepository;
+        private FunctionRepository _functionRepository;
 
         public AuthorizationClient(DatabaseContext databaseContext)
         {
             _userRepository = new UserRepository(databaseContext);
+            _clientRepository = new ClientRepository(databaseContext);
+            _functionRepository = new FunctionRepository(databaseContext);
         }
 
         public Boolean Authorize(List<Claim> userClaims, Claim functionClaim)
@@ -40,10 +44,10 @@ namespace ParkingMaster.Security.Authorization
                 return true;
             }
 
-            //if (!_repository.FunctionIsActive(functionClaim.Value))
-            //{
-            //    return false;
-            //}
+            if (!_functionRepository.FunctionIsActive(functionClaim.Value))
+            {
+                return false;
+            }
 
             // Check if user has a client claim
             string client = null;
@@ -64,7 +68,7 @@ namespace ParkingMaster.Security.Authorization
             if (client != null)
             {
                 List<Claim> clientClaims = new List<Claim>();
-                clientClaims = _userRepository.GetAllUserClaims(client);
+                clientClaims = _clientRepository.GetAllClientClaims(client);
 
                 if (!clientClaims.Contains(functionClaim))
                 {

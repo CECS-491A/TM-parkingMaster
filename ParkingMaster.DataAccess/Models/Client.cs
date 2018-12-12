@@ -10,8 +10,9 @@ namespace ParkingMaster.DataAccess.Models
 {
     public class Client
     {
-        [Key]
+        
         public Guid Id { get; set; }
+        [Key]
         public string Email { get; set; }
         public ICollection<Claim> ClientClaims { get; set; }
 

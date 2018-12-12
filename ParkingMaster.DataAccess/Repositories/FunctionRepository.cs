@@ -26,5 +26,17 @@ namespace ParkingMaster.DataAccess.Repositories
             return dbset.Find(f.Name);
         }
 
+        public Boolean FunctionIsActive(string name)
+        {
+            Function function = dbset.Find(name);
+
+            if (function != null)
+            {
+                return function.Active;
+            }
+
+            return false;
+        }
+
     }
 }

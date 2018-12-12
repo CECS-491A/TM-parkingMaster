@@ -13,12 +13,15 @@ namespace ParkingMaster.DataAccess.Models
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Value { get; set; }
+        public ICollection<Client> Clients { get; set; }
 
         public Claim(string t, string v)
         {
             Title = t;
             Value = v;
             Id = Guid.NewGuid();
+            Clients = new List<Client>();
+
         }
 
         public Claim()
@@ -26,6 +29,7 @@ namespace ParkingMaster.DataAccess.Models
             Title = "DEFAULT";
             Value = "DEFAULT";
             Id = Guid.NewGuid();
+            Clients = new List<Client>();
         }
 
         public Boolean Equals(Claim obj)

@@ -16,7 +16,7 @@ namespace ParkingMaster.DataAccess.Repositories
             dbset = context.Set<Client>();
         }
 
-        public Client GetByName(string email)
+        public Client GetByEmail(string email)
         {
             return dbset.Find(email);
         }
@@ -24,6 +24,18 @@ namespace ParkingMaster.DataAccess.Repositories
         public Client GetByName(Client c)
         {
             return dbset.Find(c.Email);
+        }
+
+        public List<Claim> GetAllClientClaims(string email)
+        {
+            Client client = dbset.Find(email);
+
+            if (client != null)
+            {
+                return client.ClientClaims as List<Claim>;
+            }
+
+            return new List<Claim>();
         }
 
     }

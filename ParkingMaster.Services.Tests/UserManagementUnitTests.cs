@@ -16,7 +16,6 @@ namespace ParkingMaster.Services.Tests
         public void UserCreation_ValidEmail_Pass()
         {
             //Arrange
-            UserManagementService _userManagementService = new UserManagementService(new DatabaseContext());
             var user = new User()
             {
                 Email = "test@gmail.com",
@@ -30,8 +29,13 @@ namespace ParkingMaster.Services.Tests
             };
             var expected = true;
             var actual = false;
-            //Act
-            actual = _userManagementService.CreateUser(user);
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+
+                // Act
+                actual = _userManagementService.CreateUser(user);
+            }
 
             //Assert
             Assert.AreEqual(expected, actual);

@@ -12,7 +12,7 @@ namespace ParkingMaster.DataAccess
     {
         protected override void Seed(DatabaseContext context)
         {
-            IList<User> UserSeed = new List<User>
+            IList<User> userSeed = new List<User>
             {
                 new User
                 {
@@ -64,12 +64,46 @@ namespace ParkingMaster.DataAccess
                         new Claim("User", "tnguyen@gmail.com"),
                         new Claim("Action", "Logout"),
                         new Claim("Action", "Client2Action"),
-                        new Claim("Client", "client2@yahoo.com")
+                        new Claim("Client", "client2@gmail.com")
                     },
                     Activated = false
                 }
             };
-            context.Users.AddRange(UserSeed);
+            context.Users.AddRange(userSeed);
+
+            IList<Function> functionSeed = new List<Function>
+            {
+                new Function("DisableAction", false),
+                new Function("CreateOtherUser", true),
+                new Function("Logout", true),
+                new Function("Client2Action", true)
+            };
+            context.Functions.AddRange(functionSeed);
+
+            IList<Client> clientSeed = new List<Client>
+            {
+                new Client{
+                    Email = "client1@yahoo.com",
+                    ClientClaims = {
+                        new Claim("User", "client1@yahoo.com"),
+                        new Claim("Action", "DisabledAction"),
+                        new Claim("Action", "CreateOtherUser"),
+                        new Claim("Action", "Logout")
+                    }
+                },
+                new Client
+                {
+                    Email = "client2@gmail.com",
+                    ClientClaims = {
+                        new Claim("User", "client2@gmail.com"),
+                        new Claim("Action", "CreateOtherUser"),
+                        new Claim("Action", "Logout"),
+                        new Claim("Action", "Client2Action")
+                    }
+                }
+            };
+            context.Clients.AddRange(clientSeed);
+
             base.Seed(context);
         }
 
