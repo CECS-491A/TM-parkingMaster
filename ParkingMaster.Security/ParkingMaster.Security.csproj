@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationClient.cs" />
     <Compile Include="Authorization\Contracts\IAuthorizationClient.cs" />
+    <Compile Include="Authorization\MockAuthorizationClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

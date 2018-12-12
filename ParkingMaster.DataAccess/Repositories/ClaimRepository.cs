@@ -14,5 +14,15 @@ namespace ParkingMaster.DataAccess.Repositories
         {
 
         }
+
+        public List<Claim> GetUserClaims(string owner)
+        {
+                throw new NotImplementedException();
+        }
+
+        public Boolean FunctionIsActive(string functionName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

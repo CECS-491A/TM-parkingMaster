@@ -9,5 +9,7 @@ namespace ParkingMaster.DataAccess.Repositories
 {
     public interface IClaimRepository : IRepository<EntityClaim>
     {
+        List<Claim> GetUserClaims(string owner);
+        Boolean FunctionIsActive(string function);
     }
 }

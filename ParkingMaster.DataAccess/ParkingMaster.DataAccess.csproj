@@ -62,6 +62,7 @@
     <Compile Include="Repositories\IFunctionRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
+    <Compile Include="Repositories\MockClaimRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\UserContext.cs" />
