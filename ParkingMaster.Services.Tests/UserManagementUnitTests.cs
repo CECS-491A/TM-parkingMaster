@@ -66,6 +66,23 @@ namespace ParkingMaster.Services.Tests
         }
 
         [TestMethod]
+        public void UserCreation_NullInput_Fail()
+        {
+            User user = null;
+            var expected = false;
+            var actual = false;
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+
+                // Act
+                actual = _userManagementService.CreateUser(user);
+            }
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void UserDeletion_UserExists_Pass()
         {
             
@@ -125,6 +142,23 @@ namespace ParkingMaster.Services.Tests
         }
 
         [TestMethod]
+        public void UserDeletion_NullInput_Fail()
+        {
+            User user = null;
+            var expected = false;
+            var actual = false;
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+
+                // Act
+                actual = _userManagementService.DeleteUser(user);
+            }
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void UserConfiguration_UserExists_Pass()
         {
             var user = new User
@@ -175,6 +209,23 @@ namespace ParkingMaster.Services.Tests
             {
                 UserManagementService _userManagementService = new UserManagementService(_dbContext);
 
+                actual = _userManagementService.UpdateUser(user);
+            }
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void UserConfiguration_NullInput_Fail()
+        {
+            User user = null;
+            var expected = false;
+            var actual = false;
+            using (_dbContext = new DatabaseContext())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+
+                // Act
                 actual = _userManagementService.UpdateUser(user);
             }
             //Assert

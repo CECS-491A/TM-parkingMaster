@@ -20,6 +20,10 @@ namespace ParkingMaster.Services.Services
 
         public bool CreateUser(User user)
         {
+            if (user == null)
+            {
+                return false;
+            }
             try
             {
                 if (_userRepository.UserExists(user.Email))
@@ -40,6 +44,10 @@ namespace ParkingMaster.Services.Services
 
         public bool DeleteUser(User user)
         {
+            if (user == null)
+            {
+                return false;
+            }
             try
             {
                 if (!(_userRepository.UserExists(user.Email)))
@@ -61,6 +69,10 @@ namespace ParkingMaster.Services.Services
 
         public bool DeleteUser(string email)
         {
+            if (email == null)
+            {
+                return false;
+            }
             try
             {
                 if (!(_userRepository.UserExists(email)))
@@ -82,6 +94,10 @@ namespace ParkingMaster.Services.Services
 
         public bool UpdateUser(User user)
         {
+            if (user == null)
+            {
+                return false;
+            }
             try
             {
                 if (!(_userRepository.UserExists(user.Email)))
