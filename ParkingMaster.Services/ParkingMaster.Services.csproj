@@ -49,6 +49,7 @@
     <Compile Include="Services\IPasswordService.cs" />
     <Compile Include="Services\IUserManagementService.cs" />
     <Compile Include="Services\PasswordService.cs" />
+    <Compile Include="Services\PasswordValidationManager.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="UserConfigurationService.cs" />
@@ -72,6 +73,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">

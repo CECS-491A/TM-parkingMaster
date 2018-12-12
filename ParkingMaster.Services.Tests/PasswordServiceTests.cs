@@ -1,95 +1,68 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ParkingMaster.Services.Services;
 
 namespace ParkingMaster.Services.Tests
 {
     [TestClass]
     public class PasswordServiceTests
     {
-        PasswordService ps = new PasswordService();
+        PasswordValidationManager pvm = new PasswordValidationManager();
 
         [TestMethod]
-        public void CheckIfPasswordBreached_InputAsBreachedPassword_Pass()
+        public void CheckPassword_InputAsBreachedPassword_Fail()
         {
-            var result = ps.CheckIfPasswordBreached("password");
+            var hashed = pvm.GetHashedPw("password123");
+            var result = pvm.CheckPassword(hashed);
             Assert.AreNotEqual(result, 0);
         }
 
         [TestMethod]
-        public void CheckIfPasswordBreached_InputAsUnbreachedPassword_Pass()
+        public void CheckPassword_InputAsUnbreachedPassword_Pass()
         {
-            var result = ps.CheckIfPasswordBreached("obviouslynotbeenhacked123!");
+            var hashed = pvm.GetHashedPw("obviouslynothacked!haha1233");
+            var result = pvm.CheckPassword(hashed);
             Assert.AreEqual(result, 0);
         }
 
         [TestMethod]
-        public void Sha1Hash_CovertTwoEqualStringsToSHA1Hash_Pass()
+        public void CheckPassword_InputAsEmptyPassword_Pass()
+        {
+            var hashed = pvm.GetHashedPw("");
+            var result = pvm.CheckPassword(hashed);
+            Assert.AreEqual(result, 0);
+        }
+
+        [TestMethod]
+        public void CheckPassword_InputAsNull_Pass()
+        {
+
+            var result = pvm.CheckPassword(null);
+            Assert.AreNotEqual(result, 0);
+        }
+
+        [TestMethod]
+        public void GetHashedPw_CovertTwoEqualStringsToSHA1Hash_Pass()
         {
             var string1 = "test123";
             var string2 = "test123";
 
-            Assert.AreEqual(ps.Sha1Hash(string1), ps.Sha1Hash(string2));
+            Assert.AreEqual(pvm.GetHashedPw(string1), pvm.GetHashedPw(string2));
         }
 
         [TestMethod]
-        public void Sha1Hash_CovertTwoUnequalStringsToSHA1Hash_Pass()
+        public void GetHashedPw_CovertTwoUnequalStringsToSHA1Hash_Pass()
         {
             var string1 = "test123";
             var string2 = "test";
 
-            Assert.AreNotEqual(ps.Sha1Hash(string1), ps.Sha1Hash(string2));
+            Assert.AreNotEqual(pvm.GetHashedPw(string1), pvm.GetHashedPw(string2));
         }
 
         [TestMethod]
-        public void RfcHashPassword_EqualPasswordsEqualSalt_Pass()
+        public void GetHashedPw_InputNullStringReturnsHashOfEmptyString_Pass()
         {
-            var pw1 = "testing123";
-            var pw2 = "testing123";
-            byte[] salt = ps.GetSalt();
-
-            Assert.AreEqual(ps.RfcHashPassword(pw1, salt), ps.RfcHashPassword(pw2, salt));
+            Assert.AreEqual(pvm.GetHashedPw(null), pvm.GetHashedPw(""));
         }
-
-        [TestMethod]
-        public void RfcHashPassword_EqualPasswordsUnequalSalt_Pass()
-        {
-            var pw1 = "testing123";
-            var pw2 = "testing123";
-            byte[] salt1 = ps.GetSalt();
-            byte[] salt2 = ps.GetSalt();
-
-            Assert.AreNotEqual(ps.RfcHashPassword(pw1, salt1), ps.RfcHashPassword(pw2, salt2));
-        }
-
-        [TestMethod]
-        public void RfcHashPassword_UnequalPasswordsUnequalSalt_Pass()
-        {
-            var pw1 = "testtest";
-            var pw2 = "testing123";
-            byte[] salt1 = ps.GetSalt();
-            byte[] salt2 = ps.GetSalt();
-
-            Assert.AreNotEqual(ps.RfcHashPassword(pw1, salt1), ps.RfcHashPassword(pw2, salt2));
-        }
-
-        [TestMethod]
-        public void RfcHashPassword_UnequalPasswordsEqualSalt_Pass()
-        {
-            var pw1 = "testtest";
-            var pw2 = "testing123";
-            byte[] salt = ps.GetSalt();
-
-            Assert.AreNotEqual(ps.RfcHashPassword(pw1, salt), ps.RfcHashPassword(pw2, salt));
-        }
-
-        [TestMethod]
-        public void GetSalt_CompareTwoSaltUnequal_Pass()
-        {
-            byte[] salt1 = ps.GetSalt();
-            byte[] salt2 = ps.GetSalt();
-
-            Assert.AreNotEqual(salt1, salt2);
-        }
-
     }
 }

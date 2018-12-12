@@ -8,7 +8,7 @@ namespace ParkingMaster.Services
         string Sha1Hash(string pw);
         string RfcHashPassword(string pw, byte[] salt);
         byte[] GetSalt();
-        int CheckIfPasswordBreached(string pw);
+        string[] GetPwnedPasswords(string prefix);
         
     }
 }
