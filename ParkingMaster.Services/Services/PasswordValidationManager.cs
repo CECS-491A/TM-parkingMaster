@@ -24,6 +24,10 @@ namespace ParkingMaster.Services.Services
         }
         public int CheckPassword(string hashed)
         {
+            if (string.IsNullOrEmpty(hashed))
+            {
+                return -1;
+            }
             string prefix = CreatePrefix(hashed);
             string suffix = CreateSuffix(hashed);
             var results = ps.GetPwnedPasswords(prefix);

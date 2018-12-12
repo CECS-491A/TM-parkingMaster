@@ -12,7 +12,7 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void CheckPassword_InputAsBreachedPassword_Fail()
         {
-            var hashed = pvm.GetHashedPw("password");
+            var hashed = pvm.GetHashedPw("password123");
             var result = pvm.CheckPassword(hashed);
             Assert.AreNotEqual(result, 0);
         }
@@ -34,6 +34,14 @@ namespace ParkingMaster.Services.Tests
         }
 
         [TestMethod]
+        public void CheckPassword_InputAsNull_Pass()
+        {
+
+            var result = pvm.CheckPassword(null);
+            Assert.AreNotEqual(result, 0);
+        }
+
+        [TestMethod]
         public void GetHashedPw_CovertTwoEqualStringsToSHA1Hash_Pass()
         {
             var string1 = "test123";
@@ -51,6 +59,10 @@ namespace ParkingMaster.Services.Tests
             Assert.AreNotEqual(pvm.GetHashedPw(string1), pvm.GetHashedPw(string2));
         }
 
-
+        [TestMethod]
+        public void GetHashedPw_InputNullStringReturnsHashOfEmptyString_Pass()
+        {
+            Assert.AreEqual(pvm.GetHashedPw(null), pvm.GetHashedPw(""));
+        }
     }
 }

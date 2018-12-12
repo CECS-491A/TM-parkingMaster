@@ -10,6 +10,10 @@ namespace ParkingMaster.Services
         /** PWNED PASSWORDS API USES SHA1 HASH **/
         public string Sha1Hash(string pw)
         {
+            if(pw == null)
+            {
+                return Sha1Hash("");
+            }
             byte[] temp;
             SHA1Cng sha = new SHA1Cng();
             temp = sha.ComputeHash(Encoding.UTF8.GetBytes(pw));
