@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace parkingMaster
 {
-    public class EditEmail
+    public class ParkingMaster.DTOs
     {
        
         [Required]
