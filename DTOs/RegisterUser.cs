@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace parkingMaster.DTO
+namespace parkingMaster.DTOs
 {
     public class RegisterUserDTO
     {
