@@ -1,4 +1,4 @@
-namespace parkingMaster.DataAccess.Models.Interface
+namespace ParkingMaster.DataAccess.Models.Interface
 {
     public interface ISalt
     {
