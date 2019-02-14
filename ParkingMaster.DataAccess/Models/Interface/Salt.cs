@@ -1,6 +1,6 @@
 namespace ParkingMaster.DataAccess.Models.Interface
 {
-    public interface ISalt
+    public interface Salt
     {
         string Salt { get; set; }
     }
