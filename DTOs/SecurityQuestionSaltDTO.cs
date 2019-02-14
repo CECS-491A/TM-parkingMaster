@@ -1,7 +1,7 @@
 namespace parkingMaster.DTOs
 {
    
-    public class SecurityQuestionWithSaltDto
+    public class SecurityQuestionWithSaltDTO
     {
         public string Question;
         public string Answer;
