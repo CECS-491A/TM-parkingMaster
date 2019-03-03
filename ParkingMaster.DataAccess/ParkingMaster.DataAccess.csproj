@@ -46,8 +46,13 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\AuthenticationContext.cs" />
+    <Compile Include="Context\AuthorizationContext.cs" />
+    <Compile Include="Context\UserContext.cs" />
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="DatabaseInitializer.cs" />
+    <Compile Include="Gateways\UserGateway.cs" />
+    <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\EntityClaim.cs" />
     <Compile Include="Models\Function.cs" />
@@ -65,7 +70,6 @@
     <Compile Include="Repositories\MockClaimRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
-    <Compile Include="Repositories\UserContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -92,6 +96,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ParkingMaster.Models\ParkingMaster.Models.csproj">
+      <Project>{7B2BFAEA-088E-4361-BF34-90D9D49BDA50}</Project>
+      <Name>ParkingMaster.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
