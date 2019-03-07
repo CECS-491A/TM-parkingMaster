@@ -10,6 +10,7 @@ using ParkingMaster.DataAccess;
 namespace ParkingMaster.Tests
 {
 	//Test UserGateway
+	//https://docs.microsoft.com/en-us/visualstudio/test/unit-test-basics?view=vs-2017
 	public class UserGatewayTest
 	{
 		[Fact]
