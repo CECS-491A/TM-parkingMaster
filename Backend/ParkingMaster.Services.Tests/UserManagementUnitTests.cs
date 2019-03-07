@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParkingMaster.Services.Services;
-using ParkingMaster.DataAccess.Models;
-using ParkingMaster.DataAccess.Repositories;
 using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Services.Tests
@@ -10,6 +8,7 @@ namespace ParkingMaster.Services.Tests
     [TestClass]
     public class UserManagementUnitTests
     {
+        /*
         private DatabaseContext _dbContext;
 
         [TestMethod]
@@ -235,7 +234,7 @@ namespace ParkingMaster.Services.Tests
             //Assert
             Assert.AreEqual(expected, actual);
         }
-
+        */
 
     }
     

@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.DataAccess;
-using ParkingMaster.DataAccess.Repositories;
-using ParkingMaster.DataAccess.Models;
 using System.Reflection;
 
 
@@ -17,6 +15,7 @@ namespace ParkingMaster.Services
     /// </summary>
     public class UserCreationService
     {
+        /*
         private IUserRepository _repository;
 
         public UserCreationService(IUserRepository repository)
@@ -42,5 +41,6 @@ namespace ParkingMaster.Services
             }
             return false; // object is null
         }
+        */
     }
 }

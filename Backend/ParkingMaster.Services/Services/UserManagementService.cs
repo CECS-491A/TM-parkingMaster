@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ParkingMaster.DataAccess.Repositories;
-using ParkingMaster.DataAccess.Models;
 using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Services.Services
 {
     public class UserManagementService : IUserManagementService
     {
+        /*
         private UserRepository _userRepository;
 
         public UserManagementService(DatabaseContext databaseContext)
@@ -145,5 +144,6 @@ namespace ParkingMaster.Services.Services
         {
             return _userRepository.GetAllUserClaims(email);
         }
+        */
     }
 }

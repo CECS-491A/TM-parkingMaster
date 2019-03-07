@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ParkingMaster.DataAccess.Repositories;
-using ParkingMaster.DataAccess.Models;
 
 namespace ParkingMaster.Services
 {
     public class UserDeletionService
     {
+        /*
         private IUserRepository _repository;
 
         public UserDeletionService(IUserRepository repository)
@@ -35,7 +34,6 @@ namespace ParkingMaster.Services
             }
             return false; // object is null
         }
-
-
+        */
     }
 }

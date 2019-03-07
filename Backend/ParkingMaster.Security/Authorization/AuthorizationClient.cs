@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Security.Authorization.Contracts;
 using ParkingMaster.DataAccess;
-using ParkingMaster.DataAccess.Models;
-using ParkingMaster.DataAccess.Repositories;
 
 namespace ParkingMaster.Security.Authorization
 {
     public class AuthorizationClient : IAuthorizationClient
     {
+        /*
         private UserRepository _userRepository;
         private ClientRepository _clientRepository;
         private FunctionRepository _functionRepository;
@@ -87,6 +86,7 @@ namespace ParkingMaster.Security.Authorization
 
             return false;
         }
+        */
 
     }
 }

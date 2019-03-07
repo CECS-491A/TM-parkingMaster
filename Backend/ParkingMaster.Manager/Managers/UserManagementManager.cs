@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using ParkingMaster.DataAccess.Models;
 using ParkingMaster.DataAccess;
-using ParkingMaster.DataAccess.Repositories;
-using ParkingMaster.Services.Services;
 
 namespace ParkingMaster.Manager.Managers
 {
     public class UserManagementManager
     {
+        /*
         private IUserManagementService _userManagementService;
         private readonly DatabaseContext _databaseContext;
 
@@ -80,6 +78,6 @@ namespace ParkingMaster.Manager.Managers
             return _userManagementService.GetAllUsers();
         }
 
-
+    */
     }
 }

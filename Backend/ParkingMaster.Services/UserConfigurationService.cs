@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ParkingMaster.DataAccess.Repositories;
-using ParkingMaster.DataAccess.Models;
-
 namespace ParkingMaster.Services
 {
     public class UserConfigurationService
     {
+        /*
         private IUserRepository _repository;
 
         public UserConfigurationService(IUserRepository repository)
@@ -35,5 +33,6 @@ namespace ParkingMaster.Services
             }
             return false; // object is null
         }
+        */
     }
 }
