@@ -41,7 +41,7 @@ namespace ParkingMaster.Tests
 			var userGateway = new UserGateway();
 
 			// Act invokes the method under test with the arranged parameters.
-			Action act = () => userGateway.StoreIndividualUser(userAccount, passwordSalt, claims, userProfile, securityQuestions, securityAnswerSalts);
+			Action act = () => userGateway.StoreIndividualUser(userAccount, passwordSalt, claims);
 
 			// Assert verifies that the action of the method under test behaves as expected.
 			act.Should().NotThrow();
