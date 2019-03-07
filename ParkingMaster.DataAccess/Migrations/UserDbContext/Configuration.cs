@@ -65,31 +65,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 					}
 				);
 
-				for (var j = 1 + 3 * (i - 1); j <= 3 + 3 * (i - 1); j++)
-				{
-					// AddorUpdate to SecurityQuestion table
-					context.SecurityQuestions.AddOrUpdate
-					(
-						new SecurityQuestions()
-						{
-							Id = j,
-							UserId = i,
-							//9 q's for now
-							Question = randomizer.Next(1, 9 + 1),
-							Answer = $"answer{j}"
-						}
-					);
-
-					// AddorUpdate to SecurityAnswerSalt table
-					context.SecurityAnswerSalts.AddOrUpdate
-					(
-						new SecurityAnswerSalt()
-						{
-							Id = j,
-							Salt = $"salt{j}"
-						}
-					);
-				}
+				
 				context.SaveChanges();
 
 				/*

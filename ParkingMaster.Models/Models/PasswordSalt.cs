@@ -8,23 +8,24 @@ using System.Threading.Tasks;
 
 namespace ParkingMaster.Models.Models
 {
-	public class PasswordSalt
-	{
-		// Automatic Properties
-		[Key]
-		[ForeignKey("UserAccount")]
-		public int? Id { get; set; }
+    public class PasswordSalt
+    {
+        // Automatic Properties
+        [Key]
+        [ForeignKey("UserAccount")]
+        public int? Id { get; set; }
 
-		public string Salt { get; set; }
+        public string Salt { get; set; }
 
-		// Navigation Property
-		public virtual UserAccount UserAccount { get; set; }
+        // Navigation Property
+        public virtual UserAccount UserAccount { get; set; }
 
-		// Constructors
-		public PasswordSalt() { }
+        // Constructors
+        public PasswordSalt() { }
 
-		public PasswordSalt(string salt)
-		{
-			Salt = salt;
-		}
+        public PasswordSalt(string salt)
+        {
+            Salt = salt;
+        }
+    }
 }

@@ -10,7 +10,11 @@ namespace ParkingMaster.DataAccess.Context
 {
 	public class AuthorizationContext : DbContext
 	{
-		public DbSet<UserClaims> Claims { get; set; }
-		public AuthorizationContext() : base("ParkingMaster") { }
+        public AuthorizationContext()
+        {
+            this.Database.Connection.ConnectionString = "Data Source=localhost;Initial Catalog=ParkingMaster;Integrated Security=True";
+        }
+
+        public DbSet<UserClaims> Claims { get; set; }
 	}
 }

@@ -10,13 +10,14 @@ namespace ParkingMaster.DataAccess.Context
 {
 	public class AuthenticationContext : DbContext
 	{
-		public DbSet<UserAccount> UserAccounts { get; set; }
+        public AuthenticationContext()
+        {
+            this.Database.Connection.ConnectionString = "Data Source=localhost;Initial Catalog=ParkingMaster;Integrated Security=True";
+        }
+
+        public DbSet<UserAccount> UserAccounts { get; set; }
 		public DbSet<PasswordSalt> PasswordSalts { get; set; }
 		public DbSet<AuthenticationToken> AuthenticationTokens { get; set; }
-		public DbSet<SecurityQuestions>SecurityQuestions { get; set; }
-
-
-		public AuthenticationContext() : base("ParkingMaster") { }
 	}
 
 }

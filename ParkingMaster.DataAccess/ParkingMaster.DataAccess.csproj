@@ -52,6 +52,10 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="DatabaseInitializer.cs" />
     <Compile Include="Gateways\UserGateway.cs" />
+    <Compile Include="Migrations\UserDbContext\201903071653536_Initial.cs" />
+    <Compile Include="Migrations\UserDbContext\201903071653536_Initial.Designer.cs">
+      <DependentUpon>201903071653536_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\EntityClaim.cs" />
@@ -102,6 +106,11 @@
       <Project>{7B2BFAEA-088E-4361-BF34-90D9D49BDA50}</Project>
       <Name>ParkingMaster.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\UserDbContext\201903071653536_Initial.resx">
+      <DependentUpon>201903071653536_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -13,18 +13,12 @@ namespace ParkingMaster.Models.DTO
 		[Required]
 		public string Username { get; set; }
 		public string Password { get; set; }
-		public IList<SecurityQuestionDTO> SecurityQuestionDTO { get; set; }
 
 		// Constructors
 		public ResetPasswordDTO() { }
 		public ResetPasswordDTO(string username)
 		{
 			Username = username;
-		}
-		public ResetPasswordDTO(string username, IList<SecurityQuestionDTO> securityQuestionDTO)
-		{
-			Username = username;
-			SecurityQuestionDTO = securityQuestionDTO;
 		}
 		public ResetPasswordDTO(string username, string password)
 		{
