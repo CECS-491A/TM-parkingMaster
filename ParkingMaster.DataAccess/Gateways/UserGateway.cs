@@ -44,7 +44,7 @@ namespace ParkingMaster.DataAccess
 		}
 
 		//Store a user
-		public ResponseDTO<bool> StoreIndividualUser(UserAccount userAccount, PasswordSalt passwordSalt, UserClaims userClaims, IList<SecurityQuestions> securityQuestions, IList<SecurityAnswerSalt> securityAnswerSalts)
+		public ResponseDTO<bool> StoreIndividualUser(UserAccount userAccount, PasswordSalt passwordSalt, UserClaims userClaims)
 		{
 			using (var dbContextTransaction = context.Database.BeginTransaction())
 			{
@@ -60,36 +60,8 @@ namespace ParkingMaster.DataAccess
 								  select account.Id).SingleOrDefault();
 
 					// Set UserId to dependencies
-					passwordSalt.Id = userId;
 					userClaims.Id = userId;
 
-					// Add SecurityQuestions
-					foreach (var securityQuestion in securityQuestions)
-					{
-						securityQuestion.UserId = userId;
-						context.SecurityQuestions.Add(securityQuestion);
-						context.SaveChanges();
-					}
-
-					// Get SecurityQuestions in database
-					var updatedSecurityQuestions = (from question in context.SecurityQuestions
-													where question.UserId == userId
-													select question).ToList();
-
-					// Add SecurityAnswerSalts
-					for (var i = 0; i < securityQuestions.Count; i++)
-					{
-						// Get SecurityQuestionId for each securityAnswerSalt
-						var securityQuestionId = (from query in updatedSecurityQuestions
-												  where query.Question == securityQuestions[i].Question
-												  select query.Id).SingleOrDefault();
-
-						// Set SecurityQuestionId for SecurityAnswerSalt
-						securityAnswerSalts[i].Id = securityQuestionId;
-						// Add SecurityAnswerSalt
-						context.SecurityAnswerSalts.Add(securityAnswerSalts[i]);
-						context.SaveChanges();
-					}
 					// Add PasswordSalt
 					context.PasswordSalts.AddOrUpdate(passwordSalt);
 
@@ -226,40 +198,6 @@ namespace ParkingMaster.DataAccess
 						context.PasswordSalts.Remove(userPasswordSalt);
 					}
 
-					// Security Answer Salt
-					// Queries for the users security answer salt based on user account id and security answer salt user id.
-					var userSecurityAnswerSalt = (from securityAnswerSalt in context.SecurityAnswerSalts
-												  join securityQuestion in context.SecurityQuestions
-												  on securityAnswerSalt.Id equals securityQuestion.Id
-												  where securityQuestion.UserId == userAccount.Id
-												  select securityAnswerSalt);
-
-					// Checks if security answer salt result is null, if not then delete from database.
-					if (userSecurityAnswerSalt != null)
-					{
-						foreach (var answers in userSecurityAnswerSalt)
-						{
-							context.SecurityAnswerSalts.Remove(answers);
-						}
-					}
-
-					// User Security Question
-					// Queries for security question based on user account id.
-					var userSecurityQuestion = (from securityQuestion in context.SecurityQuestions
-												where securityQuestion.UserId == userAccount.Id
-												select securityQuestion).ToList();
-
-					// Checks if security question result is null, if not then delete from database.
-					if (userSecurityQuestion != null)
-					{
-						foreach (var question in userSecurityQuestion)
-						{
-							context.SecurityQuestions.Remove(question);
-						}
-					}
-
-
-
 					// User Claims
 					// Queries for the users claims based on user account id and claims user id.
 					var userClaims = (from claims in context.UserClaims
@@ -327,65 +265,6 @@ namespace ParkingMaster.DataAccess
 
 					};
 				}
-			}
-		}
-
-
-		//View SQ's
-		public ResponseDTO<ICollection<SecurityQuestions>> GetSecurityQuestions(string username)
-		{
-			try
-			{
-				// Get collection of security questions pertaining to a username
-				var securityQuestions = (from account in context.UserAccounts
-										 where account.Username == username
-										 select account.SecurityQuestions).FirstOrDefault();
-
-				return new ResponseDTO<ICollection<SecurityQuestions>>()
-				{
-					Data = securityQuestions
-				};
-			}
-			catch (Exception)
-			{
-				return new ResponseDTO<ICollection<SecurityQuestions>>()
-				{
-					Data = null,
-
-				};
-			}
-		}
-
-		//Get SQ salt
-		public ResponseDTO<IList<SecurityQuestionAndSaltDTO>> GetSecurityQuestionWithSalt(string username)
-		{
-			try
-			{
-				var securityQuestionWithSaltDto = (from account in context.UserAccounts
-												   join question in context.SecurityQuestions
-													   on account.Id equals question.UserId
-												   join salt in context.SecurityAnswerSalts
-													   on question.Id equals salt.Id
-												   where account.Username == username
-												   select new SecurityQuestionAndSaltDTO
-												   {
-													   Question = question.Question,
-													   Answer = question.Answer,
-													   Salt = salt.Salt
-												   }).ToList();
-
-				return new ResponseDTO<IList<SecurityQuestionAndSaltDTO>>()
-				{
-					Data = securityQuestionWithSaltDto
-				};
-			}
-			catch (Exception)
-			{
-				return new ResponseDTO<IList<SecurityQuestionAndSaltDTO>>()
-				{
-					Data = null,
-
-				};
 			}
 		}
 

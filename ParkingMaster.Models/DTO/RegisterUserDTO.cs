@@ -12,9 +12,7 @@ namespace ParkingMaster.Models.DTO
 		// Automatic Properties
 		[Required]
 		public UserAccountDTO UserAccountDTO { get; set; }
-		[Required]
-		public IList<SecurityQuestionDTO> SecurityQuestionDTO{ get; set; }
-		[Required]
-		public UserProfileDTO UserProfileDTO { get; set; }
+		//[Required]
+		//public UserProfileDTO UserProfileDTO { get; set; }
 	}
 }

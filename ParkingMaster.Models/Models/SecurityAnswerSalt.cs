@@ -17,7 +17,5 @@ namespace ParkingMaster.Models.Models
 		public int? Id { get; set; }
 		public string Salt { get; set; }
 
-		// Navigation Properties
-		public virtual SecurityQuestions SecurityQuestions { get; set; }
 	}
 }

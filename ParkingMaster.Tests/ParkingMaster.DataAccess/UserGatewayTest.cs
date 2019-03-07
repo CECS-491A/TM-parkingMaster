@@ -4,16 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Security.Claims;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Tests
 {
 	//Test UserGateway
-	//https://docs.microsoft.com/en-us/visualstudio/test/unit-test-basics?view=vs-2017
+    [TestClass]
 	public class UserGatewayTest
 	{
-		[Fact]
+		[TestMethod]
 		public void Should_StoreUser_When_ValidModelsArePassedIn()
 		{
 			// Arrange : initializes objects and sets the value of the data
@@ -35,39 +35,6 @@ namespace ParkingMaster.Tests
 				{
 					new Claim("ReadIndividualProfile", "True"),
 					new Claim("UpdateIndividualProfile", "True"),
-				}
-			};
-			var securityQuestions = new List<SecurityQuestions()
-			{
-				new SecurityQuestions()
-				{
-					Question = 1,
-					Answer = "answer1",
-				},
-				new SecurityQuestions()
-				{
-					Question = 2,
-					Answer = "answer2",
-				},
-				new SecurityQuestions()
-				{
-					Question = 3,
-					Answer = "answer3",
-				}
-			};
-			var securityAnswerSalts = new List<SecurityAnswerSalt>()
-			{
-				new SecurityAnswerSalt()
-				{
-					Salt = "!Q2w#E4r"
-				},
-				new SecurityAnswerSalt()
-				{
-					Salt = "%T6y&U8i"
-				},
-				new SecurityAnswerSalt()
-				{
-					Salt = "&U8i(O0p"
 				}
 			};
 			

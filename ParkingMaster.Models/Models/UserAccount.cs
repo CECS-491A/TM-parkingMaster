@@ -24,7 +24,6 @@ namespace ParkingMaster.Models.Models
 		// Navigation Properties
 		public virtual PasswordSalt PasswordSalt { get; set; }
 		public virtual AuthenticationToken AuthenticationToken { get; set; }
-		public virtual ICollection<SecurityQuestions> SecurityQuestions { get; set; }
 		public virtual UserClaims UserClaims { get; set; }
 
 		// Constructors
