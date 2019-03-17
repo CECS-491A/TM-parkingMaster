@@ -119,6 +119,15 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             };
             userGateway.StoreIndividualUser(user, claims);
 
+            var functionGateway = new FunctionGateway(context);
+            functionGateway.ResetDatabase();
+
+            functionGateway.StoreFunction(new Function("DisableAction", false));
+            functionGateway.StoreFunction(new Function("CreateOtherUser", true));
+            functionGateway.StoreFunction(new Function("Logout", true));
+            functionGateway.StoreFunction(new Function("Client1Action", true));
+            functionGateway.StoreFunction(new Function("Client2Action", true));
+
         }
-	}
+    }
 }

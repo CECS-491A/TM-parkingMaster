@@ -233,7 +233,7 @@ namespace ParkingMaster.Services.Tests
                 new ClaimDTO("Action", "DisabledAction"),
                 new ClaimDTO("Action", "CreateOtherUser"),
                 new ClaimDTO("Action", "Logout"),
-                new ClaimDTO("Client", "client1@yahoo.com")
+                new ClaimDTO("Parent", "client1@yahoo.com")
             };
             List<ClaimDTO> actual = null;
             using (_userGateway = new UserGateway())

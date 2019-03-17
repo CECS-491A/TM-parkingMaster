@@ -58,6 +58,15 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 .ForeignKey("ParkingMaster.UserAccount", t => t.Id)
                 .Index(t => t.Id);
             
+            CreateTable(
+                "ParkingMaster.Functions",
+                c => new
+                    {
+                        Name = c.String(nullable: false, maxLength: 128),
+                        Active = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Name);
+            
         }
         
         public override void Down()
@@ -69,6 +78,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             DropIndex("ParkingMaster.UserAccount", new[] { "Username" });
             DropIndex("ParkingMaster.UserClaims", new[] { "Id" });
             DropIndex("dbo.Claims", new[] { "UserClaimsId" });
+            DropTable("ParkingMaster.Functions");
             DropTable("dbo.AuthenticationTokens");
             DropTable("ParkingMaster.UserAccount");
             DropTable("ParkingMaster.UserClaims");

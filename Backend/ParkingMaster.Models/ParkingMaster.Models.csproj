@@ -79,6 +79,7 @@
     <Compile Include="DTO\UserAuthenticationDTO.cs" />
     <Compile Include="Models\AuthenticationToken.cs" />
     <Compile Include="Models\Claim.cs" />
+    <Compile Include="Models\Function.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Models\UserClaims.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

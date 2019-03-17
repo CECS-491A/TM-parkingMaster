@@ -3,16 +3,13 @@ using System.Data.Entity;
 
 namespace ParkingMaster.DataAccess
 {
-	public class UserContext : DbContext
-	{
-        public UserContext()
+    public class FunctionContext : DbContext
+    {
+        public FunctionContext()
         {
             this.Database.Connection.ConnectionString = "Data Source=localhost;Initial Catalog=ParkingMaster;Integrated Security=True";
         }
 
-		public DbSet<UserAccount> UserAccounts { get; set; }
-		public DbSet<UserClaims> UserClaims { get; set; }
-        public DbSet<Claim> Claim { get; set; }
         public DbSet<Function> Function { get; set; }
-	}
+    }
 }

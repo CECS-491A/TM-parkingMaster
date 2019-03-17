@@ -46,12 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\AuthenticationContext.cs" />
-    <Compile Include="Context\AuthorizationContext.cs" />
+    <Compile Include="Context\FunctionContext.cs" />
     <Compile Include="Context\UserContext.cs" />
+    <Compile Include="Gateways\FunctionGateway.cs" />
     <Compile Include="Gateways\UserGateway.cs" />
-    <Compile Include="Migrations\UserDbContext\201903170026417_Initial.cs" />
-    <Compile Include="Migrations\UserDbContext\201903170026417_Initial.Designer.cs">
-      <DependentUpon>201903170026417_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\UserDbContext\201903170516359_Initial.cs" />
+    <Compile Include="Migrations\UserDbContext\201903170516359_Initial.Designer.cs">
+      <DependentUpon>201903170516359_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,8 +86,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\UserDbContext\201903170026417_Initial.resx">
-      <DependentUpon>201903170026417_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\UserDbContext\201903170516359_Initial.resx">
+      <DependentUpon>201903170516359_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -222,7 +222,7 @@ namespace ParkingMaster.DataAccess
 		}
 
 
-        //Delete user by username
+        // Returns all User Accounts in the data store
         public ResponseDTO<List<UserAccount>> GetAllUserAccounts()
         {
             ResponseDTO<List<UserAccount>> response = new ResponseDTO<List<UserAccount>>();
@@ -291,6 +291,7 @@ namespace ParkingMaster.DataAccess
             }
 
         }
+
 
 		/// <summary>
 		/// Dispose of the context

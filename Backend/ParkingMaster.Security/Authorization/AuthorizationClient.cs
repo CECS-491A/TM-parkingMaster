@@ -11,12 +11,15 @@ namespace ParkingMaster.Security.Authorization
 {
     public class AuthorizationClient : IAuthorizationClient
     {
-
+        private UserContext userContext;
         private UserGateway userGateway;
+        private FunctionGateway functionGateway;
 
         public AuthorizationClient()
         {
-            userGateway = new UserGateway();
+            userContext = new UserContext();
+            userGateway = new UserGateway(userContext);
+            functionGateway = new FunctionGateway(userContext);
         }
 
         public ResponseDTO<Boolean> Authorize(string username, List<ClaimDTO> functionClaims)
@@ -30,8 +33,13 @@ namespace ParkingMaster.Security.Authorization
                 return response;
             }
 
-            // TODO: Check if function is active
-
+            // Check if function is disabled
+            response = AuthorizeFunction(functionClaims);
+            // If function is disabled, return unauthorized
+            if (!response.Data)
+            {
+                return response;
+            }
 
             // Authorize user
             response = AuthorizeUser(username, functionClaims);
@@ -91,6 +99,32 @@ namespace ParkingMaster.Security.Authorization
 
             // Default to an unauthorized user
             response.Data = false;
+            return response;
+        }
+
+        private ResponseDTO<Boolean> AuthorizeFunction(List<ClaimDTO> functionClaims)
+        {
+            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
+
+            // Find the Function name in the function claims
+            string functionName = "N/A";
+            foreach (ClaimDTO claim in functionClaims)
+            {
+                if (claim.Title == "Action")
+                {
+                    functionName = claim.Value;
+                }
+            }
+
+            if (functionName == "N/A")
+            {
+                response.Data = false;
+                response.Error = "Function Claims did not include an Action claim indicating the name of the function.";
+                return response;
+            }
+
+            // Check if function is active
+            response = functionGateway.IsFunctionActive(functionName);
             return response;
         }
 
