@@ -1,40 +1,42 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParkingMaster.Services.Services;
-using ParkingMaster.DataAccess.Models;
-using ParkingMaster.DataAccess.Repositories;
 using ParkingMaster.DataAccess;
+using ParkingMaster.Models.Models;
+using ParkingMaster.Models.DTO;
+using System.Collections.Generic;
 
 namespace ParkingMaster.Services.Tests
 {
     [TestClass]
     public class UserManagementUnitTests
     {
-        private DatabaseContext _dbContext;
+        
+        private UserGateway _userGateway;
 
         [TestMethod]
         public void UserCreation_ValidEmail_Pass()
         {
             //Arrange
-            var user = new User()
+            var user = new UserAccount()
             {
-                Email = "test@gmail.com",
-                Password = "password",
-                DateOfBirth = "01/01/1970",
-                City = "City",
-                State = "State",
-                Country = "Country",
-                Role = "Role",
-                Activated = false
+                Username = "test@gmail.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
+            };
+            var claims = new List<Claim>()
+            {
+                new Claim("User", "test@gmail.com")
             };
             var expected = true;
             var actual = false;
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
                 // Act
-                actual = _userManagementService.CreateUser(user);
+                actual = _userManagementService.CreateUser(user, claims).Data;
             }
 
             //Assert
@@ -44,25 +46,25 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserCreation_UserAlreadyExists_Fail()
         {
-            var user = new User
+            var user = new UserAccount
             {
-                Email = "tnguyen@gmail.com",
-                Password = "123456",
-                DateOfBirth = "12/25/1950",
-                City = "Albany",
-                State = "NY",
-                Country = "US",
-                Role = "Standard",
-                Activated = false
+                Username = "tnguyen@gmail.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
+            };
+            var claims = new List<Claim>()
+            {
+                new Claim("User", "tnguyen@gmail.com")
             };
             var expected = false;
             var actual = false;
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
                 // Act
-                actual = _userManagementService.CreateUser(user);
+                actual = _userManagementService.CreateUser(user, claims).Data;
             }
 
             //Assert
@@ -72,15 +74,16 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserCreation_NullInput_Fail()
         {
-            User user = null;
+            UserAccount user = null;
+            List<Claim> claims = null;
             var expected = false;
             var actual = false;
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
                 // Act
-                actual = _userManagementService.CreateUser(user);
+                actual = _userManagementService.CreateUser(user, claims).Data;
             }
             //Assert
             Assert.AreEqual(expected, actual);
@@ -90,27 +93,23 @@ namespace ParkingMaster.Services.Tests
         public void UserDeletion_UserExists_Pass()
         {
             
-            var user = new User
+            var user = new UserAccount
             {
-                Email = "tnguyen@gmail.com",
-                Password = "123456",
-                DateOfBirth = "12/25/1950",
-                City = "Albany",
-                State = "NY",
-                Country = "US",
-                Role = "Standard",
-                Activated = false
+                Username = "plaurent@yahoo.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
             };
             
             var expected = true;
             var actual = false;
 
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
                 // Act
-                actual = _userManagementService.DeleteUser(user);
+                actual = _userManagementService.DeleteUser(user).Data;
             }
 
             //Assert
@@ -120,25 +119,21 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserDeletion_UserDNE_Fail()
         {
-            var user = new User
+            var user = new UserAccount
             {
-                Email = "randomemail@gmail.com",
-                Password = "123456",
-                DateOfBirth = "12/25/1950",
-                City = "Albany",
-                State = "NY",
-                Country = "US",
-                Role = "Standard",
-                Activated = false
+                Username = "randomemail@gmail.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
             };
             var expected = false;
             var actual = false;
 
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
-                actual = _userManagementService.DeleteUser(user);
+                actual = _userManagementService.DeleteUser(user).Data;
             }
 
             //Assert
@@ -148,15 +143,15 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserDeletion_NullInput_Fail()
         {
-            User user = null;
+            UserAccount user = null;
             var expected = false;
             var actual = false;
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
                 // Act
-                actual = _userManagementService.DeleteUser(user);
+                actual = _userManagementService.DeleteUser(user).Data;
             }
             //Assert
             Assert.AreEqual(expected, actual);
@@ -165,27 +160,23 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserConfiguration_UserExists_Pass()
         {
-            var user = new User
+            var user = new UserAccount
             {
-                Email = "tnguyen@gmail.com",
-                Password = "123456",
-                DateOfBirth = "12/25/1950",
-                City = "Albany",
-                State = "NY",
-                Country = "US",
-                Role = "Standard",
-                Activated = false
+                Username = "tnguyen@gmail.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
             };
             //_userManagementService.CreateUser(user);
 
             var expected = true;
             var actual = false;
 
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
-                actual = _userManagementService.UpdateUser(user);
+                actual = _userManagementService.UpdateUser(user).Data;
             }
 
             //Assert
@@ -195,25 +186,21 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserConfiguration_UserDNE_Fail()
         {
-            var user = new User
+            var user = new UserAccount
             {
-                Email = "randomemail@gmail.com",
-                Password = "123456",
-                DateOfBirth = "12/25/1950",
-                City = "Albany",
-                State = "NY",
-                Country = "US",
-                Role = "Standard",
-                Activated = false
+                Username = "randomemail@gmail.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
             };
             var expected = false;
             var actual = false;
 
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
-                actual = _userManagementService.UpdateUser(user);
+                actual = _userManagementService.UpdateUser(user).Data;
             }
             //Assert
             Assert.AreEqual(expected, actual);
@@ -222,20 +209,46 @@ namespace ParkingMaster.Services.Tests
         [TestMethod]
         public void UserConfiguration_NullInput_Fail()
         {
-            User user = null;
+            UserAccount user = null;
             var expected = false;
             var actual = false;
-            using (_dbContext = new DatabaseContext())
+            using (_userGateway = new UserGateway())
             {
-                UserManagementService _userManagementService = new UserManagementService(_dbContext);
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
 
                 // Act
-                actual = _userManagementService.UpdateUser(user);
+                actual = _userManagementService.UpdateUser(user).Data;
             }
             //Assert
             Assert.AreEqual(expected, actual);
         }
 
+        [TestMethod]
+        public void GetUserClaims_UserExists_Pass()
+        {
+            string username = "pnguyen@gmail.com";
+            List<ClaimDTO> expected = new List<ClaimDTO>
+            {
+                new ClaimDTO("User", "pnguyen@gmail.com"),
+                new ClaimDTO("Action", "DisabledAction"),
+                new ClaimDTO("Action", "CreateOtherUser"),
+                new ClaimDTO("Action", "Logout"),
+                new ClaimDTO("Parent", "client1@yahoo.com")
+            };
+            List<ClaimDTO> actual = null;
+            using (_userGateway = new UserGateway())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
+
+                // Act
+                actual = _userManagementService.GetAllUserClaims(username).Data;
+            }
+            //Assert
+            foreach(ClaimDTO claim in expected)
+            {
+                CollectionAssert.Contains(actual, claim);
+            }
+        }
 
     }
     

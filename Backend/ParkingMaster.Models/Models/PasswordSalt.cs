@@ -13,8 +13,7 @@ namespace ParkingMaster.Models.Models
         // Automatic Properties
         [Key]
         [ForeignKey("UserAccount")]
-        public int? Id { get; set; }
-
+        public Guid? Id { get; set; }
         public string Salt { get; set; }
 
         // Navigation Property
