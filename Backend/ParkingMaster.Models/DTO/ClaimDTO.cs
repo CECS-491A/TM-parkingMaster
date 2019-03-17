@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ParkingMaster.Models.Models;
 
 namespace ParkingMaster.Models.DTO
 {
@@ -15,6 +16,12 @@ namespace ParkingMaster.Models.DTO
         {
             Title = t;
             Value = v;
+        }
+
+        public ClaimDTO(Claim claim)
+        {
+            Title = claim.Title;
+            Value = claim.Value;
         }
 
         public bool Equals(ClaimDTO obj)

@@ -5,88 +5,94 @@ using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Security.Authorization.Contracts;
 using ParkingMaster.DataAccess;
+using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Security.Authorization
 {
     public class AuthorizationClient : IAuthorizationClient
     {
-        /*
-        private UserRepository _userRepository;
-        private ClientRepository _clientRepository;
-        private FunctionRepository _functionRepository;
 
-        public AuthorizationClient(DatabaseContext databaseContext)
+        private UserGateway userGateway;
+
+        public AuthorizationClient()
         {
-            _userRepository = new UserRepository(databaseContext);
-            _clientRepository = new ClientRepository(databaseContext);
-            _functionRepository = new FunctionRepository(databaseContext);
+            userGateway = new UserGateway();
         }
 
-        public Boolean Authorize(List<Claim> userClaims, Claim functionClaim)
+        public ResponseDTO<Boolean> Authorize(string username, List<ClaimDTO> functionClaims)
         {
-
+            ResponseDTO<Boolean> response = new ResponseDTO<bool>();
             // Check for null inputs
-            if (functionClaim == null || userClaims == null)
+            if (functionClaims == null || username == null)
             {
-                return false;
+                response.Data = false;
+                response.Error = "Input was Null";
+                return response;
             }
 
-            // Check for null claims
-            if (userClaims.Contains(null))
+            // TODO: Check if function is active
+
+
+            // Authorize user
+            response = AuthorizeUser(username, functionClaims);
+
+            return response;
+        }
+
+        private ResponseDTO<Boolean> AuthorizeUser(string username, List<ClaimDTO> functionClaims)
+        {
+            List<ClaimDTO> userClaims;
+            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
+            ResponseDTO<List<ClaimDTO>> claimResponse = userGateway.GetUserClaims(username);
+
+            // If error occured retrieving user claims return unauthorized with error message
+            if(claimResponse == null)
             {
-                return false;
+                response.Data = false;
+                response.Error = "Failed to read claims of user: " + username;
+                return response;
+            }
+            // place user claims in a new object for better code readability
+            else
+            {
+                userClaims = claimResponse.Data;
             }
 
-            // Check if user has all claims to use the function
-            if (userClaims.Contains(functionClaim))
+            // Check if user has a parent claim
+            // The existance of a parent claim indicates that the current user authorization depends on the parent user
+            string parent = null;
+            userClaims.ForEach(delegate (ClaimDTO uClaim)
             {
-                return true;
-            }
-
-            if (!_functionRepository.FunctionIsActive(functionClaim.Value))
-            {
-                return false;
-            }
-
-            // Check if user has a client claim
-            string client = null;
-            string user = null;
-            userClaims.ForEach(delegate (Claim uClaim)
-            {
-                if (uClaim.Title == "Client")
+                if (uClaim.Title == "Parent")
                 {
-                    client = uClaim.Value;
-                }
-                if (uClaim.Title == "User")
-                {
-                    user = uClaim.Value;
+                    parent = uClaim.Value;
                 }
             });
 
-            // If the user has a client, check if the client has authorization for the function
-            if (client != null)
+            // If the user has a parent user, recursively authorize the parent user
+            if (parent != null)
             {
-                List<Claim> clientClaims = new List<Claim>();
-                clientClaims = _clientRepository.GetAllClientClaims(client);
+                response = AuthorizeUser(parent, functionClaims);
 
-                if (!clientClaims.Contains(functionClaim))
+                // If parent user is not authorized to use this function do not authorize the current user
+                if (!response.Data)
                 {
-                    return false;
+                    return response;
                 }
             }
 
-            userClaims = _userRepository.GetAllUserClaims(user);
-
             // Check if user has all claims to use the function
-            if (userClaims.Contains(functionClaim))
+            foreach(ClaimDTO claim in functionClaims)
+            if (userClaims.Contains(claim))
             {
-                return true;
+                response.Data = true;
+                return response;
             }
 
-
-            return false;
+            // Default to an unauthorized user
+            response.Data = false;
+            return response;
         }
-        */
 
     }
 }

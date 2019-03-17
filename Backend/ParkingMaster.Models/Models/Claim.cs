@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Models.Models
 {
@@ -30,6 +31,13 @@ namespace ParkingMaster.Models.Models
             ClaimId = Guid.NewGuid();
             Title = t;
             Value = v;
+        }
+
+        public Claim(ClaimDTO claimDTO)
+        {
+            ClaimId = Guid.NewGuid();
+            Title = claimDTO.Title;
+            Value = claimDTO.Value;
         }
 
         public Boolean Equals(Claim obj)

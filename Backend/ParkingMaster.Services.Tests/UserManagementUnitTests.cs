@@ -95,7 +95,7 @@ namespace ParkingMaster.Services.Tests
             
             var user = new UserAccount
             {
-                Username = "tnguyen@gmail.com",
+                Username = "plaurent@yahoo.com",
                 IsActive = true,
                 IsFirstTimeUser = false,
                 RoleType = "standard"

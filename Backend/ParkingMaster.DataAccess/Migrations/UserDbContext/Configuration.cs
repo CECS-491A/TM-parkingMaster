@@ -40,7 +40,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 new Claim("Action", "DisabledAction"),
                 new Claim("Action", "CreateOtherUser"),
                 new Claim("Action", "Logout"),
-                new Claim("Client", "client1@yahoo.com")
+                new Claim("Parent", "client1@yahoo.com")
             };
             userGateway.StoreIndividualUser(user, claims);
 
@@ -59,7 +59,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 new Claim("Action", "DisabledAction"),
                 new Claim("Action", "CreateOtherUser"),
                 new Claim("Action", "Logout"),
-                new Claim("Client", "client1@yahoo.com")
+                new Claim("Parent", "client1@yahoo.com")
             };
             userGateway.StoreIndividualUser(user, claims);
 
@@ -77,7 +77,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 new Claim("User", "tnguyen@gmail.com"),
                 new Claim("Action", "Logout"),
                 new Claim("Action", "Client2Action"),
-                new Claim("Client", "client2@gmail.com")
+                new Claim("Parent", "client2@gmail.com")
             };
             userGateway.StoreIndividualUser(user, claims);
 
@@ -93,6 +93,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             claims = new List<Claim>
             {
                 new Claim("User", "client1@yahoo.com"),
+                new Claim("Action", "Client1Action"),
                 new Claim("Action", "DisabledAction"),
                 new Claim("Action", "CreateOtherUser"),
                 new Claim("Action", "Logout")
@@ -111,6 +112,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             claims = new List<Claim>
             {
                 new Claim("User", "client2@gmail.com"),
+                new Claim("Action", "Client2Action"),
                 new Claim("Action", "CreateOtherUser"),
                 new Claim("Action", "Logout"),
                 new Claim("Action", "Client2Action")
