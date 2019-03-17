@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ParkingMaster.Models.Models
 {
-    public class Claim
+    public class Claim : IEquatable<Claim>
     {
         [Key]
         public Guid ClaimId { get; set; }
@@ -20,6 +20,10 @@ namespace ParkingMaster.Models.Models
         [ForeignKey("UserClaimsId")]
         public UserClaims UserClaims { get; set; }
 
+        public Claim()
+        {
+            ClaimId = Guid.NewGuid();
+        }
 
         public Claim(string t, string v)
         {

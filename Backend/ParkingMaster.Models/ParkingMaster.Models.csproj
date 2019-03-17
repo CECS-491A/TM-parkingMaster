@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\AuthenticationDTO.cs" />
+    <Compile Include="DTO\ClaimDTO.cs" />
     <Compile Include="DTO\EditUserDTO.cs" />
     <Compile Include="DTO\LoginDTO.cs" />
     <Compile Include="DTO\RegisterUserDTO.cs" />

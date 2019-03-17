@@ -122,7 +122,7 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<IEnumerable<UserAccount>> GetAllUsers()
+        public ResponseDTO<List<UserAccount>> GetAllUsers()
         {
             throw new NotImplementedException();
         }
@@ -132,9 +132,12 @@ namespace ParkingMaster.Services.Services
             throw new NotImplementedException();
         }
 
-        public List<Claim> GetAllUserClaims(string email)
+        public ResponseDTO<List<ClaimDTO>> GetAllUserClaims(string username)
         {
-            throw new NotImplementedException();
+            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>();
+            response = _userGateway.GetUserClaims(username);
+
+            return response;
         }
     }
 }

@@ -221,10 +221,69 @@ namespace ParkingMaster.DataAccess
 			}
 		}
 
+
+        //Delete user by username
+        public ResponseDTO<List<UserAccount>> GetAllUserAccounts()
+        {
+            ResponseDTO<List<UserAccount>> response = new ResponseDTO<List<UserAccount>>();
+            try
+            {
+                response.Data = context.UserAccounts.ToList<UserAccount>();
+                return response;
+            }
+            catch
+            {
+                response.Data = null;
+                response.Error = "Failed to read UserAccount table";
+                return response;
+            }
+        }
+
+        public ResponseDTO<List<ClaimDTO>> GetUserClaims(string username)
+        {
+            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>();
+            response.Data = new List<ClaimDTO>();
+            List<Claim> claimsList = new List<Claim>();
+            try
+            {
+                // Queries for the user account based on username.
+                var userAccount = (from account in context.UserAccounts
+                                   where account.Username == username
+                                   select account).FirstOrDefault();
+
+                if(userAccount == null)
+                {
+                    response.Data = null;
+                    response.Error = "Username is not in the database.";
+                    return response;
+                }
+
+                claimsList = (from claims in context.Claim
+                                 where claims.UserClaimsId == userAccount.Id
+                                 select claims).ToList<Claim>();
+
+                //Transform List of Claims into a List of ClaimDTOs
+                foreach(Claim claim in claimsList)
+                {
+                    response.Data.Add(new ClaimDTO(claim.Title, claim.Value));
+                }
+
+                return response;
+            }
+            catch
+            {
+                response.Data = null;
+                response.Error = "Failed to read UserAccount table";
+                return response;
+            }
+
+        }
+
+        //Deletes all users to reinitialize the database
         public void ResetDatabase()
         {
 
-            List<UserAccount> userAccounts = context.UserAccounts.ToList<UserAccount>();
+            List<UserAccount> userAccounts = GetAllUserAccounts().Data;
 
             foreach(UserAccount acc in userAccounts)
             {

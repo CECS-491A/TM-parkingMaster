@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParkingMaster.Services.Services;
 using ParkingMaster.DataAccess;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Models.DTO;
 using System.Collections.Generic;
 
 namespace ParkingMaster.Services.Tests
@@ -221,7 +222,33 @@ namespace ParkingMaster.Services.Tests
             //Assert
             Assert.AreEqual(expected, actual);
         }
-        
+
+        [TestMethod]
+        public void GetUserClaims_UserExists_Pass()
+        {
+            string username = "pnguyen@gmail.com";
+            List<ClaimDTO> expected = new List<ClaimDTO>
+            {
+                new ClaimDTO("User", "pnguyen@gmail.com"),
+                new ClaimDTO("Action", "DisabledAction"),
+                new ClaimDTO("Action", "CreateOtherUser"),
+                new ClaimDTO("Action", "Logout"),
+                new ClaimDTO("Client", "client1@yahoo.com")
+            };
+            List<ClaimDTO> actual = null;
+            using (_userGateway = new UserGateway())
+            {
+                UserManagementService _userManagementService = new UserManagementService(_userGateway);
+
+                // Act
+                actual = _userManagementService.GetAllUserClaims(username).Data;
+            }
+            //Assert
+            foreach(ClaimDTO claim in expected)
+            {
+                CollectionAssert.Contains(actual, claim);
+            }
+        }
 
     }
     
