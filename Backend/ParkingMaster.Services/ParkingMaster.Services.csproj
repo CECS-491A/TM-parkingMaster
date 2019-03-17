@@ -52,9 +52,6 @@
     <Compile Include="Services\PasswordValidationManager.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
     <Compile Include="Services\UserManagementService.cs" />
-    <Compile Include="UserConfigurationService.cs" />
-    <Compile Include="UserCreationService.cs" />
-    <Compile Include="UserDeletionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Debug.config">
