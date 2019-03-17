@@ -15,12 +15,22 @@ namespace ParkingMaster.DataAccess
 	public class UserGateway : IDisposable
 	{
 		// Open the User context
-		UserContext context = new UserContext();
+		UserContext context;
 
-		/// <summary>
-		/// The GetUserByUsername method.
-		/// Gets a user by username
-		public ResponseDTO<UserAccount> GetUserByUsername(string username)
+        public UserGateway()
+        {
+            context = new UserContext();
+        }
+
+        public UserGateway(UserContext c)
+        {
+            context = c;
+        }
+
+        /// <summary>
+        /// The GetUserByUsername method.
+        /// Gets a user by username
+        public ResponseDTO<UserAccount> GetUserByUsername(string username)
 		{
 			try
 			{
@@ -44,30 +54,18 @@ namespace ParkingMaster.DataAccess
 		}
 
 		//Store a user
-		public ResponseDTO<bool> StoreIndividualUser(UserAccount userAccount, PasswordSalt passwordSalt, UserClaims userClaims)
+		public ResponseDTO<bool> StoreIndividualUser(UserAccount userAccount, List<Claim> claims)
 		{
 			using (var dbContextTransaction = context.Database.BeginTransaction())
 			{
 				try
 				{
-					// Add UserAccount
-					context.UserAccounts.AddOrUpdate(userAccount);
-					context.SaveChanges();
 
-					// Get Id from UserAccount
-					var userId = (from account in context.UserAccounts
-								  where account.Username == userAccount.Username
-								  select account.Id).SingleOrDefault();
+                    // Add UserAccount
+                    context.UserAccounts.Add(userAccount);
 
-					// Set UserId to dependencies
-					userClaims.Id = userId;
-
-					// Add PasswordSalt
-					context.PasswordSalts.AddOrUpdate(passwordSalt);
-
-					// Add UserClaims
-					context.UserClaims.Add(userClaims);
-
+                    // Add UserClaims
+                    context.UserClaims.Add(new UserClaims(userAccount.Id, claims));
 
 					context.SaveChanges();
 
@@ -167,8 +165,8 @@ namespace ParkingMaster.DataAccess
 		//Delete user by username
 		public ResponseDTO<bool> DeleteUser(string username)
 		{
-			using (var dbContextTransaction = context.Database.BeginTransaction())
-			{
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
 				try
 				{
 
@@ -186,23 +184,14 @@ namespace ParkingMaster.DataAccess
 						};
 					}
 
-					// PasswordSalt
-					// Queries for the password salt based on user account id.
-					var userPasswordSalt = (from passwordSalt in context.PasswordSalts
-											where passwordSalt.Id == userAccount.Id
-											select passwordSalt).FirstOrDefault();
-
-					// Checks if user password salt is null, if not then delete from database.
-					if (userPasswordSalt != null)
-					{
-						context.PasswordSalts.Remove(userPasswordSalt);
-					}
 
 					// User Claims
 					// Queries for the users claims based on user account id and claims user id.
 					var userClaims = (from claims in context.UserClaims
 									  where claims.Id == userAccount.Id
 									  select claims).FirstOrDefault();
+
+                    var userClaimsId = userClaims.Id;
 
 					// Checks if claims result is null, if not then delete from database.
 					if (userClaims != null)
@@ -232,90 +221,17 @@ namespace ParkingMaster.DataAccess
 			}
 		}
 
+        public void ResetDatabase()
+        {
 
+            List<UserAccount> userAccounts = context.UserAccounts.ToList<UserAccount>();
 
-		//Password reset
-		public ResponseDTO<bool> ResetPassword(string username, string newPassword)
-		{
-			using (var dbContextTransaction = context.Database.BeginTransaction())
-			{
-				try
-				{
-					//Queries for the user account based on the username passed in.
-					var userAccount = (from account in context.UserAccounts
-									   where account.Username == username
-									   select account).SingleOrDefault();
+            foreach(UserAccount acc in userAccounts)
+            {
+                DeleteUser(acc.Username);
+            }
 
-					//Select the password from useraccount and give it the new username.
-					userAccount.Password = newPassword;
-					context.SaveChanges();
-					dbContextTransaction.Commit();
-
-					return new ResponseDTO<bool>()
-					{
-						Data = true
-					};
-				}
-				catch (Exception)
-				{
-					dbContextTransaction.Rollback();
-					return new ResponseDTO<bool>()
-					{
-						Data = false,
-
-					};
-				}
-			}
-		}
-
-		//Update PW
-		public ResponseDTO<bool> UpdatePassword(UserAccount userAccount, PasswordSalt passwordSalt)
-		{
-			using (var dbContextTransaction = context.Database.BeginTransaction())
-			{
-				try
-				{
-
-					// Get Id from username
-					userAccount.Id = (from account in context.UserAccounts
-									  where account.Username == userAccount.Username
-									  select account.Id).FirstOrDefault();
-					context.SaveChanges();
-
-					// Set UserId to dependencies
-					passwordSalt.Id = userAccount.Id;
-					context.SaveChanges();
-
-					// Update UserAccount
-					context.UserAccounts.AddOrUpdate(userAccount);
-
-					// Update PasswordSalt
-					context.PasswordSalts.AddOrUpdate(passwordSalt);
-					context.SaveChanges();
-
-					// Commit transaction to database
-					dbContextTransaction.Commit();
-
-					// Return a true ResponseDto
-					return new ResponseDTO<bool>()
-					{
-						Data = true
-					};
-
-				}
-				catch (Exception)
-				{
-					// Rolls back the changes saved in the transaction
-					dbContextTransaction.Rollback();
-					// Returns a false ResponseDto
-					return new ResponseDTO<bool>()
-					{
-						Data = false,
-						
-					};
-				}
-			}
-		}
+        }
 
 		/// <summary>
 		/// Dispose of the context
