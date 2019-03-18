@@ -1,7 +1,9 @@
 <template>
   <div>
-    <img src="../assets/logo.png">
     <h1>{{pageTitle}}</h1>
+    <div>
+      <h2>VehicleRegistration</h2>
+    </div>
   </div>
 </template>
 
@@ -9,11 +11,11 @@
 import axios from 'axios'
 
 export default {
-  name: 'Home',
+  name: 'VehicleRegistration',
   data () {
     return {
       pageTitle: '',
-      msg: 'Our Home page.'
+      msg: 'Our Vehicle Registration page.'
 
     }
   },
