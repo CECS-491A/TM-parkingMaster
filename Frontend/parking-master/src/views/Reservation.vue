@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <h1>{{pageTitle}}</h1>
-    <div>
-      <h2>Reservation</h2>
-    </div>
+  <div class = "view-reservation">
+    <h2>Reservation</h2>
   </div>
 </template>
 

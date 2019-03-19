@@ -21,6 +21,7 @@ export default {
 
 <style>
   div[class^='view-'] {
-    padding-top: 65px
+    padding: 5% 10px;
+    text-align: center;
   }
 </style>
