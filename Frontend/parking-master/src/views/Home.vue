@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="view-home">
     <img src="../assets/logo.png">
     <h1>{{pageTitle}}</h1>
   </div>
@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     getString () {
-      axios.get('http://ec2-18-191-80-204.us-east-2.compute.amazonaws.com/ParkingMaster/api/Testing')
+      axios.get('http://ec2-18-218-97-81.us-east-2.compute.amazonaws.com/ParkingMaster/api/Testing')
         .then(response => {
           this.pageTitle = response.data
         })
@@ -30,21 +30,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
