@@ -11,15 +11,21 @@ namespace ParkingMaster.Models.Models
     public class Spot
     {
         // Automatic properties
+        [Key]
         public Guid SpotId { get; set; } // I don't think this should have to be a GUID, maybe just an int?
         [ForeignKey("Lot")]
         public Guid LotId { get; set; }
+        public string LotName { get; set; }
         public bool IsHandicappedAccessible { get; set; }
 
         // Navigation properties
         public virtual Lot Lot { get; set; }
 
         // Constructors
-
+        public Spot()
+        {
+            LotName = "Default Lot Name";
+            IsHandicappedAccessible = false;
+        }
     }
 }
