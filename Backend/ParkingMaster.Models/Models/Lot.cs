@@ -13,12 +13,12 @@ namespace ParkingMaster.Models.Models
         // Automatic properties
         [Key]
         public Guid LotId { get; set; }
-        [ForeignKey("UserAccount")]
-        public Guid OwnerId { get; set; }
+        //[ForeignKey("UserAccount")]
+        //public Guid OwnerId { get; set; }
         public string LotName { get; set; }
 
         // Navigation Properties
-        public virtual UserAccount UserAccount { get; set; }
+        //public virtual UserAccount UserAccount { get; set; }
         public ICollection<Spot> Spots { get; set; }
 
         // Constructors

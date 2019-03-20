@@ -23,7 +23,7 @@ namespace ParkingMaster.DataAccess.Gateways
             context = c;
         }
 
-        public ResponseDTO<Boolean> AddLot(Lot lot)
+        public ResponseDTO<Boolean> AddLot(Lot lot) // (Lot lot, List<Spot> spotList)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {

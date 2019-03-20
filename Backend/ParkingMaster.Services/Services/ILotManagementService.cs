@@ -16,13 +16,14 @@ namespace ParkingMaster.Services.Services
 
         Lot GetLotByName(string name);
 
+        List<Spot> ParseSpotsFromFile();
+
         ResponseDTO<Boolean> AddSpots(); // parse CSV - file argument
         ResponseDTO<Boolean> EditSpots(); // parse CSV - file argument
 
         List<Lot> GetAllLots();
+        List<Lot> GetAllLotsByOwner(string ownername); // use this + GetAllSpotsInLot to get all spots by user
         List<Spot> GetAllSpots();
         List<Spot> GetAllSpotsInLot(string lotname);
-
-
     }
 }

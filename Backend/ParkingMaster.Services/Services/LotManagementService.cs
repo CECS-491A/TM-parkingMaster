@@ -14,16 +14,34 @@ namespace ParkingMaster.Services.Services
 
         private LotGateway _lotGateway;
 
-        public ResponseDTO<bool> AddLot(string lotname)
+        public LotManagementService(LotGateway lotGateway)
         {
-            ResponseDTO<bool> response = new ResponseDTO<bool>();
-            // create new lot with owner GUID, lotname
-            // response = _lotGateway.AddLot(lot);
-            // return response;
-            throw new NotImplementedException();
+            _lotGateway = lotGateway;
         }
 
-        public ResponseDTO<bool> AddSpots() // might just add this into AddLot
+        public ResponseDTO<bool> AddLot(string lotname) // (string lotname, ??? spotfile)
+        {
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+            Lot newLot = new Lot()
+            {
+                LotId = Guid.NewGuid(),
+                LotName = lotname,
+                Spots = new List<Spot>() // Spots = new List<Spot>()
+                //OwnerId
+                //UserAccount
+            };
+
+            response = _lotGateway.AddLot(newLot); // (newLot, parsed list?)
+            return response;
+        }
+
+        public List<Spot> ParseSpotsFromFile() // parameter = file
+        {
+            //List<Spot> spotList = new List<Spot>();
+            return new List<Spot>();
+        }
+
+        public ResponseDTO<bool> AddSpots()
         {
             // parse CSV, create list of spots, set lot's spots to this list
             throw new NotImplementedException();
@@ -45,6 +63,11 @@ namespace ParkingMaster.Services.Services
         }
 
         public List<Lot> GetAllLots()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Lot> GetAllLotsByOwner(string ownername)
         {
             throw new NotImplementedException();
         }
