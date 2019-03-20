@@ -92,7 +92,7 @@ namespace ParkingMaster.DataAccess.Gateways
         // GetLotByName (?)
         // GetAllLots
         // GetAllSpotsInLot
-        // GetAllSpots
+        // GetAllSpots - get all lots then get all spots? need to figure this out
 
         public void Dispose()
         {

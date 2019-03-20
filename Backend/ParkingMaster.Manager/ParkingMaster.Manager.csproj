@@ -47,11 +47,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Logic\LotManagerController.cs" />
     <Compile Include="App_Logic\TestingController.cs" />
     <Compile Include="App_Start\WebApiConfigure.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Managers\LotManagementManager.cs" />
     <Compile Include="Managers\UserManagementManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
