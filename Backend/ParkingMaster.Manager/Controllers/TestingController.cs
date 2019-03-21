@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using ParkingMaster.Services.Services;
 
 namespace ParkingMaster.Manager.App_Logic
 {
@@ -16,9 +17,11 @@ namespace ParkingMaster.Manager.App_Logic
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public int Get(string pw)
         {
-            return "value";
+            PasswordValidationManager pvm = new PasswordValidationManager();
+            string hashed = pvm.GetHashedPw(pw);
+            return pvm.CheckPassword(hashed);
         }
 
         // POST api/<controller>

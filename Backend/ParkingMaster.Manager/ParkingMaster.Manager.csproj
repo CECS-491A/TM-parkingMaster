@@ -47,7 +47,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Logic\TestingController.cs" />
+    <Compile Include="Controllers\TestingController.cs" />
     <Compile Include="App_Start\WebApiConfigure.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -84,9 +84,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Business_Logic\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ParkingMaster.DataAccess\ParkingMaster.DataAccess.csproj">
       <Project>{d2c4413b-8029-4148-af13-fcc74963bf33}</Project>
