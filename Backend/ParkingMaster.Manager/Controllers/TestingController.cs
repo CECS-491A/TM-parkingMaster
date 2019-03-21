@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using ParkingMaster.Services.Services;
 
-namespace ParkingMaster.Manager.App_Logic
+namespace ParkingMaster.Manager.Controllers
 {
     public class TestingController : ApiController
     {
@@ -19,9 +19,8 @@ namespace ParkingMaster.Manager.App_Logic
         // GET api/<controller>/5
         public int Get(string pw)
         {
-            PasswordValidationManager pvm = new PasswordValidationManager();
-            string hashed = pvm.GetHashedPw(pw);
-            return pvm.CheckPassword(hashed);
+            IPasswordService ps = new PasswordService();
+            return ps.CheckPassword(pw);
         }
 
         // POST api/<controller>

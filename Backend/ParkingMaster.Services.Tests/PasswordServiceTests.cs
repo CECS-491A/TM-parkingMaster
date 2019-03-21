@@ -7,29 +7,26 @@ namespace ParkingMaster.Services.Tests
     [TestClass]
     public class PasswordServiceTests
     {
-        PasswordValidationManager pvm = new PasswordValidationManager();
+        PasswordService ps = new PasswordService();
 
         [TestMethod]
         public void CheckPassword_InputAsBreachedPassword_Fail()
         {
-            var hashed = pvm.GetHashedPw("password123");
-            var result = pvm.CheckPassword(hashed);
+            var result = ps.CheckPassword("password123");
             Assert.AreNotEqual(result, 0);
         }
 
         [TestMethod]
         public void CheckPassword_InputAsUnbreachedPassword_Pass()
         {
-            var hashed = pvm.GetHashedPw("obviouslynothacked!haha1233");
-            var result = pvm.CheckPassword(hashed);
+            var result = ps.CheckPassword("obviouslynothacked!haha1233");
             Assert.AreEqual(result, 0);
         }
 
         [TestMethod]
         public void CheckPassword_InputAsEmptyPassword_Pass()
         {
-            var hashed = pvm.GetHashedPw(" ");
-            var result = pvm.CheckPassword(hashed);
+            var result = ps.CheckPassword(" ");
             Assert.AreEqual(result, 0);
         }
 
@@ -37,7 +34,7 @@ namespace ParkingMaster.Services.Tests
         public void CheckPassword_InputAsNull_Pass()
         {
 
-            var result = pvm.CheckPassword(null);
+            var result = ps.CheckPassword(null);
             Assert.AreEqual(result, -1);
         }
 
@@ -47,7 +44,7 @@ namespace ParkingMaster.Services.Tests
             var string1 = "test123";
             var string2 = "test123";
 
-            Assert.AreEqual(pvm.GetHashedPw(string1), pvm.GetHashedPw(string2));
+            Assert.AreEqual(ps.Sha1Hash(string1), ps.Sha1Hash(string2));
         }
 
         [TestMethod]
@@ -56,13 +53,13 @@ namespace ParkingMaster.Services.Tests
             var string1 = "test123";
             var string2 = "test";
 
-            Assert.AreNotEqual(pvm.GetHashedPw(string1), pvm.GetHashedPw(string2));
+            Assert.AreNotEqual(ps.Sha1Hash(string1), ps.Sha1Hash(string2));
         }
 
         [TestMethod]
         public void GetHashedPw_InputNullStringReturnsHashOfEmptyString_Pass()
         {
-            Assert.AreEqual(pvm.GetHashedPw(null), pvm.GetHashedPw(""));
+            Assert.AreEqual(ps.Sha1Hash(null), ps.Sha1Hash(""));
         }
     }
 }

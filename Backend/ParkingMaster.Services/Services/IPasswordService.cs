@@ -1,14 +1,15 @@
 ﻿using System;
 
 
-namespace ParkingMaster.Services
+namespace ParkingMaster.Services.Services
 {
-    interface IPasswordService
+    public interface IPasswordService
     {
         string Sha1Hash(string pw);
         string RfcHashPassword(string pw, byte[] salt);
         byte[] GetSalt();
         string[] GetPwnedPasswords(string prefix);
+        int CheckPassword(string pw);
         
     }
 }
