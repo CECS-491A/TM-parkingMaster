@@ -26,24 +26,26 @@ namespace ParkingMaster.Services.Services
             {
                 LotId = Guid.NewGuid(),
                 LotName = lotname,
-                Spots = new List<Spot>() // Spots = new List<Spot>()
+                Spots = new List<Spot>() // Spots = ParseSpotsFromFile(spotfile);
                 //OwnerId
                 //UserAccount
             };
-
-            response = _lotGateway.AddLot(newLot); // (newLot, parsed list?)
+            response = _lotGateway.AddLot(newLot, newLot.Spots); // (newLot, parsed list?)
             return response;
         }
 
         public List<Spot> ParseSpotsFromFile() // parameter = file
         {
             //List<Spot> spotList = new List<Spot>();
+
+
+            //return spotList;
+
             return new List<Spot>();
         }
 
-        public ResponseDTO<bool> AddSpots()
+        public ResponseDTO<bool> AddSpots() // might just remove this
         {
-            // parse CSV, create list of spots, set lot's spots to this list
             throw new NotImplementedException();
         }
 

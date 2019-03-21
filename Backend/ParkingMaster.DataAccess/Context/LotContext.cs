@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ParkingMaster.Models.Models;
 using System.Data.Entity;
 
-namespace ParkingMaster.DataAccess.Context
+namespace ParkingMaster.DataAccess.Context // SUPERFLUOUS - DELETE
 {
     public class LotContext : DbContext
     {

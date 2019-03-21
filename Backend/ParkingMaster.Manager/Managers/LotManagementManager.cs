@@ -24,7 +24,7 @@ namespace ParkingMaster.Manager.Managers
             //_lotManagementService = new LotManagementService(_lotContext);
         }
 
-        public Boolean AddLot(string lotname) // merge with add lots?
+        public Boolean AddLot(string lotname) // merge with add lots - need GUID from login token
         {
             ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
             response = _lotManagementService.AddLot(lotname); //(lotname, spotfile)

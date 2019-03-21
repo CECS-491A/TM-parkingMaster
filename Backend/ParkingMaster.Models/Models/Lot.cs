@@ -19,13 +19,13 @@ namespace ParkingMaster.Models.Models
 
         // Navigation Properties
         //public virtual UserAccount UserAccount { get; set; }
-        public ICollection<Spot> Spots { get; set; }
+        public List<Spot> Spots { get; set; }
 
         // Constructors
-        public Lot()
-        {
-            this.Spots = new List<Spot>();
-        }
+        //public Lot()
+        //{
+        //    this.Spots = new List<Spot>();
+        //}
 
     }
 }
