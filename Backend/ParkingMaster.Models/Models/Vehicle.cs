@@ -38,7 +38,7 @@ namespace ParkingMaster.Models.Models
             Plate = plate;
         }
 
-        public vehicle(Guid id, string make, string model, int year, string state, string plate)
+        public Vehicle(Guid id, string make, string model, int year, string state, string plate)
         {
             Id = id;
             Make = make;
