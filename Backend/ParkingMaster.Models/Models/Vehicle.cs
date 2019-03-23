@@ -22,6 +22,7 @@ namespace ParkingMaster.Models.Models
         public int Year { get; set; }
         public string State { get; set;}
         public string Plate { get; set;}
+        public string Vin { get; set;}
 
         // Navigational Property
         public virtual UserAccount UserAccount { get; set; }
@@ -29,16 +30,17 @@ namespace ParkingMaster.Models.Models
         // Constructors
         public Vehicle() { }
 
-        public Vehicle(string make, string model, int year, string state, string plate)
+        public Vehicle(string make, string model, int year, string state, string plate, string vin)
         {
             Make = make;
             Model = model;
             Year = year;
             State = state;
             Plate = plate;
+            Vin = vin;
         }
 
-        public Vehicle(Guid id, string make, string model, int year, string state, string plate)
+        public Vehicle(Guid id, string make, string model, int year, string state, string plate, string vin)
         {
             Id = id;
             Make = make;
@@ -46,5 +48,6 @@ namespace ParkingMaster.Models.Models
             Year = year;
             State = state;
             Plate = plate;
+            Vin = vin;
         }
     }
