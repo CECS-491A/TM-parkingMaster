@@ -13,8 +13,8 @@ namespace ParkingMaster.Models.Models
 		// Automatic properties
 		[Key]
 		[ForeignKey("UserAccount")]
-		public int? Id { get; set; }
-		public string Username { get; set; }
+        public Guid Id { get; set; }
+        public string Username { get; set; }
 		public DateTime ExpiresOn { get; set; }
 		public string Salt { get; set; }
 		public string TokenString { get; set; }
@@ -32,7 +32,7 @@ namespace ParkingMaster.Models.Models
 			TokenString = tokenString;
 		}
 
-		public AuthenticationToken(int? id, string username, DateTime expiresOn, string tokenString)
+		public AuthenticationToken(Guid id, string username, DateTime expiresOn, string tokenString)
 		{
 			Id = id;
 			Username = username;

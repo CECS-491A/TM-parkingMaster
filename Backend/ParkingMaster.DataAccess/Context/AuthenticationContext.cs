@@ -16,7 +16,6 @@ namespace ParkingMaster.DataAccess.Context
         }
 
         public DbSet<UserAccount> UserAccounts { get; set; }
-		public DbSet<PasswordSalt> PasswordSalts { get; set; }
 		public DbSet<AuthenticationToken> AuthenticationTokens { get; set; }
 	}
 

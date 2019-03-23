@@ -49,6 +49,10 @@
       <Project>{d2c4413b-8029-4148-af13-fcc74963bf33}</Project>
       <Name>ParkingMaster.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ParkingMaster.Models\ParkingMaster.Models.csproj">
+      <Project>{7b2bfaea-088e-4361-bf34-90d9d49bda50}</Project>
+      <Name>ParkingMaster.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ParkingMaster.Services\ParkingMaster.Services.csproj">
       <Project>{5543f43b-7227-47b8-84c6-04deea35406f}</Project>
       <Name>ParkingMaster.Services</Name>

@@ -3,36 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ParkingMaster.DataAccess.Repositories;
-using ParkingMaster.DataAccess.Models;
 using ParkingMaster.DataAccess;
+using ParkingMaster.Models.Models;
+using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Services.Services
 {
     public class UserManagementService : IUserManagementService
     {
-        private UserRepository _userRepository;
 
-        public UserManagementService(DatabaseContext databaseContext)
+        private UserGateway _userGateway;
+
+        public UserManagementService(UserGateway userGateway)
         {
-            _userRepository = new UserRepository(databaseContext);
+            _userGateway = userGateway;
         }
 
-        public bool CreateUser(User user)
+        public ResponseDTO<bool> CreateUser(UserAccount user, List<Claim> claims)
         {
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+
             if (user == null)
             {
-                return false;
+                response.Data = false;
+                response.Error = "Attempted to store Null UserAccount.";
+                return response;
+            }
+            if (claims == null)
+            {
+                response.Data = false;
+                response.Error = "Attempted to store Null UserClaims.";
+                return response;
             }
             try
             {
-                if (_userRepository.UserExists(user.Email))
-                {
-                    Console.WriteLine("User with that email already exists.");
-                    return false;
-                }
-                _userRepository.Insert(user);
-                return true;
+                response = _userGateway.StoreIndividualUser(user, claims);
+                return response;
             }
             catch (Exception e)
             {
@@ -42,22 +48,20 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public bool DeleteUser(User user)
+        public ResponseDTO<bool> DeleteUser(UserAccount user)
         {
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+
             if (user == null)
             {
-                return false;
+                response.Data = false;
+                response.Error = "Attempted to delete Null UserAccount.";
+                return response;
             }
             try
             {
-                if (!(_userRepository.UserExists(user.Email)))
-                {
-                    Console.WriteLine("User does not exist.");
-                    return false;
-                }
-                User deleteUser = _userRepository.GetByEmail(user.Email);
-                _userRepository.Delete(deleteUser);
-                return true;
+                response = _userGateway.DeleteUser(user.Username);
+                return response;
             }
             catch (Exception e)
             {
@@ -67,22 +71,20 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public bool DeleteUser(string email)
+        public ResponseDTO<bool> DeleteUser(string username)
         {
-            if (email == null)
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+
+            if (username == null)
             {
-                return false;
+                response.Data = false;
+                response.Error = "Attempted to delete Null username.";
+                return response;
             }
             try
             {
-                if (!(_userRepository.UserExists(email)))
-                {
-                    Console.WriteLine("User does not exist.");
-                    return false;
-                }
-                User deleteUser = _userRepository.GetByEmail(email);
-                _userRepository.Delete(deleteUser);
-                return true;
+                response = _userGateway.DeleteUser(username);
+                return response;
             }
             catch (Exception e)
             {
@@ -92,22 +94,25 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public bool UpdateUser(User user)
+        public ResponseDTO<bool> UpdateUser(UserAccount user)
         {
-            if (user == null)
+            throw new NotImplementedException();
+        }
+
+        public ResponseDTO<UserAccount> GetUserByUsername(string username)
+        {
+            ResponseDTO<UserAccount> response = new ResponseDTO<UserAccount>();
+
+            if (username == null)
             {
-                return false;
+                response.Data = null;
+                response.Error = "Attempted to delete Null username.";
+                return response;
             }
             try
             {
-                if (!(_userRepository.UserExists(user.Email)))
-                {
-                    Console.WriteLine("User does not exist.");
-                    return false;
-                }
-                User updateUser = _userRepository.GetByEmail(user.Email);
-                _userRepository.Update(updateUser);
-                return true;
+                response = _userGateway.GetUserByUsername(username);
+                return response;
             }
             catch (Exception e)
             {
@@ -117,33 +122,22 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public User GetUserByEmail(string email)
+        public ResponseDTO<List<UserAccount>> GetAllUsers()
         {
-            return _userRepository.GetByEmail(email);
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public void AddUserClaim(UserAccount user, Claim claim)
         {
-            return _userRepository.GetAll();
+            throw new NotImplementedException();
         }
 
-        public void AddUserClaim(User user, Claim claim)
+        public ResponseDTO<List<ClaimDTO>> GetAllUserClaims(string username)
         {
-            try
-            {
-                user.UserClaims.Add(claim);
-            }
-            catch (Exception e)
-            {
-                //Console.WriteLine(e.ToString());
-                //return false;
-                throw e;
-            }
-        }
+            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>();
+            response = _userGateway.GetUserClaims(username);
 
-        public List<Claim> GetAllUserClaims(string email)
-        {
-            return _userRepository.GetAllUserClaims(email);
+            return response;
         }
     }
 }

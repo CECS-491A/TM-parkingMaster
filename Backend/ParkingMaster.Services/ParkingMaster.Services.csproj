@@ -49,12 +49,8 @@
     <Compile Include="Services\IPasswordService.cs" />
     <Compile Include="Services\IUserManagementService.cs" />
     <Compile Include="Services\PasswordService.cs" />
-    <Compile Include="Services\PasswordValidationManager.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
     <Compile Include="Services\UserManagementService.cs" />
-    <Compile Include="UserConfigurationService.cs" />
-    <Compile Include="UserCreationService.cs" />
-    <Compile Include="UserDeletionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Debug.config">
@@ -68,6 +64,10 @@
     <ProjectReference Include="..\ParkingMaster.DataAccess\ParkingMaster.DataAccess.csproj">
       <Project>{d2c4413b-8029-4148-af13-fcc74963bf33}</Project>
       <Name>ParkingMaster.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ParkingMaster.Models\ParkingMaster.Models.csproj">
+      <Project>{7b2bfaea-088e-4361-bf34-90d9d49bda50}</Project>
+      <Name>ParkingMaster.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

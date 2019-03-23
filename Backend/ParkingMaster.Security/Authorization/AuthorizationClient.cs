@@ -5,87 +5,127 @@ using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Security.Authorization.Contracts;
 using ParkingMaster.DataAccess;
-using ParkingMaster.DataAccess.Models;
-using ParkingMaster.DataAccess.Repositories;
+using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Security.Authorization
 {
     public class AuthorizationClient : IAuthorizationClient
     {
-        private UserRepository _userRepository;
-        private ClientRepository _clientRepository;
-        private FunctionRepository _functionRepository;
+        private UserContext userContext;
+        private UserGateway userGateway;
+        private FunctionGateway functionGateway;
 
-        public AuthorizationClient(DatabaseContext databaseContext)
+        public AuthorizationClient()
         {
-            _userRepository = new UserRepository(databaseContext);
-            _clientRepository = new ClientRepository(databaseContext);
-            _functionRepository = new FunctionRepository(databaseContext);
+            userContext = new UserContext();
+            userGateway = new UserGateway(userContext);
+            functionGateway = new FunctionGateway(userContext);
         }
 
-        public Boolean Authorize(List<Claim> userClaims, Claim functionClaim)
+        public ResponseDTO<Boolean> Authorize(string username, List<ClaimDTO> functionClaims)
         {
-
+            ResponseDTO<Boolean> response = new ResponseDTO<bool>();
             // Check for null inputs
-            if (functionClaim == null || userClaims == null)
+            if (functionClaims == null || username == null)
             {
-                return false;
+                response.Data = false;
+                response.Error = "Input was Null";
+                return response;
             }
 
-            // Check for null claims
-            if (userClaims.Contains(null))
+            // Check if function is disabled
+            response = AuthorizeFunction(functionClaims);
+            // If function is disabled, return unauthorized
+            if (!response.Data)
             {
-                return false;
+                return response;
             }
 
-            // Check if user has all claims to use the function
-            if (userClaims.Contains(functionClaim))
+            // Authorize user
+            response = AuthorizeUser(username, functionClaims);
+
+            return response;
+        }
+
+        private ResponseDTO<Boolean> AuthorizeUser(string username, List<ClaimDTO> functionClaims)
+        {
+            List<ClaimDTO> userClaims;
+            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
+            ResponseDTO<List<ClaimDTO>> claimResponse = userGateway.GetUserClaims(username);
+
+            // If error occured retrieving user claims return unauthorized with error message
+            if(claimResponse == null)
             {
-                return true;
+                response.Data = false;
+                response.Error = "Failed to read claims of user: " + username;
+                return response;
+            }
+            // place user claims in a new object for better code readability
+            else
+            {
+                userClaims = claimResponse.Data;
             }
 
-            if (!_functionRepository.FunctionIsActive(functionClaim.Value))
+            // Check if user has a parent claim
+            // The existance of a parent claim indicates that the current user authorization depends on the parent user
+            string parent = null;
+            userClaims.ForEach(delegate (ClaimDTO uClaim)
             {
-                return false;
-            }
-
-            // Check if user has a client claim
-            string client = null;
-            string user = null;
-            userClaims.ForEach(delegate (Claim uClaim)
-            {
-                if (uClaim.Title == "Client")
+                if (uClaim.Title == "Parent")
                 {
-                    client = uClaim.Value;
-                }
-                if (uClaim.Title == "User")
-                {
-                    user = uClaim.Value;
+                    parent = uClaim.Value;
                 }
             });
 
-            // If the user has a client, check if the client has authorization for the function
-            if (client != null)
+            // If the user has a parent user, recursively authorize the parent user
+            if (parent != null)
             {
-                List<Claim> clientClaims = new List<Claim>();
-                clientClaims = _clientRepository.GetAllClientClaims(client);
+                response = AuthorizeUser(parent, functionClaims);
 
-                if (!clientClaims.Contains(functionClaim))
+                // If parent user is not authorized to use this function do not authorize the current user
+                if (!response.Data)
                 {
-                    return false;
+                    return response;
                 }
             }
 
-            userClaims = _userRepository.GetAllUserClaims(user);
-
             // Check if user has all claims to use the function
-            if (userClaims.Contains(functionClaim))
+            foreach(ClaimDTO claim in functionClaims)
+            if (userClaims.Contains(claim))
             {
-                return true;
+                response.Data = true;
+                return response;
             }
 
+            // Default to an unauthorized user
+            response.Data = false;
+            return response;
+        }
 
-            return false;
+        private ResponseDTO<Boolean> AuthorizeFunction(List<ClaimDTO> functionClaims)
+        {
+            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
+
+            // Find the Function name in the function claims
+            string functionName = "N/A";
+            foreach (ClaimDTO claim in functionClaims)
+            {
+                if (claim.Title == "Action")
+                {
+                    functionName = claim.Value;
+                }
+            }
+
+            if (functionName == "N/A")
+            {
+                response.Data = false;
+                response.Error = "Function Claims did not include an Action claim indicating the name of the function.";
+                return response;
+            }
+
+            // Check if function is active
+            response = functionGateway.IsFunctionActive(functionName);
+            return response;
         }
 
     }

@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ParkingMaster.Services
+namespace ParkingMaster.Services.Services
 {
     public class PasswordService : IPasswordService
     {
@@ -52,6 +52,33 @@ namespace ParkingMaster.Services
         public string[] GetPwnedPasswords(string prefix)
         {
             return new PwnedPasswords().GetHashListByPrefix(prefix);
+        }
+
+        public int CheckPassword(string pw)
+        {
+            string hashed = Sha1Hash(pw);
+            string prefix = hashed.Substring(0, 5);
+            string suffix = hashed.Substring(5);
+
+            if (string.IsNullOrEmpty(pw))
+            {
+                return -1;
+            }
+            var results = GetPwnedPasswords(prefix);
+            if (results.Length == 0) // Handles the possibility of an empty array being returned into hashResults
+            {
+                return -1;
+            }
+            foreach (string s in results)
+            {
+                var pair = s.Split(':');
+                if (pair[0].Equals(suffix, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return Int32.Parse(pair[1]);
+                }
+
+            }
+            return 0;
         }
     }
 }

@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Security.Authorization.Contracts;
-using ParkingMaster.DataAccess.Models;
-using ParkingMaster.DataAccess.Repositories;
 
 namespace ParkingMaster.Security.Authorization
 {
     public class MockAuthorizationClient : IAuthorizationClient
     {
+        /*
         private IClaimRepository _repository;
         public MockAuthorizationClient(IClaimRepository repository)
         {
@@ -81,6 +80,6 @@ namespace ParkingMaster.Security.Authorization
 
             return false;
         }
-
+        */
     }
 }

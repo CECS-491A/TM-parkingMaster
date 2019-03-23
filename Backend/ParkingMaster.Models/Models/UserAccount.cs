@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,30 +15,40 @@ namespace ParkingMaster.Models.Models
 	{
 		// Automatic Properties
 		[Key]
-		public int? Id { get; set; }
+		public Guid Id { get; set; }
+        public Guid SsoId { get; set; }
+        [StringLength(350)]
+        [Index(IsUnique=true)]
 		public string Username { get; set; }
-		public string Password { get; set; }
 		public bool? IsActive { get; set; }
 		public bool? IsFirstTimeUser { get; set; }
 		public string RoleType { get; set; }
 
 		// Navigation Properties
-		public virtual PasswordSalt PasswordSalt { get; set; }
 		public virtual AuthenticationToken AuthenticationToken { get; set; }
 		public virtual UserClaims UserClaims { get; set; }
 
 		// Constructors
-		public UserAccount() { }
+		public UserAccount()
+        {
+            Id = Guid.NewGuid();
+            IsActive = true;
+            IsFirstTimeUser = true;
+        }
 
 		public UserAccount(string username)
 		{
-			Username = username;
+            Id = Guid.NewGuid();
+            IsActive = true;
+            IsFirstTimeUser = true;
+            Username = username;
 		}
 
-		public UserAccount(string username, string password, bool isActive, bool isFirstTimeUser, string roleType)
+		public UserAccount(Guid ssoId, string username, bool isActive, bool isFirstTimeUser, string roleType)
 		{
-			Username = username;
-			Password = password;
+            Id = Guid.NewGuid();
+            SsoId = ssoId;
+            Username = username;
 			IsActive = isActive;
 			IsFirstTimeUser = isFirstTimeUser;
 			RoleType = roleType;
