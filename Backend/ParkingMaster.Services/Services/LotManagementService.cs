@@ -32,11 +32,36 @@ namespace ParkingMaster.Services.Services
                 LotName = lotname,
                 Address = address,
                 Cost = cost,
-                //UserAccount = _userGateway.GetUserByUsername(), // oops need to fix this
+                //UserAccount = _userGateway.GetUserByUsername(), // oops need to fix this. add a getUserByGUID?
                 Spots = new List<Spot>() // Spots = ParseSpotsFromFile(spotfile);
             };
             response = _lotGateway.AddLot(newLot, newLot.Spots);
             return response;
+        }
+
+        //public ResponseDTO<bool> AddSpots() // might just remove this
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ResponseDTO<bool> EditLotSpots(Guid ownerid, string lotname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ResponseDTO<bool> EditLotName(Guid ownerid, string oldlotname, string newlotname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Lot GetLotByName(Guid ownerid, string name)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Spot> ParseSpotsFromFile() // parameter = file
@@ -49,32 +74,12 @@ namespace ParkingMaster.Services.Services
             return new List<Spot>();
         }
 
-        public ResponseDTO<bool> AddSpots() // might just remove this
-        {
-            throw new NotImplementedException();
-        }
-
-        public ResponseDTO<bool> DeleteLot(string lotname)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ResponseDTO<bool> EditLot(string lotname)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ResponseDTO<bool> EditSpots()
-        {
-            throw new NotImplementedException();
-        }
-
         public List<Lot> GetAllLots()
         {
             throw new NotImplementedException();
         }
 
-        public List<Lot> GetAllLotsByOwner(string ownername)
+        public List<Lot> GetAllLotsByOwner(Guid ownerid)
         {
             throw new NotImplementedException();
         }
@@ -84,12 +89,7 @@ namespace ParkingMaster.Services.Services
             throw new NotImplementedException();
         }
 
-        public List<Spot> GetAllSpotsInLot(string lotname)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Lot GetLotByName(string name)
+        public List<Spot> GetAllSpotsInLot(Guid ownerid, string lotname)
         {
             throw new NotImplementedException();
         }

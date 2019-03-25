@@ -11,19 +11,19 @@ namespace ParkingMaster.Services.Services
     public interface ILotManagementService
     {
         ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost);
-        ResponseDTO<Boolean> DeleteLot(string lotname);
-        ResponseDTO<Boolean> EditLot(string lotname); // edit name
+        ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname);
+        ResponseDTO<Boolean> EditLotSpots(Guid ownerid, string lotname);
+        ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname);
 
-        Lot GetLotByName(string name);
-
+        Lot GetLotByName(Guid ownerid, string name);
         List<Spot> ParseSpotsFromFile();
 
-        ResponseDTO<Boolean> AddSpots(); // parse CSV - file argument. Probably going to remove this
-        ResponseDTO<Boolean> EditSpots(); // parse CSV - file argument
+        //ResponseDTO<Boolean> AddSpots(); // parse CSV - file argument. Probably going to remove this
+        //ResponseDTO<Boolean> EditSpots(Guid ownerid, string lotname); // parse CSV - file argument
 
         List<Lot> GetAllLots();
-        List<Lot> GetAllLotsByOwner(string ownername); // use this + GetAllSpotsInLot to get all spots by user
+        List<Lot> GetAllLotsByOwner(Guid ownerid); // use this + GetAllSpotsInLot to get all spots by user
         List<Spot> GetAllSpots();
-        List<Spot> GetAllSpotsInLot(string lotname);
+        List<Spot> GetAllSpotsInLot(Guid ownerid, string lotname);
     }
 }

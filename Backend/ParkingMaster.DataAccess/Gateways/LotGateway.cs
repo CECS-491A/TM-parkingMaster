@@ -58,13 +58,17 @@ namespace ParkingMaster.DataAccess.Gateways
             }
         }
 
-        public ResponseDTO<Boolean> DeleteLot(Lot lot)
+        public ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
                 {
-                    context.Lots.Remove(lot);
+                    var deletelot = (from lot in context.Lots
+                               where lot.OwnerId == ownerid &&
+                               lot.LotName == lotname
+                               select lot).FirstOrDefault();
+                    context.Lots.Remove(deletelot);
                     context.SaveChanges();
 
                     dbContextTransaction.Commit();
@@ -87,7 +91,11 @@ namespace ParkingMaster.DataAccess.Gateways
             }
         }
 
-
+        public ResponseDTO<Boolean> EditLotSpots()
+        {
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+            return response;
+        }
 
         // TO DO
 
