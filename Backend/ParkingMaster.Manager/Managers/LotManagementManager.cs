@@ -1,4 +1,5 @@
-﻿using ParkingMaster.DataAccess.Context;
+﻿using ParkingMaster.DataAccess;
+using ParkingMaster.DataAccess.Context;
 using ParkingMaster.DataAccess.Gateways;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
@@ -13,34 +14,41 @@ namespace ParkingMaster.Manager.Managers
     public class LotManagementManager
     {
         private ILotManagementService _lotManagementService;
-        private LotGateway _lotGateway;
+        private readonly LotGateway _lotGateway;
+        private readonly UserGateway _userGateway;
         //private readonly LotContext _lotContext;
 
         public LotManagementManager()
         {
             _lotGateway = new LotGateway();
-            _lotManagementService = new LotManagementService(_lotGateway);
-            //_lotContext = new LotContext();
-            //_lotManagementService = new LotManagementService(_lotContext);
+            _userGateway = new UserGateway();
+            _lotManagementService = new LotManagementService(_lotGateway, _userGateway);
         }
 
-        public Boolean AddLot(string lotname) // merge with add lots - need GUID from login token
+        // 'The file collection is populated only when the HTTP request Content-Type value is "multipart/form-data"'
+        public Boolean AddLot(Guid ownerid, string lotname, string address, double cost) // need another parameter, file
         {
+
+            // PLEASE REPLACE THE FOLLOWING LINE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
+            ownerid = Guid.NewGuid();
+
             ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
-            response = _lotManagementService.AddLot(lotname); //(lotname, spotfile)
+            response = _lotManagementService.AddLot(ownerid, lotname, address, cost); //(lotname, spotfile)
             return response.Data;
         }
 
-        public Boolean AddSpots(Lot lot) // 'The file collection is populated only when the HTTP request Content-Type value is "multipart/form-data"'
+        public Boolean AddSpots(Lot lot) 
         {
             ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
             //response = _lotManagementService.AddLot(lotname);
             return response.Data;
         }
 
-        public Boolean DeleteLot(string lotname)
+        public Boolean DeleteLot(Guid ownerid, string lotname)
         {
-            return false;
+            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
+            response = _lotManagementService.DeleteLot(ownerid, lotname);
+            return response.Data;
         }
 
         public Boolean EditLot(string lotname)

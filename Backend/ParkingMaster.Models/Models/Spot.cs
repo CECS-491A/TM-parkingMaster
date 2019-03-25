@@ -17,6 +17,7 @@ namespace ParkingMaster.Models.Models
         public Guid LotId { get; set; }
         public string LotName { get; set; }
         public bool IsHandicappedAccessible { get; set; }
+        public bool IsTaken { get; set; }
 
         // Navigation properties
         public virtual Lot Lot { get; set; }
@@ -24,8 +25,9 @@ namespace ParkingMaster.Models.Models
         // Constructors
         public Spot()
         {
-            LotName = "Default Lot Name";
+            LotName = "DEFAULT";
             IsHandicappedAccessible = false;
+            IsTaken = false;
         }
     }
 }

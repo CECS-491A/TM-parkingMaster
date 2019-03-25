@@ -10,7 +10,7 @@ namespace ParkingMaster.Services.Services
 {
     public interface ILotManagementService
     {
-        ResponseDTO<Boolean> AddLot(string lotname);
+        ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost);
         ResponseDTO<Boolean> DeleteLot(string lotname);
         ResponseDTO<Boolean> EditLot(string lotname); // edit name
 
@@ -18,7 +18,7 @@ namespace ParkingMaster.Services.Services
 
         List<Spot> ParseSpotsFromFile();
 
-        ResponseDTO<Boolean> AddSpots(); // parse CSV - file argument
+        ResponseDTO<Boolean> AddSpots(); // parse CSV - file argument. Probably going to remove this
         ResponseDTO<Boolean> EditSpots(); // parse CSV - file argument
 
         List<Lot> GetAllLots();

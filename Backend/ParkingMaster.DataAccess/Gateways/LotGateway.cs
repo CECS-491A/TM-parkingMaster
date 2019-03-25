@@ -11,7 +11,7 @@ namespace ParkingMaster.DataAccess.Gateways
 {
     public class LotGateway : IDisposable
     {
-        UserContext context;
+        UserContext context; // used to be LotContext
 
         public LotGateway()
         {
@@ -82,38 +82,6 @@ namespace ParkingMaster.DataAccess.Gateways
                     {
                         Data = false,
                         Error = "Failed to delete lot from data store."
-                    };
-                }
-            }
-        }
-
-        public ResponseDTO<Boolean> AddSpots(List<Spot> spots) // will delete this, ignore
-        {
-            using (var dbContextTransaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    foreach (Spot spot in spots)
-                    {
-                        context.Spots.Add(spot);
-                    }
-                    context.SaveChanges();
-
-                    dbContextTransaction.Commit();
-
-                    return new ResponseDTO<bool>()
-                    {
-                        Data = true
-                    };
-                }
-                catch (Exception)
-                {
-                    dbContextTransaction.Rollback();
-
-                    return new ResponseDTO<bool>()
-                    {
-                        Data = false,
-                        Error = "Failed to add spots to data store."
                     };
                 }
             }

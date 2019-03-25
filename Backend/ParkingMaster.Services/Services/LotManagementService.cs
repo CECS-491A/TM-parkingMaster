@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ParkingMaster.DataAccess;
 using ParkingMaster.DataAccess.Gateways;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
@@ -13,24 +14,28 @@ namespace ParkingMaster.Services.Services
     {
 
         private LotGateway _lotGateway;
+        private UserGateway _userGateway;
 
-        public LotManagementService(LotGateway lotGateway)
+        public LotManagementService(LotGateway lotGateway, UserGateway userGateway)
         {
             _lotGateway = lotGateway;
+            _userGateway = userGateway;
         }
 
-        public ResponseDTO<bool> AddLot(string lotname) // (string lotname, ??? spotfile)
+        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost) // (string lotname, ??? spotfile)
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
             Lot newLot = new Lot()
             {
                 LotId = Guid.NewGuid(),
+                OwnerId = ownerid,
                 LotName = lotname,
+                Address = address,
+                Cost = cost,
+                //UserAccount = _userGateway.GetUserByUsername(), // oops need to fix this
                 Spots = new List<Spot>() // Spots = ParseSpotsFromFile(spotfile);
-                //OwnerId
-                //UserAccount
             };
-            response = _lotGateway.AddLot(newLot, newLot.Spots); // (newLot, parsed list?)
+            response = _lotGateway.AddLot(newLot, newLot.Spots);
             return response;
         }
 
