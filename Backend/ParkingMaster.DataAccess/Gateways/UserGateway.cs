@@ -48,13 +48,36 @@ namespace ParkingMaster.DataAccess
 			{
 				return new ResponseDTO<UserAccount>()
 				{
-					Data = new UserAccount(username),
+					Data = null,
 				};
 			}
 		}
 
-		//Store a user
-		public ResponseDTO<bool> StoreIndividualUser(UserAccount userAccount, List<Claim> claims)
+        public ResponseDTO<UserAccount> GetUserBySsoId(Guid id)
+        {
+            try
+            {
+                var userAccount = (from account in context.UserAccounts
+                                   where account.SsoId == id
+                                   select account).FirstOrDefault();
+
+                // Return a ResponseDto with a UserAccount model
+                return new ResponseDTO<UserAccount>()
+                {
+                    Data = userAccount
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<UserAccount>()
+                {
+                    Data = null
+                };
+            }
+        }
+
+        //Store a user
+        public ResponseDTO<bool> StoreIndividualUser(UserAccount userAccount, List<Claim> claims)
 		{
 			using (var dbContextTransaction = context.Database.BeginTransaction())
 			{
@@ -241,8 +264,10 @@ namespace ParkingMaster.DataAccess
 
         public ResponseDTO<List<ClaimDTO>> GetUserClaims(string username)
         {
-            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>();
-            response.Data = new List<ClaimDTO>();
+            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>
+            {
+                Data = new List<ClaimDTO>()
+            };
             List<Claim> claimsList = new List<Claim>();
             try
             {

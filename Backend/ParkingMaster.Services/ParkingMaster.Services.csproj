@@ -84,6 +84,11 @@
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
       <Version>2.0.1</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Net.Compilers">
+      <Version>2.10.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
     </PackageReference>

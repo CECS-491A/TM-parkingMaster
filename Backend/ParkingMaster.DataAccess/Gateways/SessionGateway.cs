@@ -24,7 +24,7 @@ namespace ParkingMaster.DataAccess
             context = c;
         }
 
-        public ResponseDTO<SessionDTO> StoreSession(SessionDTO sessionDTO)
+        public ResponseDTO<Session> StoreSession(SessionDTO sessionDTO)
         {
             Session session = new Session(sessionDTO);
 
@@ -42,9 +42,9 @@ namespace ParkingMaster.DataAccess
                     dbContextTransaction.Commit();
 
                     // Return a true ResponseDto
-                    return new ResponseDTO<SessionDTO>()
+                    return new ResponseDTO<Session>()
                     {
-                        Data = new SessionDTO(session)
+                        Data = session
                     };
                 }
                 catch (Exception)
@@ -52,7 +52,7 @@ namespace ParkingMaster.DataAccess
                     // Rolls back the changes saved in the transaction
                     dbContextTransaction.Rollback();
                     // Returns a false ResponseDto
-                    return new ResponseDTO<SessionDTO>()
+                    return new ResponseDTO<Session>()
                     {
                         Data = null,
                     };
@@ -104,7 +104,7 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<SessionDTO> GetSession(Guid sessionId)
+        public ResponseDTO<Session> GetSession(Guid sessionId)
         {
             try
             {
@@ -113,14 +113,14 @@ namespace ParkingMaster.DataAccess
                                    select sessions).FirstOrDefault();
 
                 // Return a ResponseDto with a Session DTO
-                return new ResponseDTO<SessionDTO>()
+                return new ResponseDTO<Session>()
                 {
-                    Data = new SessionDTO(session)
+                    Data = (Session) session
                 };
             }
             catch (Exception)
             {
-                return new ResponseDTO<SessionDTO>()
+                return new ResponseDTO<Session>()
                 {
                     Data = null
                 };

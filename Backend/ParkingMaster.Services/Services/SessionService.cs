@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Models;
 using ParkingMaster.Services.Services.Contracts;
 using ParkingMaster.DataAccess;
 
@@ -18,7 +19,7 @@ namespace ParkingMaster.Services.Services
             _sessionGateway = new SessionGateway();
         }
 
-        public ResponseDTO<SessionDTO> CreateSession(Guid userId)
+        public ResponseDTO<Session> CreateSession(Guid userId)
         {
             return _sessionGateway.StoreSession(new SessionDTO(userId));
         }
@@ -28,7 +29,7 @@ namespace ParkingMaster.Services.Services
             return _sessionGateway.DeleteSession(sessionId);
         }
 
-        public ResponseDTO<SessionDTO> GetSession(Guid sessionId)
+        public ResponseDTO<Session> GetSession(Guid sessionId)
         {
             return _sessionGateway.GetSession(sessionId);
         }

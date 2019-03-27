@@ -47,10 +47,8 @@ namespace ParkingMaster.Models.Models
             {
                 return false;
             }
-
-            Claim otherClaim = obj as Claim;
-
-            if (otherClaim != null)
+            
+            if (obj is Claim otherClaim)
             {
                 if (this.Title.Equals(otherClaim.Title))
                 {
