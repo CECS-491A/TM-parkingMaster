@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParkingMaster.DataAccess.Gateways
+namespace ParkingMaster.DataAccess
 {
     public class SessionGateway : IDisposable, ISessionGateway
     {
@@ -62,17 +62,136 @@ namespace ParkingMaster.DataAccess.Gateways
 
         public ResponseDTO<bool> DeleteSession(Guid sessionId)
         {
-            throw new NotImplementedException();
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    // Queries for the session by sessionId.
+                    var session = (from sessions in context.Sessions
+                                   where sessions.SessionId == sessionId
+                                   select sessions).FirstOrDefault();
+
+                    // Checking if user account is null.
+                    if (session == null)
+                    {
+                        return new ResponseDTO<bool>()
+                        {
+                            Data = false,
+                        };
+                    }
+                    
+
+                    // Delete useraccount
+                    context.Sessions.Remove(session);
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+
+                    };
+                };
+            }
         }
 
         public ResponseDTO<SessionDTO> GetSession(Guid sessionId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var session = (from sessions in context.Sessions
+                                   where sessions.SessionId == sessionId
+                                   select sessions).FirstOrDefault();
+
+                // Return a ResponseDto with a Session DTO
+                return new ResponseDTO<SessionDTO>()
+                {
+                    Data = new SessionDTO(session)
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<SessionDTO>()
+                {
+                    Data = null
+                };
+            }
         }
 
         public ResponseDTO<SessionDTO> UpdateSessionExpiration(Guid sessionId)
         {
-            throw new NotImplementedException();
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    // Queries for the session that needs to be updated.
+                    var session = (from sessions in context.Sessions
+                                   where sessions.SessionId == sessionId
+                                   select sessions).FirstOrDefault();
+
+                    session.ExpiringAt = DateTime.Now.AddMinutes(Session.SESSION_LENGTH);
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<SessionDTO>()
+                    {
+                        Data = new SessionDTO(session)
+                    };
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<SessionDTO>()
+                    {
+                        Data = null,
+
+                    };
+                }
+            }
+        }
+
+        // Returns all sessions in the data store
+        public ResponseDTO<List<Session>> GetAllSessions()
+        {
+            ResponseDTO<List<Session>> response = new ResponseDTO<List<Session>>();
+            try
+            {
+                response.Data = context.Sessions.ToList<Session>();
+                return response;
+            }
+            catch
+            {
+                response.Data = null;
+                response.Error = "Failed to read Session table";
+                return response;
+            }
+        }
+
+        // Deletes all sessions to reinitialize the database
+        public void ResetDatabase()
+        {
+
+            List<Session> sessions = GetAllSessions().Data;
+
+            if (sessions == null)
+            {
+                return;
+            }
+            foreach (Session session in sessions)
+            {
+                DeleteSession(session.SessionId);
+            }
+
         }
 
         /// <summary>

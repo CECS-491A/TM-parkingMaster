@@ -20,5 +20,12 @@ namespace ParkingMaster.Models.DTO
             UserId = session.Id;
             ExpiringAt = session.ExpiringAt;
         }
+
+        // Constructor to easily add new session to database
+        public SessionDTO(Guid userId)
+        {
+            UserId = userId;
+            ExpiringAt = DateTime.Now.AddMinutes(Session.SESSION_LENGTH);
+        }
     }
 }

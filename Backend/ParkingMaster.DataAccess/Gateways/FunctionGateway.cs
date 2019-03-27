@@ -164,7 +164,7 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        //Deletes all functions to reinitialize the database
+        // Deletes all functions to reinitialize the database
         public void ResetDatabase()
         {
 
