@@ -258,7 +258,7 @@ namespace ParkingMaster.DataAccess
                     return response;
                 }
 
-                claimsList = (from claims in context.Claim
+                claimsList = (from claims in context.Claims
                                  where claims.UserClaimsId == userAccount.Id
                                  select claims).ToList<Claim>();
 

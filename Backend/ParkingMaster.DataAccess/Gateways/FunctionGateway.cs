@@ -1,6 +1,5 @@
 ﻿using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
-using ParkingMaster.DataAccess.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +28,7 @@ namespace ParkingMaster.DataAccess
                 try
                 {
                     // Add Function
-                    context.Function.Add(function);
+                    context.Functions.Add(function);
                     context.SaveChanges();
 
                     // Commit transaction to database
@@ -59,7 +58,7 @@ namespace ParkingMaster.DataAccess
         {
             try
             {
-                var funct = (from function in context.Function
+                var funct = (from function in context.Functions
                                    where function.Name == name
                                    select function).FirstOrDefault();
 
@@ -83,7 +82,7 @@ namespace ParkingMaster.DataAccess
         {
             try
             {
-                var funct = (from function in context.Function
+                var funct = (from function in context.Functions
                              where function.Name == name
                              select function).FirstOrDefault();
 
@@ -112,7 +111,7 @@ namespace ParkingMaster.DataAccess
                 {
 
                     // Queries for the user account based on username.
-                    var funct = (from function in context.Function
+                    var funct = (from function in context.Functions
                                        where function.Name == name
                                        select function).FirstOrDefault();
 
@@ -127,7 +126,7 @@ namespace ParkingMaster.DataAccess
                     }
 
                     // Delete function
-                    context.Function.Remove(funct);
+                    context.Functions.Remove(funct);
                     context.SaveChanges();
                     dbContextTransaction.Commit();
 
@@ -154,7 +153,7 @@ namespace ParkingMaster.DataAccess
             ResponseDTO<List<Function>> response = new ResponseDTO<List<Function>>();
             try
             {
-                response.Data = context.Function.ToList<Function>();
+                response.Data = context.Functions.ToList<Function>();
                 return response;
             }
             catch

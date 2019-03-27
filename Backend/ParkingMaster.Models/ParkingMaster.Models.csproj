@@ -75,11 +75,12 @@
     <Compile Include="DTO\RegisterUserDTO.cs" />
     <Compile Include="DTO\ResetPasswordDTO.cs" />
     <Compile Include="DTO\ResponseDTO.cs" />
+    <Compile Include="DTO\SessionDTO.cs" />
     <Compile Include="DTO\UserAccountDTO.cs" />
     <Compile Include="DTO\UserAuthenticationDTO.cs" />
-    <Compile Include="Models\AuthenticationToken.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="Models\Function.cs" />
+    <Compile Include="Models\Session.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Models\UserClaims.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

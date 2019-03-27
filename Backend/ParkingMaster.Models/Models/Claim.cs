@@ -9,6 +9,7 @@ using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Models.Models
 {
+    [Table("ParkingMaster.Claims")]
     public class Claim : IEquatable<Claim>
     {
         [Key]

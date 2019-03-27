@@ -119,6 +119,25 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             };
             userGateway.StoreIndividualUser(user, claims);
 
+            user = new UserAccount()
+            {
+                SsoId = new Guid("2AE9A868-17AA-490F-9094-5907D2E64EBB"),
+                Username = "user1@yahoo.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
+            };
+            claims = new List<Claim>
+            {
+                new Claim("User", "user1@yahoo.com"),
+                new Claim("Action", "DisabledAction"),
+                new Claim("Action", "CreateOtherUser"),
+                new Claim("Action", "Logout"),
+                new Claim("Parent", "client1@yahoo.com")
+            };
+            userGateway.StoreIndividualUser(user, claims);
+
+
             var functionGateway = new FunctionGateway(context);
             functionGateway.ResetDatabase();
 
