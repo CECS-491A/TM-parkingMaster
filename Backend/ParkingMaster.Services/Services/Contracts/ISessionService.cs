@@ -1,15 +1,13 @@
 ﻿using System;
 using ParkingMaster.Models.DTO;
 
-
-namespace ParkingMaster.DataAccess.Gateways.Contracts
+namespace ParkingMaster.Services.Services.Contracts
 {
-    public interface ISessionGateway
+    public interface ISessionService
     {
-        ResponseDTO<SessionDTO> StoreSession(SessionDTO sessionDTO);
+        ResponseDTO<SessionDTO> CreateSession(Guid userId);
         ResponseDTO<SessionDTO> GetSession(Guid sessionId);
         ResponseDTO<SessionDTO> UpdateSessionExpiration(Guid sessionId);
         ResponseDTO<bool> DeleteSession(Guid sessionId);
-
     }
 }

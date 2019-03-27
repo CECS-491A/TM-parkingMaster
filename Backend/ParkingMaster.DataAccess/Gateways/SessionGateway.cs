@@ -24,7 +24,7 @@ namespace ParkingMaster.DataAccess
             context = c;
         }
 
-        public ResponseDTO<bool> CreateSession(SessionDTO sessionDTO)
+        public ResponseDTO<SessionDTO> StoreSession(SessionDTO sessionDTO)
         {
             Session session = new Session(sessionDTO);
 
@@ -42,9 +42,9 @@ namespace ParkingMaster.DataAccess
                     dbContextTransaction.Commit();
 
                     // Return a true ResponseDto
-                    return new ResponseDTO<bool>()
+                    return new ResponseDTO<SessionDTO>()
                     {
-                        Data = true
+                        Data = new SessionDTO(session)
                     };
                 }
                 catch (Exception)
@@ -52,9 +52,9 @@ namespace ParkingMaster.DataAccess
                     // Rolls back the changes saved in the transaction
                     dbContextTransaction.Rollback();
                     // Returns a false ResponseDto
-                    return new ResponseDTO<bool>()
+                    return new ResponseDTO<SessionDTO>()
                     {
-                        Data = false,
+                        Data = null,
                     };
                 }
             }
