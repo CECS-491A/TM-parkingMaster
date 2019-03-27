@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ParkingMaster.Manager.Managers
+namespace ParkingMaster.Manager.Managers // error handling and logging happens here!
 {
     public class LotManagementManager
     {
@@ -32,15 +32,7 @@ namespace ParkingMaster.Manager.Managers
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
-            response = _lotManagementService.AddLot(ownerid, lotname, address, cost); //(lotname, spotfile)
-            return response.Data;
-        }
-
-        public Boolean AddSpots(Lot lot) // probably going to remove this
-        {
-            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
-            //response = _lotManagementService.AddLot(lotname);
+            ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost); //(lotname, spotfile)
             return response.Data;
         }
 
@@ -49,8 +41,7 @@ namespace ParkingMaster.Manager.Managers
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
-            response = _lotManagementService.DeleteLot(ownerid, lotname);
+            ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
             return response.Data;
         }
 
@@ -59,8 +50,7 @@ namespace ParkingMaster.Manager.Managers
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
-            response = _lotManagementService.EditLotSpots(ownerid, lotname);
+            ResponseDTO<Boolean> response = _lotManagementService.EditLotSpots(ownerid, lotname);
             return response.Data;
         }
 
@@ -69,8 +59,7 @@ namespace ParkingMaster.Manager.Managers
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            ResponseDTO<Boolean> response = new ResponseDTO<Boolean>();
-            response = _lotManagementService.EditLotName(ownerid, oldlotname, newlotname);
+            ResponseDTO<Boolean> response = _lotManagementService.EditLotName(ownerid, oldlotname, newlotname);
             return response.Data;
         }
 
@@ -79,14 +68,14 @@ namespace ParkingMaster.Manager.Managers
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            //ResponseDTO<Lot> response = new ResponseDTO<Lot>();
-            return _lotManagementService.GetLotByName(ownerid, lotname);
-            //return response.Data;
+            ResponseDTO<Lot> response = _lotManagementService.GetLotByName(ownerid, lotname);
+            return response.Data;
         }
 
         public List<Lot> GetAllLots()
         {
             List<Lot> lots = new List<Lot>();
+
             return new List<Lot>();
         }
 
@@ -94,6 +83,7 @@ namespace ParkingMaster.Manager.Managers
         {
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
+
 
             return new List<Lot>();
         }

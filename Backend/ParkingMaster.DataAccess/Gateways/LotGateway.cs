@@ -94,17 +94,235 @@ namespace ParkingMaster.DataAccess.Gateways
         public ResponseDTO<Boolean> EditLotSpots()
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
+
             return response;
         }
 
-        // TO DO
+        public ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var editlot = (from lot in context.Lots
+                                     where lot.OwnerId == ownerid &&
+                                     lot.LotName == oldlotname
+                                     select lot).FirstOrDefault();
 
-        // Edit lot
-        // Delete spot(s) - though I think an EditSpots would suffice
-        // GetLotByName (?)
-        // GetAllLots
-        // GetAllSpotsInLot
-        // GetAllSpots - get all lots then get all spots? need to figure this out
+                    editlot.LotName = newlotname;
+
+                    context.SaveChanges();
+
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = "Failed to edit lot name."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<Lot> GetLotByName(Guid ownerid, string lotname)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var returnlot = (from lot in context.Lots
+                                   where lot.OwnerId == ownerid &&
+                                   lot.LotName == lotname
+                                   select lot).FirstOrDefault();
+
+                    //context.SaveChanges();
+
+                    //dbContextTransaction.Commit();
+
+                    return new ResponseDTO<Lot>()
+                    {
+                        Data = returnlot
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<Lot>()
+                    {
+                        Data = null,
+                        Error = "Could not fetch lot."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<List<Lot>> GetAllLots()
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var lots = (from lot in context.Lots select lot).ToList();
+
+                    //context.SaveChanges();
+
+                    //dbContextTransaction.Commit();
+
+                    return new ResponseDTO<List<Lot>>()
+                    {
+                        Data = lots
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<List<Lot>>()
+                    {
+                        Data = null,
+                        Error = "Could not fetch lots."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var lots = (from lot in context.Lots where lot.OwnerId == ownerid select lot).ToList();
+
+                    //context.SaveChanges();
+
+                    //dbContextTransaction.Commit();
+
+                    return new ResponseDTO<List<Lot>>()
+                    {
+                        Data = lots
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<List<Lot>>()
+                    {
+                        Data = null,
+                        Error = "Could not fetch lots."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<List<Spot>> GetAllSpots()
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var spots = (from spot in context.Spots select spot).ToList();
+
+                    //context.SaveChanges();
+
+                    //dbContextTransaction.Commit();
+
+                    return new ResponseDTO<List<Spot>>()
+                    {
+                        Data = spots
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<List<Spot>>()
+                    {
+                        Data = null,
+                        Error = "Could not fetch spots."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<List<Spot>> GetAllSpotsByOwner(Guid ownerid)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    List<Spot> spots = new List<Spot>();
+
+                    var lots = (from lot in context.Lots where lot.OwnerId == ownerid select lot).ToList();
+                    List<Spot> lotspots = new List<Spot>();
+                    foreach (Lot l in lots)
+                    {
+                        lotspots = (from spot in context.Spots where spot.LotId == l.LotId select spot).ToList();
+                        foreach (Spot sp in lotspots)
+                        {
+                            spots.Add(sp);
+                        }
+                    }
+
+                    return new ResponseDTO<List<Spot>>()
+                    {
+                        Data = spots
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<List<Spot>>()
+                    {
+                        Data = null,
+                        Error = "Could not fetch spots."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<List<Spot>> GetAllSpotsInLot(Guid ownerid, string lotname)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var _lot = (from lot in context.Lots where lot.OwnerId == ownerid && lot.LotName == lotname select lot).FirstOrDefault();
+                    List<Spot> lotspots = (from spot in context.Spots where spot.LotId == _lot.LotId select spot).ToList();
+
+                    //context.SaveChanges();
+
+                    //dbContextTransaction.Commit();
+
+                    return new ResponseDTO<List<Spot>>()
+                    {
+                        Data = lotspots
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<List<Spot>>()
+                    {
+                        Data = null,
+                        Error = "Could not fetch spots."
+                    };
+                }
+            }
+        }
 
         public void Dispose()
         {

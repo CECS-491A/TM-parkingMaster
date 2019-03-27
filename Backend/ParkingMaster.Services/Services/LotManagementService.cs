@@ -24,7 +24,6 @@ namespace ParkingMaster.Services.Services
 
         public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost) // (string lotname, ??? spotfile)
         {
-            ResponseDTO<bool> response = new ResponseDTO<bool>();
             Lot newLot = new Lot()
             {
                 LotId = Guid.NewGuid(),
@@ -35,61 +34,65 @@ namespace ParkingMaster.Services.Services
                 //UserAccount = _userGateway.GetUserByUsername(), // oops need to fix this. add a getUserByGUID?
                 Spots = new List<Spot>() // Spots = ParseSpotsFromFile(spotfile);
             };
-            response = _lotGateway.AddLot(newLot, newLot.Spots);
+            ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
             return response;
         }
 
-        //public ResponseDTO<bool> AddSpots() // might just remove this
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
         {
-            throw new NotImplementedException();
+            ResponseDTO<bool> response = _lotGateway.DeleteLot(ownerid, lotname);
+            return response;
         }
 
         public ResponseDTO<bool> EditLotSpots(Guid ownerid, string lotname)
         {
-            throw new NotImplementedException();
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+            return response;
         }
 
         public ResponseDTO<bool> EditLotName(Guid ownerid, string oldlotname, string newlotname)
         {
-            throw new NotImplementedException();
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+            //response = _lotGateway.DeleteLot(ownerid, lotname);
+            return response;
         }
 
-        public Lot GetLotByName(Guid ownerid, string name)
+        public ResponseDTO<Lot> GetLotByName(Guid ownerid, string name)
         {
             throw new NotImplementedException();
         }
 
-        public List<Spot> ParseSpotsFromFile() // parameter = file
+        public ResponseDTO<List<Spot>> ParseSpotsFromFile() // parameter = file
         {
             //List<Spot> spotList = new List<Spot>();
-
+            ResponseDTO<List<Spot>> response = new ResponseDTO<List<Spot>>();
 
             //return spotList;
 
-            return new List<Spot>();
+            return response;
         }
 
-        public List<Lot> GetAllLots()
+        public ResponseDTO<List<Lot>> GetAllLots()
         {
             throw new NotImplementedException();
         }
 
-        public List<Lot> GetAllLotsByOwner(Guid ownerid)
+        public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)
         {
             throw new NotImplementedException();
         }
 
-        public List<Spot> GetAllSpots()
+        public ResponseDTO<List<Spot>> GetAllSpots()
         {
             throw new NotImplementedException();
         }
 
-        public List<Spot> GetAllSpotsInLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByOwner(Guid ownerid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ResponseDTO<List<Spot>> GetAllSpotsInLot(Guid ownerid, string lotname)
         {
             throw new NotImplementedException();
         }

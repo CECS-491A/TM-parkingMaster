@@ -15,15 +15,17 @@ namespace ParkingMaster.Services.Services
         ResponseDTO<Boolean> EditLotSpots(Guid ownerid, string lotname);
         ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname);
 
-        Lot GetLotByName(Guid ownerid, string name);
-        List<Spot> ParseSpotsFromFile();
+        ResponseDTO<Lot> GetLotByName(Guid ownerid, string name);
+        ResponseDTO<List<Spot>> ParseSpotsFromFile();
 
         //ResponseDTO<Boolean> AddSpots(); // parse CSV - file argument. Probably going to remove this
         //ResponseDTO<Boolean> EditSpots(Guid ownerid, string lotname); // parse CSV - file argument
 
-        List<Lot> GetAllLots();
-        List<Lot> GetAllLotsByOwner(Guid ownerid); // use this + GetAllSpotsInLot to get all spots by user
-        List<Spot> GetAllSpots();
-        List<Spot> GetAllSpotsInLot(Guid ownerid, string lotname);
+        ResponseDTO<List<Lot>> GetAllLots();
+        ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid); // use this + GetAllSpotsInLot to get all spots by user
+        ResponseDTO<List<Spot>> GetAllSpots();
+        ResponseDTO<List<Spot>> GetAllSpotsByOwner(Guid ownerid);
+        ResponseDTO<List<Spot>> GetAllSpotsInLot(Guid ownerid, string lotname);
+
     }
 }
