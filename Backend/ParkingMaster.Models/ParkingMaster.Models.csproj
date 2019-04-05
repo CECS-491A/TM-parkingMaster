@@ -69,7 +69,7 @@
     <Compile Include="DTO\ResponseDTO.cs" />
     <Compile Include="DTO\SessionDTO.cs" />
     <Compile Include="DTO\UserAccountDTO.cs" />
-    <Compile Include="DTO\UserRequestDTO.cs" />
+    <Compile Include="DTO\SsoUserRequestDTO.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="Models\Function.cs" />
     <Compile Include="Models\Session.cs" />

@@ -2,7 +2,7 @@
 
 namespace ParkingMaster.Models.DTO
 {
-    public class UserRequestDTO
+    public class SsoUserRequestDTO
     {
         [Required]
         public string Email { get; set; }

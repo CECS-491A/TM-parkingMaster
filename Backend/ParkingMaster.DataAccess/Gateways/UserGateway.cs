@@ -30,7 +30,7 @@ namespace ParkingMaster.DataAccess
         /// <summary>
         /// The GetUserByUsername method.
         /// Gets a user by username
-        public ResponseDTO<UserAccount> GetUserByUsername(string username)
+        public ResponseDTO<UserAccountDTO> GetUserByUsername(string username)
 		{
 			try
 			{
@@ -39,21 +39,22 @@ namespace ParkingMaster.DataAccess
 								   select account).FirstOrDefault();
 
 				// Return a ResponseDto with a UserAccount model
-				return new ResponseDTO<UserAccount>()
+				return new ResponseDTO<UserAccountDTO>()
 				{
-					Data = userAccount
-				};
+					Data = new UserAccountDTO(userAccount)
+
+                };
 			}
 			catch (Exception)
 			{
-				return new ResponseDTO<UserAccount>()
+				return new ResponseDTO<UserAccountDTO>()
 				{
 					Data = null,
 				};
 			}
 		}
 
-        public ResponseDTO<UserAccount> GetUserBySsoId(Guid id)
+        public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id)
         {
             try
             {
@@ -62,14 +63,14 @@ namespace ParkingMaster.DataAccess
                                    select account).FirstOrDefault();
 
                 // Return a ResponseDto with a UserAccount model
-                return new ResponseDTO<UserAccount>()
+                return new ResponseDTO<UserAccountDTO>()
                 {
-                    Data = userAccount
+                    Data = new UserAccountDTO(userAccount)
                 };
             }
             catch (Exception)
             {
-                return new ResponseDTO<UserAccount>()
+                return new ResponseDTO<UserAccountDTO>()
                 {
                     Data = null
                 };

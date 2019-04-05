@@ -104,9 +104,9 @@ namespace ParkingMaster.Services.Services
             throw new NotImplementedException();
         }
 
-        public ResponseDTO<UserAccount> GetUserByUsername(string username)
+        public ResponseDTO<UserAccountDTO> GetUserByUsername(string username)
         {
-            ResponseDTO<UserAccount> response = new ResponseDTO<UserAccount>();
+            ResponseDTO<UserAccountDTO> response = new ResponseDTO<UserAccountDTO>();
 
             if (username == null)
             {
@@ -127,9 +127,9 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<UserAccount> GetUserBySsoId(Guid id)
+        public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id)
         {
-            ResponseDTO<UserAccount> response = new ResponseDTO<UserAccount>();
+            ResponseDTO<UserAccountDTO> response = new ResponseDTO<UserAccountDTO>();
 
             if (id == null)
             {
@@ -144,18 +144,18 @@ namespace ParkingMaster.Services.Services
             }
             catch (Exception e)
             {
-                //Console.WriteLine(e.ToString());
-                //return false;
-                throw e;
+                response.Data = null;
+                response.Error = "Error occurred when searching for SssoId: " + id + "\n" + e.Message;
+                return response;
             }
         }
 
-        public ResponseDTO<List<UserAccount>> GetAllUsers()
+        public ResponseDTO<List<UserAccountDTO>> GetAllUsers()
         {
             throw new NotImplementedException();
         }
 
-        public void AddUserClaim(UserAccount user, Claim claim)
+        public void AddUserClaim(UserAccountDTO user, Claim claim)
         {
             throw new NotImplementedException();
         }

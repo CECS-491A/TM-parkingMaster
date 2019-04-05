@@ -4,36 +4,37 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Data.Entity.Validation;
+using System.ComponentModel.DataAnnotations;
+using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Models;
+using ParkingMaster.Manager.Managers;
 
 namespace ParkingMaster.Manager.Controllers
 {
     public class SsoController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> DeleteUser()
+        [HttpDelete]
+        [Route("api/sso/deleteuser")]
+        public IHttpActionResult SsoLogin([FromBody, Required] SsoUserRequestDTO request)
         {
-            return new string[] { "value1", "value2" };
-        }
+            if(request == null)
+            {
+                return Content((HttpStatusCode)400, "Request is null.");
+            }
 
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+            UserManagementManager _userManagementManager = new UserManagementManager();
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
+            ResponseDTO<HttpStatusCode> managerResponse = _userManagementManager.DeleteUser(request);
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            if(managerResponse.Data != (HttpStatusCode)200)
+            {
+                return Content(managerResponse.Data, managerResponse.Error);
+            }
+            else
+            {
+                return Ok();
+            }
         }
     }
 }
