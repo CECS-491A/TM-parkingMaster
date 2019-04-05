@@ -186,7 +186,7 @@ namespace ParkingMaster.DataAccess
 		}
 
 		//Delete user by username
-		public ResponseDTO<bool> DeleteUser(string username)
+		public ResponseDTO<bool> DeleteUser(Guid userId)
 		{
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -195,8 +195,8 @@ namespace ParkingMaster.DataAccess
 
 					// Queries for the user account based on username.
 					var userAccount = (from account in context.UserAccounts
-									   where account.Username == username
-									   select account).FirstOrDefault();
+									   where account.Id == userId
+                                       select account).FirstOrDefault();
 
 					// Checking if user account is null.
 					if (userAccount == null)
@@ -312,7 +312,7 @@ namespace ParkingMaster.DataAccess
 
             foreach(UserAccount acc in userAccounts)
             {
-                DeleteUser(acc.Username);
+                DeleteUser(acc.Id);
             }
 
         }

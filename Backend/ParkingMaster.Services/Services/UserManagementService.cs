@@ -65,7 +65,7 @@ namespace ParkingMaster.Services.Services
             }
             try
             {
-                response = _userGateway.DeleteUser(user.Username);
+                response = _userGateway.DeleteUser(user.Id);
                 return response;
             }
             catch (Exception e)
@@ -76,11 +76,11 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<bool> DeleteUser(string username)
+        public ResponseDTO<bool> DeleteUser(Guid userId)
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
 
-            if (username == null)
+            if (userId == null)
             {
                 response.Data = false;
                 response.Error = "Attempted to delete Null username.";
@@ -88,7 +88,7 @@ namespace ParkingMaster.Services.Services
             }
             try
             {
-                response = _userGateway.DeleteUser(username);
+                response = _userGateway.DeleteUser(userId);
                 return response;
             }
             catch (Exception e)

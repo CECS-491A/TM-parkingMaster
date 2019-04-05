@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using ParkingMaster.DataAccess;
+using ParkingMaster.Services.Services;
 
 namespace ParkingMaster.Manager.Managers
 {
     public class UserManagementManager
     {
-        /*
-        private IUserManagementService _userManagementService;
-        private readonly DatabaseContext _databaseContext;
+        
+        private UserManagementService _userManagementService;
 
         public UserManagementManager()
         {
-            _databaseContext = new DatabaseContext();
-            _userManagementService = new UserManagementService(_databaseContext);
+            _userManagementService = new UserManagementService();
         }
-
+        /*
         // I am considering moving context.SaveChanges() here, but maybe later
 
         public bool CreateUser(string email, string password, string dob, string city, string state, string country, string role, bool act)
@@ -44,12 +39,12 @@ namespace ParkingMaster.Manager.Managers
                 return false;
             }
         }
-
-        public bool DeleteUser(string email)
+        */
+        public bool DeleteUser(Guid userId)
         {
             try
             {
-                _userManagementService.DeleteUser(email);
+                _userManagementService.DeleteUser(userId);
                 return true;
             }
             catch (Exception e)
@@ -58,7 +53,7 @@ namespace ParkingMaster.Manager.Managers
                 return false;
             }
         }
-
+        /*
         public bool UpdateUser(User user)
         {
             try
