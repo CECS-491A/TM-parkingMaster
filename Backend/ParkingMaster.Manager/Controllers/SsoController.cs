@@ -14,7 +14,7 @@ namespace ParkingMaster.Manager.Controllers
 {
     public class SsoController : ApiController
     {
-        [HttpDelete]
+        [HttpPost]
         [Route("api/sso/deleteuser")]
         public IHttpActionResult SsoLogin([FromBody, Required] SsoUserRequestDTO request)
         {
