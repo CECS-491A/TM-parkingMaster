@@ -47,6 +47,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SsoController.cs" />
     <Compile Include="Controllers\TestingController.cs" />
     <Compile Include="App_Start\WebApiConfigure.cs" />
     <Compile Include="Global.asax.cs">
