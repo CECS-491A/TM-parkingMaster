@@ -45,14 +45,19 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\AuthenticationContext.cs" />
     <Compile Include="Context\FunctionContext.cs" />
     <Compile Include="Context\UserContext.cs" />
+    <Compile Include="Gateways\Contracts\ISessionGateway.cs" />
     <Compile Include="Gateways\FunctionGateway.cs" />
+    <Compile Include="Gateways\SessionGateway.cs" />
     <Compile Include="Gateways\UserGateway.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.Designer.cs">
       <DependentUpon>201903170516359_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\UserDbContext\201903271917275_Add_Sessions.cs" />
+    <Compile Include="Migrations\UserDbContext\201903271917275_Add_Sessions.Designer.cs">
+      <DependentUpon>201903271917275_Add_Sessions.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,6 +93,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\UserDbContext\201903170516359_Initial.resx">
       <DependentUpon>201903170516359_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserDbContext\201903271917275_Add_Sessions.resx">
+      <DependentUpon>201903271917275_Add_Sessions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

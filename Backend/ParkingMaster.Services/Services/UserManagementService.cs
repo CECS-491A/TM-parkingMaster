@@ -19,6 +19,11 @@ namespace ParkingMaster.Services.Services
             _userGateway = userGateway;
         }
 
+        public UserManagementService()
+        {
+            _userGateway = new UserGateway();
+        }
+
         public ResponseDTO<bool> CreateUser(UserAccount user, List<Claim> claims)
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
@@ -112,6 +117,29 @@ namespace ParkingMaster.Services.Services
             try
             {
                 response = _userGateway.GetUserByUsername(username);
+                return response;
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e.ToString());
+                //return false;
+                throw e;
+            }
+        }
+
+        public ResponseDTO<UserAccount> GetUserBySsoId(Guid id)
+        {
+            ResponseDTO<UserAccount> response = new ResponseDTO<UserAccount>();
+
+            if (id == null)
+            {
+                response.Data = null;
+                response.Error = "Attempted to delete Null username.";
+                return response;
+            }
+            try
+            {
+                response = _userGateway.GetUserBySsoId(id);
                 return response;
             }
             catch (Exception e)

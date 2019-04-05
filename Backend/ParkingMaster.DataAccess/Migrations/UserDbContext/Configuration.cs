@@ -1,4 +1,5 @@
 ﻿using ParkingMaster.Models.Models;
+using ParkingMaster.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -119,6 +120,25 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             };
             userGateway.StoreIndividualUser(user, claims);
 
+            var user1 = new UserAccount()
+            {
+                SsoId = new Guid("2AE9A868-17AA-490F-9094-5907D2E64EBB"),
+                Username = "user1@yahoo.com",
+                IsActive = true,
+                IsFirstTimeUser = false,
+                RoleType = "standard"
+            };
+            claims = new List<Claim>
+            {
+                new Claim("User", "user1@yahoo.com"),
+                new Claim("Action", "DisabledAction"),
+                new Claim("Action", "CreateOtherUser"),
+                new Claim("Action", "Logout"),
+                new Claim("Parent", "client1@yahoo.com")
+            };
+            userGateway.StoreIndividualUser(user1, claims);
+
+
             var functionGateway = new FunctionGateway(context);
             functionGateway.ResetDatabase();
 
@@ -127,6 +147,11 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             functionGateway.StoreFunction(new Function("Logout", true));
             functionGateway.StoreFunction(new Function("Client1Action", true));
             functionGateway.StoreFunction(new Function("Client2Action", true));
+
+            var sessionGateway = new SessionGateway(context);
+            sessionGateway.ResetDatabase();
+
+            sessionGateway.StoreSession(new SessionDTO(user1.Id));
 
         }
     }

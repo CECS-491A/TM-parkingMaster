@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ParkingMaster.Models.Models
 //For properties relating to a user account
 {
-	[Table("ParkingMaster.UserAccount")]
+	[Table("ParkingMaster.UserAccounts")]
 	public class UserAccount
 	{
 		// Automatic Properties
@@ -25,7 +25,6 @@ namespace ParkingMaster.Models.Models
 		public string RoleType { get; set; }
 
 		// Navigation Properties
-		public virtual AuthenticationToken AuthenticationToken { get; set; }
 		public virtual UserClaims UserClaims { get; set; }
 
 		// Constructors
