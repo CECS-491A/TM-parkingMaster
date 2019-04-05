@@ -12,7 +12,8 @@ namespace ParkingMaster.DataAccess
 
 		public DbSet<UserAccount> UserAccounts { get; set; }
 		public DbSet<UserClaims> UserClaims { get; set; }
-        public DbSet<Claim> Claim { get; set; }
-        public DbSet<Function> Function { get; set; }
+        public DbSet<Claim> Claims { get; set; }
+        public DbSet<Function> Functions { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 	}
 }

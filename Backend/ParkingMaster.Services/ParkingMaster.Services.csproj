@@ -46,10 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Contracts\ISessionService.cs" />
     <Compile Include="Services\IPasswordService.cs" />
     <Compile Include="Services\IUserManagementService.cs" />
     <Compile Include="Services\PasswordService.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
+    <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +83,11 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
       <Version>2.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Net.Compilers">
+      <Version>2.10.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
