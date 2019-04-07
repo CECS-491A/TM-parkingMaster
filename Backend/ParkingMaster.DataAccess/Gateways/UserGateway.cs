@@ -30,7 +30,7 @@ namespace ParkingMaster.DataAccess
         /// <summary>
         /// The GetUserByUsername method.
         /// Gets a user by username
-        public ResponseDTO<UserAccount> GetUserByUsername(string username)
+        public ResponseDTO<UserAccountDTO> GetUserByUsername(string username)
 		{
 			try
 			{
@@ -39,21 +39,22 @@ namespace ParkingMaster.DataAccess
 								   select account).FirstOrDefault();
 
 				// Return a ResponseDto with a UserAccount model
-				return new ResponseDTO<UserAccount>()
+				return new ResponseDTO<UserAccountDTO>()
 				{
-					Data = userAccount
-				};
+					Data = new UserAccountDTO(userAccount)
+
+                };
 			}
 			catch (Exception)
 			{
-				return new ResponseDTO<UserAccount>()
+				return new ResponseDTO<UserAccountDTO>()
 				{
 					Data = null,
 				};
 			}
 		}
 
-        public ResponseDTO<UserAccount> GetUserBySsoId(Guid id)
+        public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id)
         {
             try
             {
@@ -62,14 +63,14 @@ namespace ParkingMaster.DataAccess
                                    select account).FirstOrDefault();
 
                 // Return a ResponseDto with a UserAccount model
-                return new ResponseDTO<UserAccount>()
+                return new ResponseDTO<UserAccountDTO>()
                 {
-                    Data = userAccount
+                    Data = new UserAccountDTO(userAccount)
                 };
             }
             catch (Exception)
             {
-                return new ResponseDTO<UserAccount>()
+                return new ResponseDTO<UserAccountDTO>()
                 {
                     Data = null
                 };
@@ -186,7 +187,7 @@ namespace ParkingMaster.DataAccess
 		}
 
 		//Delete user by username
-		public ResponseDTO<bool> DeleteUser(string username)
+		public ResponseDTO<bool> DeleteUser(Guid userId)
 		{
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -195,8 +196,8 @@ namespace ParkingMaster.DataAccess
 
 					// Queries for the user account based on username.
 					var userAccount = (from account in context.UserAccounts
-									   where account.Username == username
-									   select account).FirstOrDefault();
+									   where account.Id == userId
+                                       select account).FirstOrDefault();
 
 					// Checking if user account is null.
 					if (userAccount == null)
@@ -312,7 +313,7 @@ namespace ParkingMaster.DataAccess
 
             foreach(UserAccount acc in userAccounts)
             {
-                DeleteUser(acc.Username);
+                DeleteUser(acc.Id);
             }
 
         }

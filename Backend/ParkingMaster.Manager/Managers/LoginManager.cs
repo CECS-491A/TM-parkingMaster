@@ -48,7 +48,7 @@ namespace ParkingMaster.Manager.Managers
             Guid SsoId = new Guid(request.SsoId);
 
             // Search for user in database
-            ResponseDTO<UserAccount> userAccountResponse = _userManagementService.GetUserBySsoId(SsoId);
+            ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.GetUserBySsoId(SsoId);
             if(userAccountResponse.Data == null)
             {
                 // TODO: Should be user registration
