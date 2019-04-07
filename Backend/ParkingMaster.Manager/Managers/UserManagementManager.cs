@@ -62,6 +62,14 @@ namespace ParkingMaster.Manager.Managers
         public ResponseDTO<HttpStatusCode> DeleteUser(SsoUserRequestDTO request)
         {
             ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
+            ITokenService tokenService = new TokenService();
+            if(!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            {
+                response.Data = (HttpStatusCode)400;
+                response.Error = "Signature not valid";
+                return response;
+            }
+
 
             // Check if request id is in guid format
             Guid ssoId;

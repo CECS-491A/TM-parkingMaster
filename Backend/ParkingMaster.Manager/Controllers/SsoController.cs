@@ -16,7 +16,7 @@ namespace ParkingMaster.Manager.Controllers
     {
         [HttpPost]
         [Route("api/sso/deleteuser")]
-        public IHttpActionResult SsoLogin([FromBody, Required] SsoUserRequestDTO request)
+        public IHttpActionResult DeleteUser([FromBody, Required] SsoUserRequestDTO request)
         {
             if(request == null)
             {
