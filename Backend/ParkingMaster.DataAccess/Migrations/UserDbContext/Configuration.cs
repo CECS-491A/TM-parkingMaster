@@ -151,7 +151,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             var sessionGateway = new SessionGateway(context);
             sessionGateway.ResetDatabase();
 
-            sessionGateway.StoreSession(new SessionDTO(user1.Id));
+            sessionGateway.StoreSession(new Session(user1.Id));
 
         }
     }

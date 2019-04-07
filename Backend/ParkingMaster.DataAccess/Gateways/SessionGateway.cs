@@ -24,10 +24,8 @@ namespace ParkingMaster.DataAccess
             context = c;
         }
 
-        public ResponseDTO<Session> StoreSession(SessionDTO sessionDTO)
+        public ResponseDTO<Session> StoreSession(Session session)
         {
-            Session session = new Session(sessionDTO);
-
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
@@ -127,7 +125,7 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<SessionDTO> UpdateSessionExpiration(Guid sessionId)
+        public ResponseDTO<Session> UpdateSessionExpiration(Guid sessionId)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -136,25 +134,25 @@ namespace ParkingMaster.DataAccess
                     // Queries for the session that needs to be updated.
                     var session = (from sessions in context.Sessions
                                    where sessions.SessionId == sessionId
-                                   select sessions).FirstOrDefault();
-
+                                   select sessions).First();
+                    
                     session.ExpiringAt = DateTime.Now.AddMinutes(Session.SESSION_LENGTH);
                     context.SaveChanges();
                     dbContextTransaction.Commit();
 
-                    return new ResponseDTO<SessionDTO>()
+                    return new ResponseDTO<Session>()
                     {
-                        Data = new SessionDTO(session)
+                        Data = session
                     };
                 }
                 catch (Exception)
                 {
                     dbContextTransaction.Rollback();
 
-                    return new ResponseDTO<SessionDTO>()
+                    return new ResponseDTO<Session>()
                     {
                         Data = null,
-
+                        Error = "Unable to update sessionId: " + sessionId
                     };
                 }
             }

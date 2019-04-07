@@ -75,7 +75,7 @@ namespace ParkingMaster.Manager.Managers
             Guid ssoId;
             try
             {
-                ssoId = new Guid(request.SsoId);
+                ssoId = new Guid(request.SsoUserId);
             }
             catch (Exception e)
             {
@@ -137,6 +137,22 @@ namespace ParkingMaster.Manager.Managers
                 {
                     Data = null,
                     Error = "Failed to get ssoId: " + ssoId + "\n" + e.Message
+                };
+            }
+        }
+
+        public ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id)
+        {
+            try
+            {
+                return _userManagementService.GetUserByUserId(id);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO<UserAccountDTO>()
+                {
+                    Data = null,
+                    Error = "Failed to get userId: " + id + "\n" + e.Message
                 };
             }
         }

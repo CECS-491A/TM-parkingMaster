@@ -9,13 +9,17 @@ namespace ParkingMaster.Models.DTO
         [Required]
         public string Signature { get; set; }
         [Required]
-        public string SsoId { get; set; }
+        public string SsoUserId { get; set; }
         [Required]
         public long Timestamp { get; set; }
 
         public string GetStringToSign()
         {
-            return "ssoUserId=" + SsoId + ";email=" + Email + ";timestamp=" + Timestamp + ";";
+            string acc = "";
+            acc += "ssoUserId=" + SsoUserId + ";";
+            acc += "email=" + Email + ";";
+            acc += "timestamp=" + Timestamp + ";";
+            return acc;
         }
     }
 }

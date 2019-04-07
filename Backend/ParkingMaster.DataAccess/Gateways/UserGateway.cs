@@ -36,7 +36,7 @@ namespace ParkingMaster.DataAccess
 			{
 				var userAccount = (from account in context.UserAccounts
 								   where account.Username == username
-								   select account).FirstOrDefault();
+								   select account).First();
 
 				// Return a ResponseDto with a UserAccount model
 				return new ResponseDTO<UserAccountDTO>()
@@ -60,7 +60,30 @@ namespace ParkingMaster.DataAccess
             {
                 var userAccount = (from account in context.UserAccounts
                                    where account.SsoId == id
-                                   select account).FirstOrDefault();
+                                   select account).First();
+
+                // Return a ResponseDto with a UserAccount model
+                return new ResponseDTO<UserAccountDTO>()
+                {
+                    Data = new UserAccountDTO(userAccount)
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<UserAccountDTO>()
+                {
+                    Data = null
+                };
+            }
+        }
+
+        public ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id)
+        {
+            try
+            {
+                var userAccount = (from account in context.UserAccounts
+                                   where account.Id == id
+                                   select account).First();
 
                 // Return a ResponseDto with a UserAccount model
                 return new ResponseDTO<UserAccountDTO>()

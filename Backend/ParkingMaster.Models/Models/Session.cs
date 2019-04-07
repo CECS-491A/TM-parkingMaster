@@ -27,11 +27,11 @@ namespace ParkingMaster.Models.Models
             ExpiringAt = DateTime.Now.AddMinutes(SESSION_LENGTH);
         }
 
-        public Session(SessionDTO sessionDTO)
+        public Session(Guid id)
         {
             SessionId = Guid.NewGuid();
-            Id = sessionDTO.UserId;
-            ExpiringAt = sessionDTO.ExpiringAt;
+            Id = id;
+            ExpiringAt = DateTime.Now.AddMinutes(SESSION_LENGTH);
         }
     }
 }

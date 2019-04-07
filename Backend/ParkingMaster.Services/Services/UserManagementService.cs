@@ -134,7 +134,7 @@ namespace ParkingMaster.Services.Services
             if (id == null)
             {
                 response.Data = null;
-                response.Error = "Attempted to delete Null username.";
+                response.Error = "Attempted to read Null username.";
                 return response;
             }
             try
@@ -146,6 +146,29 @@ namespace ParkingMaster.Services.Services
             {
                 response.Data = null;
                 response.Error = "Error occurred when searching for SssoId: " + id + "\n" + e.Message;
+                return response;
+            }
+        }
+
+        public ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id)
+        {
+            ResponseDTO<UserAccountDTO> response = new ResponseDTO<UserAccountDTO>();
+
+            if (id == null)
+            {
+                response.Data = null;
+                response.Error = "Attempted to read Null username.";
+                return response;
+            }
+            try
+            {
+                response = _userGateway.GetUserByUserId(id);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response.Data = null;
+                response.Error = "Error occurred when searching for UserId: " + id + "\n" + e.Message;
                 return response;
             }
         }

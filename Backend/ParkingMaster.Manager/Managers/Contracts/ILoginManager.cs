@@ -9,6 +9,6 @@ namespace ParkingMaster.Manager.Managers.Contracts
 {
     public interface ILoginManager
     {
-        ResponseDTO<Session> SsoLogin(LoginRequestDTO request);
+        ResponseDTO<Session> SsoLogin(SsoUserRequestDTO request);
     }
 }
