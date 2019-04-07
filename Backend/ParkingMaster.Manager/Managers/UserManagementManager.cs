@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using ParkingMaster.DataAccess;
+using ParkingMaster.Models.DTO;
+using ParkingMaster.Services.Services;
+using System.Net;
 
 namespace ParkingMaster.Manager.Managers
 {
     public class UserManagementManager
     {
-        /*
-        private IUserManagementService _userManagementService;
-        private readonly DatabaseContext _databaseContext;
+        
+        private UserManagementService _userManagementService;
 
         public UserManagementManager()
         {
-            _databaseContext = new DatabaseContext();
-            _userManagementService = new UserManagementService(_databaseContext);
+            _userManagementService = new UserManagementService();
         }
-
+        /*
         // I am considering moving context.SaveChanges() here, but maybe later
 
         public bool CreateUser(string email, string password, string dob, string city, string state, string country, string role, bool act)
@@ -44,21 +41,122 @@ namespace ParkingMaster.Manager.Managers
                 return false;
             }
         }
-
-        public bool DeleteUser(string email)
+        */
+        public ResponseDTO<bool> DeleteUser(Guid userId)
         {
             try
             {
-                _userManagementService.DeleteUser(email);
-                return true;
+                return _userManagementService.DeleteUser(userId);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
-                return false;
+               return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = "Failed to delete userID: " + userId + "\n" + e.Message
+                };
             }
         }
 
+        // Delete User From SsoRequest
+        public ResponseDTO<HttpStatusCode> DeleteUser(SsoUserRequestDTO request)
+        {
+            ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
+            ITokenService tokenService = new TokenService();
+            if(!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            {
+                response.Data = (HttpStatusCode)400;
+                response.Error = "Signature not valid";
+                return response;
+            }
+
+
+            // Check if request id is in guid format
+            Guid ssoId;
+            try
+            {
+                ssoId = new Guid(request.SsoUserId);
+            }
+            catch (Exception e)
+            {
+                response.Data = (HttpStatusCode) 400;
+                response.Error = "SsoId provided was invalid";
+                return response;
+            }
+
+            // TODO: Check signature
+
+            UserAccountDTO userAccount;
+            ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.GetUserBySsoId(ssoId);
+            if(userAccountResponse.Data == null)
+            {
+                // TODO: Add a check if user did not exist or if it was a standard EntityFramework Error
+                response.Data = (HttpStatusCode) 404;
+                response.Error = "Unable to find ssoId";
+                return response;
+            }
+            else
+            {
+                userAccount = userAccountResponse.Data;
+            }
+
+            ResponseDTO<bool> boolResponse;
+            try
+            {
+                boolResponse = _userManagementService.DeleteUser(userAccount.Id);
+            }
+            catch (Exception e)
+            {
+                response.Data = (HttpStatusCode) 500;
+                response.Error = "Failed to delete userID: " + userAccount.Id + "\n" + e.Message;
+                return response;
+            }
+
+            if (boolResponse.Data)
+            {
+                response.Data = (HttpStatusCode) 200;
+                return response;
+            }
+            else
+            {
+                response.Data = (HttpStatusCode) 500;
+                response.Error = boolResponse.Error;
+                return response;
+            }
+        }
+
+        public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid ssoId)
+        {
+            try
+            {
+                return _userManagementService.GetUserBySsoId(ssoId);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO<UserAccountDTO>()
+                {
+                    Data = null,
+                    Error = "Failed to get ssoId: " + ssoId + "\n" + e.Message
+                };
+            }
+        }
+
+        public ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id)
+        {
+            try
+            {
+                return _userManagementService.GetUserByUserId(id);
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO<UserAccountDTO>()
+                {
+                    Data = null,
+                    Error = "Failed to get userId: " + id + "\n" + e.Message
+                };
+            }
+        }
+        /*
         public bool UpdateUser(User user)
         {
             try

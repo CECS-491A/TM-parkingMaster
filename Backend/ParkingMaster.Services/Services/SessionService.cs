@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
-using ParkingMaster.Services.Services.Contracts;
 using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Services.Services
@@ -21,7 +20,7 @@ namespace ParkingMaster.Services.Services
 
         public ResponseDTO<Session> CreateSession(Guid userId)
         {
-            return _sessionGateway.StoreSession(new SessionDTO(userId));
+            return _sessionGateway.StoreSession(new Session(userId));
         }
 
         public ResponseDTO<bool> DeleteSession(Guid sessionId)
@@ -31,10 +30,18 @@ namespace ParkingMaster.Services.Services
 
         public ResponseDTO<Session> GetSession(Guid sessionId)
         {
-            return _sessionGateway.GetSession(sessionId);
+            ResponseDTO<Session> response = _sessionGateway.GetSession(sessionId);
+
+            // If session exists, make sure to update it everytime
+            if(response.Data != null)
+            {
+                response = UpdateSessionExpiration(sessionId);
+            }
+
+            return response;
         }
 
-        public ResponseDTO<SessionDTO> UpdateSessionExpiration(Guid sessionId)
+        public ResponseDTO<Session> UpdateSessionExpiration(Guid sessionId)
         {
             return _sessionGateway.UpdateSessionExpiration(sessionId);
         }

@@ -7,9 +7,9 @@ namespace ParkingMaster.DataAccess.Gateways.Contracts
 {
     public interface ISessionGateway
     {
-        ResponseDTO<Session> StoreSession(SessionDTO sessionDTO);
+        ResponseDTO<Session> StoreSession(Session sessionDTO);
         ResponseDTO<Session> GetSession(Guid sessionId);
-        ResponseDTO<SessionDTO> UpdateSessionExpiration(Guid sessionId);
+        ResponseDTO<Session> UpdateSessionExpiration(Guid sessionId);
         ResponseDTO<bool> DeleteSession(Guid sessionId);
 
     }

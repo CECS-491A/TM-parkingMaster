@@ -13,10 +13,9 @@ namespace ParkingMaster.Manager.Managers
 {
     public class LoginManager: ILoginManager
     {
-        private SessionService _sessionService;
-        private UserManagementService _userManagementService;
-        // IMPORTANT: For development, remove before deployment
-        private string sharedSecretKey = "8ED06CB19DF0FF3654722F5ED6D8878909F8A456C7DA8A85E6D72FBAAB16CDCF";
+        private ISessionService _sessionService;
+        private IUserManagementService _userManagementService;
+        private ITokenService tokenService = new TokenService();
 
         public LoginManager()
         {
@@ -24,31 +23,23 @@ namespace ParkingMaster.Manager.Managers
             _userManagementService = new UserManagementService();
         }
 
-        public ResponseDTO<Session> SsoLogin(LoginRequestDTO request)
+        public ResponseDTO<Session> SsoLogin(SsoUserRequestDTO request)
         {
-
-            // Check the reuqest signature
-            string stringToSign = request.GetStringToSign();
-            HMACSHA256 hmacsha256 = new HMACSHA256(Encoding.ASCII.GetBytes(sharedSecretKey));
-            byte[] launchPayloadBuffer = Encoding.ASCII.GetBytes(stringToSign);
-            byte[] signatureBytes = hmacsha256.ComputeHash(launchPayloadBuffer);
-            string signature = Convert.ToBase64String(signatureBytes);
-
-            // If request signature does not match our signature, do not authenticate user
-            if(signature != request.Signature)
+            ResponseDTO<Session> response = new ResponseDTO<Session>();
+            
+            // Before anything happens, validate that this request is coming from the known sso server
+            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
-                return new ResponseDTO<Session>()
-                {
-                    Data = null,
-                    Error = stringToSign + " Produced the Invalid Signature: " + signature
-                };
+                response.Data = null;
+                response.Error = "Signature not valid";
+                return response;
             }
 
             // Convert request SsoId into Guid
-            Guid SsoId = new Guid(request.SsoId);
+            Guid SsoId = new Guid(request.SsoUserId);
 
             // Search for user in database
-            ResponseDTO<UserAccount> userAccountResponse = _userManagementService.GetUserBySsoId(SsoId);
+            ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.GetUserBySsoId(SsoId);
             if(userAccountResponse.Data == null)
             {
                 // TODO: Should be user registration
@@ -64,6 +55,55 @@ namespace ParkingMaster.Manager.Managers
             ResponseDTO<Session> sessionResponseDTO = _sessionService.CreateSession(userAccountResponse.Data.Id);
 
             return sessionResponseDTO;
+        }
+
+        public ResponseDTO<ParkingMasterFrontendDTO> SessionChecker(string sessionId)
+        {
+            ResponseDTO<ParkingMasterFrontendDTO> response = new ResponseDTO<ParkingMasterFrontendDTO>();
+            
+            // Convert token into Guid
+            Guid tokenGuid;
+            try
+            {
+                tokenGuid = new Guid(sessionId);
+            }
+            catch
+            {
+                response.Data = null;
+                response.Error = "Invalid Token: " + sessionId;
+                return response;
+            }
+
+
+            
+
+            // Check session in data store
+            ResponseDTO<Session> sessionResponseDTO = _sessionService.GetSession(tokenGuid);
+
+            // If session is not found, return error
+            if(sessionResponseDTO.Data == null)
+            {
+                response.Data = null;
+                response.Error = sessionResponseDTO.Error;
+                return response;
+            }
+
+            // Get user data from data store
+            ResponseDTO<UserAccountDTO> userResponseDTO = _userManagementService.GetUserByUserId(sessionResponseDTO.Data.Id);
+            if(userResponseDTO.Data == null)
+            {
+                response.Data = null;
+                response.Error = userResponseDTO.Error;
+                return response;
+            }
+
+            response.Data = new ParkingMasterFrontendDTO();
+            // Return response info
+            response.Data.Id = userResponseDTO.Data.Id.ToString();
+            response.Data.Username = userResponseDTO.Data.Username;
+            response.Data.Role = userResponseDTO.Data.RoleType;
+            response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
+            return response;
         }
     }
 }
