@@ -173,6 +173,11 @@ namespace ParkingMaster.Services.Services
             }
         }
 
+        public ResponseDTO<List<ClaimDTO>> GetAllUserClaims(string username)
+        {
+            return _userGateway.GetUserClaims(username);
+        }
+
         public ResponseDTO<List<UserAccountDTO>> GetAllUsers()
         {
             throw new NotImplementedException();

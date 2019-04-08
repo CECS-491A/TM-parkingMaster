@@ -49,6 +49,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             user = new UserAccount()
             {
                 SsoId = new Guid("87654321-4321-4321-4321-CBA987654321"),
+                Id = new Guid("88888888-4444-3333-2222-111111111111"),
                 Username = "plaurent@yahoo.com",
                 IsActive = true,
                 IsFirstTimeUser = false,
