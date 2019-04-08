@@ -58,7 +58,9 @@ export default {
           .then(resp => {
             sessionStorage.setItem('ParkingMasterToken', resp.data.Token)
             sessionStorage.setItem('ParkingMasterUsername', resp.data.Username)
-            sessionStorage.setItem('ParkingMasterRole', resp.data.parkingMasterRole)
+            sessionStorage.setItem('ParkingMasterRole', resp.data.Role)
+            // Force the navBar to refresh
+            this.$root.$emit('refreshNavBar')
             this.$router.push('/Home')
           })
           .catch(e => {

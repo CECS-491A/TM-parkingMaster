@@ -17,8 +17,10 @@ export default {
   methods: {
     checkLocalStorage () {
       var username = sessionStorage.getItem('ParkingMasterUsername')
-      if (username.length > 0) {
+      if (username !== null) {
         this.pageTitle = 'Welcome ' + username
+      } else {
+        this.pageTitle = 'Welcome!'
       }
     }
   },
