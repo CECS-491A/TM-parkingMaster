@@ -52,7 +52,7 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "Failed to add lot to data store."
+                        Error = "[DATA ACCESS] Failed to add lot to data store."
                     };
                 }
             }
@@ -85,13 +85,13 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "Failed to delete lot from data store."
+                        Error = "[DATA ACCESS] Failed to delete lot from data store."
                     };
                 }
             }
         }
 
-        public ResponseDTO<Boolean> EditLotSpots()
+        public ResponseDTO<Boolean> EditLotSpots() // todo
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
 
@@ -127,7 +127,7 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "Failed to edit lot name."
+                        Error = "[DATA ACCESS] Failed to edit lot name."
                     };
                 }
             }
@@ -160,7 +160,7 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<Lot>()
                     {
                         Data = null,
-                        Error = "Could not fetch lot."
+                        Error = "[DATA ACCESS] Could not fetch lot."
                     };
                 }
             }
@@ -190,7 +190,7 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<List<Lot>>()
                     {
                         Data = null,
-                        Error = "Could not fetch lots."
+                        Error = "[DATA ACCESS] Could not fetch lots."
                     };
                 }
             }
@@ -220,7 +220,7 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<List<Lot>>()
                     {
                         Data = null,
-                        Error = "Could not fetch lots."
+                        Error = "[DATA ACCESS] Could not fetch lots."
                     };
                 }
             }
@@ -250,7 +250,7 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = null,
-                        Error = "Could not fetch spots."
+                        Error = "[DATA ACCESS] Could not fetch spots."
                     };
                 }
             }
@@ -287,13 +287,13 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = null,
-                        Error = "Could not fetch spots."
+                        Error = "[DATA ACCESS] Could not fetch spots."
                     };
                 }
             }
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsInLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -318,7 +318,7 @@ namespace ParkingMaster.DataAccess.Gateways
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = null,
-                        Error = "Could not fetch spots."
+                        Error = "[DATA ACCESS] Could not fetch spots."
                     };
                 }
             }

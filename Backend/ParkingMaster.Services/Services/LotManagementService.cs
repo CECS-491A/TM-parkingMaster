@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,79 +23,215 @@ namespace ParkingMaster.Services.Services
             _userGateway = userGateway;
         }
 
-        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost) // (string lotname, ??? spotfile)
+        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, FileInfo file)
         {
-            Lot newLot = new Lot()
+            try
             {
-                LotId = Guid.NewGuid(),
-                OwnerId = ownerid,
-                LotName = lotname,
-                Address = address,
-                Cost = cost,
-                //UserAccount = _userGateway.GetUserByUsername(), // oops need to fix this. add a getUserByGUID?
-                Spots = new List<Spot>() // Spots = ParseSpotsFromFile(spotfile);
-            };
-            ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
-            return response;
+                Lot newLot = new Lot()
+                {
+                    LotId = Guid.NewGuid(),
+                    OwnerId = ownerid,
+                    LotName = lotname,
+                    Address = address,
+                    Cost = cost,
+                    UserAccount = _userGateway.GetUserByGuid(ownerid).Data
+                };
+                newLot.Spots = ParseSpotsFromFile(newLot.LotId, newLot.LotName, file);
+                ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Boolean>()
+                {
+                    Data = false,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not add lot."
+                };
+            }
         }
 
         public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
         {
-            ResponseDTO<bool> response = _lotGateway.DeleteLot(ownerid, lotname);
-            return response;
+            try
+            {
+                ResponseDTO<bool> response = _lotGateway.DeleteLot(ownerid, lotname);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Boolean>()
+                {
+                    Data = false,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not delete lot."
+                };
+            }
         }
 
-        public ResponseDTO<bool> EditLotSpots(Guid ownerid, string lotname)
+        public ResponseDTO<bool> EditLotSpots(Guid ownerid, string lotname, FileInfo file) //todo
         {
-            ResponseDTO<bool> response = new ResponseDTO<bool>();
-            return response;
+            try
+            {
+                ResponseDTO<bool> response = new ResponseDTO<bool>();
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Boolean>()
+                {
+                    Data = false,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not edit spots."
+                };
+            }
         }
 
         public ResponseDTO<bool> EditLotName(Guid ownerid, string oldlotname, string newlotname)
         {
-            ResponseDTO<bool> response = new ResponseDTO<bool>();
-            //response = _lotGateway.DeleteLot(ownerid, lotname);
-            return response;
+            try
+            {
+                ResponseDTO<bool> response = _lotGateway.EditLotName(ownerid, oldlotname, newlotname);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Boolean>()
+                {
+                    Data = false,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not edit lot name."
+                };
+            }
         }
 
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string name)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ResponseDTO<Lot> response = _lotGateway.GetLotByName(ownerid, name);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Lot>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not get lot by name."
+                };
+            }
         }
 
-        public ResponseDTO<List<Spot>> ParseSpotsFromFile() // parameter = file
+        public List<Spot> ParseSpotsFromFile(Guid lotid, string lotname, FileInfo file) // need to throw an exception here in case of formatting issues
         {
-            //List<Spot> spotList = new List<Spot>();
-            ResponseDTO<List<Spot>> response = new ResponseDTO<List<Spot>>();
-
-            //return spotList;
-
-            return response;
+            List<Spot> response = new List<Spot>();
+            try
+            {
+                using (StreamReader reader = file.OpenText())
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        string[] vars = line.Split(',');
+                        Spot spot = new Spot()
+                        {
+                            SpotId = Guid.NewGuid(),
+                            SpotName = vars[0],
+                            LotId = lotid,
+                            LotName = lotname,
+                            IsHandicappedAccessible = (vars[1].Equals("true")) ? true : false,
+                            IsTaken = false
+                        };
+                        response.Add(spot);
+                    }
+                }
+                return response;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public ResponseDTO<List<Lot>> GetAllLots()
         {
-            throw new NotImplementedException();
+            try
+            {
+                ResponseDTO<List<Lot>> response = _lotGateway.GetAllLots();
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Lot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not get lots."
+                };
+            }
         }
 
         public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ResponseDTO<List<Lot>> response = _lotGateway.GetAllLotsByOwner(ownerid);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Lot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not get lots."
+                };
+            }
         }
 
         public ResponseDTO<List<Spot>> GetAllSpots()
         {
-            throw new NotImplementedException();
+            try
+            {
+                ResponseDTO<List<Spot>> response = _lotGateway.GetAllSpots();
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not get spots."
+                };
+            }
         }
 
         public ResponseDTO<List<Spot>> GetAllSpotsByOwner(Guid ownerid)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ResponseDTO<List<Spot>> response = _lotGateway.GetAllSpotsByOwner(ownerid);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not get spots."
+                };
+            }
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsInLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
         {
-            throw new NotImplementedException();
+            try
+            {
+                ResponseDTO<List<Spot>> response = _lotGateway.GetAllSpotsByLot(ownerid, lotname);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT SERVICE] Could not get spots."
+                };
+            }
         }
     }
 }

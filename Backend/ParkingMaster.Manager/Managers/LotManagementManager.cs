@@ -6,10 +6,12 @@ using ParkingMaster.Models.Models;
 using ParkingMaster.Services.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace ParkingMaster.Manager.Managers // error handling and logging happens here!
+namespace ParkingMaster.Manager.Managers // error handling and logging happens here?? or in controller
+    // also logic...? business rules
 {
     public class LotManagementManager
     {
@@ -26,87 +28,89 @@ namespace ParkingMaster.Manager.Managers // error handling and logging happens h
         }
 
         // 'The file collection is populated only when the HTTP request Content-Type value is "multipart/form-data"'
-        public Boolean AddLot(Guid ownerid, string lotname, string address, double cost) // need another parameter, file
+        public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, FileInfo file) // need another parameter, file
         {
 
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost); //(lotname, spotfile)
-            return response.Data;
+            ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, file); //(lotname, spotfile)
+            return response;
         }
 
-        public Boolean DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname)
         {
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
             ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
-            return response.Data;
+            return response;
         }
 
-        public Boolean EditLotSpots(Guid ownerid, string lotname)
+        public ResponseDTO<Boolean> EditLotSpots(Guid ownerid, string lotname, FileInfo file)
         {
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            ResponseDTO<Boolean> response = _lotManagementService.EditLotSpots(ownerid, lotname);
-            return response.Data;
+            ResponseDTO<Boolean> response = _lotManagementService.EditLotSpots(ownerid, lotname, file);
+            return response;
         }
 
-        public Boolean EditLotName(Guid ownerid, string oldlotname, string newlotname)
+        public ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname)
         {
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
             ResponseDTO<Boolean> response = _lotManagementService.EditLotName(ownerid, oldlotname, newlotname);
-            return response.Data;
+            return response;
         }
 
-        public Lot GetLotByName(Guid ownerid, string lotname)
+        public ResponseDTO<Lot> GetLotByName(Guid ownerid, string lotname)
         {
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
             ResponseDTO<Lot> response = _lotManagementService.GetLotByName(ownerid, lotname);
-            return response.Data;
+            return response;
         }
 
-        public List<Lot> GetAllLots()
+        public ResponseDTO<List<Lot>> GetAllLots()
         {
-            List<Lot> lots = new List<Lot>();
-
-            return new List<Lot>();
+            ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLots();
+            return response;
         }
 
-        public List<Lot> GetAllLotsByOwner(Guid ownerid)
-        {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
-
-
-            return new List<Lot>();
-        }
-
-        public List<Spot> GetAllSpots()
-        {
-            return new List<Spot>();
-        }
-
-        public List<Spot> GetAllSpotsByOwner(Guid ownerid)
+        public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)
         {
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            return new List<Spot>();
+            ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
+            return response;
         }
 
-        public List<Spot> GetAllSpotsByLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpots()
+        {
+            ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpots();
+            return response;
+        }
+
+        public ResponseDTO<List<Spot>> GetAllSpotsByOwner(Guid ownerid)
         {
             // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
             ownerid = new Guid();
 
-            return new List<Spot>();
+            ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpotsByOwner(ownerid);
+            return response;
+        }
+
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
+        {
+            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
+            ownerid = new Guid();
+
+            ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpotsByLot(ownerid, lotname);
+            return response;
         }
 
     }
