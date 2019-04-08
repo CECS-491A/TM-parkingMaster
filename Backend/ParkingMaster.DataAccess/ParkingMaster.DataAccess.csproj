@@ -46,10 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\FunctionContext.cs" />
+    <Compile Include="Context\LotContext.cs" />
     <Compile Include="Context\UserContext.cs" />
     <Compile Include="Gateways\Contracts\ISessionGateway.cs" />
     <Compile Include="Gateways\FunctionGateway.cs" />
     <Compile Include="Gateways\SessionGateway.cs" />
+    <Compile Include="Gateways\LotGateway.cs" />
     <Compile Include="Gateways\UserGateway.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.Designer.cs">

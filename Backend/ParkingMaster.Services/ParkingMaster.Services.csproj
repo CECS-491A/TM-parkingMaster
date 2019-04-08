@@ -49,9 +49,11 @@
     <Compile Include="Services\ClaimService.cs" />
     <Compile Include="Services\Contracts\IClaimService.cs" />
     <Compile Include="Services\Contracts\ISessionService.cs" />
+    <Compile Include="Services\ILotManagementService.cs" />
     <Compile Include="Services\IPasswordService.cs" />
     <Compile Include="Services\Contracts\ITokenService.cs" />
     <Compile Include="Services\IUserManagementService.cs" />
+    <Compile Include="Services\LotManagementService.cs" />
     <Compile Include="Services\PasswordService.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
     <Compile Include="Services\SessionService.cs" />

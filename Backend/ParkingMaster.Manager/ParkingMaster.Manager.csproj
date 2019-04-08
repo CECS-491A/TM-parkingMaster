@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Controllers\SsoController.cs" />
     <Compile Include="Controllers\TestingController.cs" />
+    <Compile Include="App_Logic\LotManagerController.cs" />
     <Compile Include="App_Start\WebApiConfigure.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -56,6 +57,7 @@
     </Compile>
     <Compile Include="Managers\Contracts\ILoginManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
+    <Compile Include="Managers\LotManagementManager.cs" />
     <Compile Include="Managers\UserManagementManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
