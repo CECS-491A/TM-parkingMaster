@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\FunctionContext.cs" />
-    <Compile Include="Context\LotContext.cs" />
     <Compile Include="Context\UserContext.cs" />
     <Compile Include="Gateways\Contracts\ISessionGateway.cs" />
     <Compile Include="Gateways\FunctionGateway.cs" />

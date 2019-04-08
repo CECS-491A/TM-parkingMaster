@@ -34,7 +34,7 @@ namespace ParkingMaster.Services.Services
                     LotName = lotname,
                     Address = address,
                     Cost = cost,
-                    UserAccount = _userGateway.GetUserByGuid(ownerid).Data
+                    UserAccount = _userGateway.GetUserByUserId(ownerid).Data
                 };
                 newLot.Spots = ParseSpotsFromFile(newLot.LotId, newLot.LotName, file);
                 ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
