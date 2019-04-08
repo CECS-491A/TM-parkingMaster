@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ParkingMaster.DataAccess;
+using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Services.Services
 {
@@ -18,5 +14,7 @@ namespace ParkingMaster.Services.Services
         IEnumerable<User> GetAllUsers();
         void AddUserClaim(User user, Claim claim);
         */
+        ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id);
+        ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id);
     }
 }
