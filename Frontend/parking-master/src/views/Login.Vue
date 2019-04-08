@@ -57,7 +57,8 @@ export default {
           })
           .then(resp => {
             localStorage.parkingMasterToken = resp.data.Token
-            console.log(resp.data)
+            localStorage.parkingMasterUsername = resp.data.Username
+            localStorage.parkingMasterRole = resp.data.parkingMasterRole
           })
           .catch(e => {
             console.log(e.response)
