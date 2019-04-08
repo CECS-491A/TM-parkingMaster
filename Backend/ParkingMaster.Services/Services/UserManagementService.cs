@@ -182,13 +182,5 @@ namespace ParkingMaster.Services.Services
         {
             throw new NotImplementedException();
         }
-
-        public ResponseDTO<List<ClaimDTO>> GetAllUserClaims(string username)
-        {
-            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>();
-            response = _userGateway.GetUserClaims(username);
-
-            return response;
-        }
     }
 }

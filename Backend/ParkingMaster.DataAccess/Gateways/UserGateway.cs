@@ -328,6 +328,37 @@ namespace ParkingMaster.DataAccess
 
         }
 
+        public ResponseDTO<List<ClaimDTO>> GetUserClaims(Guid userId)
+        {
+            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>
+            {
+                Data = new List<ClaimDTO>()
+            };
+            List<Claim> claimsList = new List<Claim>();
+            try
+            {
+
+                claimsList = (from claims in context.Claims
+                              where claims.UserClaimsId == userId
+                              select claims).ToList<Claim>();
+
+                //Transform List of Claims into a List of ClaimDTOs
+                foreach (Claim claim in claimsList)
+                {
+                    response.Data.Add(new ClaimDTO(claim.Title, claim.Value));
+                }
+
+                return response;
+            }
+            catch
+            {
+                response.Data = null;
+                response.Error = "Failed to read UserAccount table";
+                return response;
+            }
+
+        }
+
         //Deletes all users to reinitialize the database
         public void ResetDatabase()
         {

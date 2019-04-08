@@ -56,8 +56,10 @@ export default {
             Token: this.token
           })
           .then(resp => {
-            localStorage.parkingMasterToken = resp.data.Token
-            console.log(resp.data)
+            sessionStorage.setItem('ParkingMasterToken', resp.data.Token)
+            sessionStorage.setItem('ParkingMasterUsername', resp.data.Username)
+            sessionStorage.setItem('ParkingMasterRole', resp.data.parkingMasterRole)
+            this.$router.push('/Home')
           })
           .catch(e => {
             console.log(e.response)

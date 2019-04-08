@@ -11,6 +11,7 @@
         <v-btn to="reservation" flat>Reservation</v-btn>
         <v-btn to="vehicleRegistration" flat>Vehicle Registration</v-btn>
         <v-btn to="lotRegistration" flat>Lot Registration</v-btn>
+        <v-btn to="login" flat>Login</v-btn>
       </v-toolbar-items>
 
     </v-toolbar>
