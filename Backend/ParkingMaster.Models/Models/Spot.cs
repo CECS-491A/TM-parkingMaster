@@ -13,6 +13,7 @@ namespace ParkingMaster.Models.Models
         // Automatic properties
         [Key]
         public Guid SpotId { get; set; } // I don't think this should have to be a GUID, maybe just an int?
+        public string SpotName { get; set; }
         [ForeignKey("Lot")]
         public Guid LotId { get; set; }
         public string LotName { get; set; }
