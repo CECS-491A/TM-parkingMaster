@@ -16,12 +16,13 @@ export default {
   },
   methods: {
     checkLocalStorage () {
-      if (localStorage.parkingMasterUsername.length > 0) {
-        this.pageTitle = 'Welcome ' + localStorage.parkingMasterUsername
+      var username = sessionStorage.getItem('ParkingMasterUsername')
+      if (username.length > 0) {
+        this.pageTitle = 'Welcome ' + username
       }
     }
   },
-  created () {
+  mounted () {
     this.checkLocalStorage()
   }
 }
