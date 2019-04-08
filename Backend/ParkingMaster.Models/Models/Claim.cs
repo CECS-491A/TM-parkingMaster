@@ -9,6 +9,7 @@ using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Models.Models
 {
+    [Table("ParkingMaster.Claims")]
     public class Claim : IEquatable<Claim>
     {
         [Key]
@@ -46,10 +47,8 @@ namespace ParkingMaster.Models.Models
             {
                 return false;
             }
-
-            Claim otherClaim = obj as Claim;
-
-            if (otherClaim != null)
+            
+            if (obj is Claim otherClaim)
             {
                 if (this.Title.Equals(otherClaim.Title))
                 {

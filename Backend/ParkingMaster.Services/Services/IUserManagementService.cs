@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ParkingMaster.DataAccess;
+using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Models;
 
 namespace ParkingMaster.Services.Services
 {
     public interface IUserManagementService
     {
         /*
-        bool CreateUser(User user);
         bool DeleteUser(User user);
         bool DeleteUser(string email);
         bool UpdateUser(User user);
@@ -18,5 +15,9 @@ namespace ParkingMaster.Services.Services
         IEnumerable<User> GetAllUsers();
         void AddUserClaim(User user, Claim claim);
         */
+
+        ResponseDTO<bool> CreateUser(UserAccount user, List<Claim> claims);
+        ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id);
+        ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id);
     }
 }

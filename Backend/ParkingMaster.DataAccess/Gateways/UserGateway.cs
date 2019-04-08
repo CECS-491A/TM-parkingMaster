@@ -30,48 +30,71 @@ namespace ParkingMaster.DataAccess
         /// <summary>
         /// The GetUserByUsername method.
         /// Gets a user by username
-        public ResponseDTO<UserAccount> GetUserByUsername(string username)
+        public ResponseDTO<UserAccountDTO> GetUserByUsername(string username)
 		{
 			try
 			{
 				var userAccount = (from account in context.UserAccounts
 								   where account.Username == username
-								   select account).FirstOrDefault();
+								   select account).First();
 
 				// Return a ResponseDto with a UserAccount model
-				return new ResponseDTO<UserAccount>()
+				return new ResponseDTO<UserAccountDTO>()
 				{
-					Data = userAccount
-				};
+					Data = new UserAccountDTO(userAccount)
+
+                };
 			}
 			catch (Exception)
 			{
-				return new ResponseDTO<UserAccount>()
+				return new ResponseDTO<UserAccountDTO>()
 				{
-					Data = new UserAccount(username),
+					Data = null,
 				};
 			}
 		}
+        public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id)
+        {
+            try
+            {
+                var userAccount = (from account in context.UserAccounts
+                                   where account.SsoId == id
+                                   select account).First();
 
-        public ResponseDTO<UserAccount> GetUserByGuid(Guid id)
+                // Return a ResponseDto with a UserAccount model
+                return new ResponseDTO<UserAccountDTO>()
+                {
+                    Data = new UserAccountDTO(userAccount)
+                };
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<UserAccountDTO>()
+                {
+                    Data = null
+                };
+            }
+        }
+
+        public ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id)
         {
             try
             {
                 var userAccount = (from account in context.UserAccounts
                                    where account.Id == id
-                                   select account).FirstOrDefault();
+                                   select account).First();
 
                 // Return a ResponseDto with a UserAccount model
-                return new ResponseDTO<UserAccount>()
+                return new ResponseDTO<UserAccountDTO>()
                 {
-                    Data = userAccount
+                    Data = new UserAccountDTO(userAccount)
                 };
             }
             catch (Exception)
             {
-                return new ResponseDTO<UserAccount>()
+                return new ResponseDTO<UserAccountDTO>()
                 {
-                    //Data = new UserAccount(id) ????
+                    Data = null
                 };
             }
         }
@@ -186,7 +209,7 @@ namespace ParkingMaster.DataAccess
 		}
 
 		//Delete user by username
-		public ResponseDTO<bool> DeleteUser(string username)
+		public ResponseDTO<bool> DeleteUser(Guid userId)
 		{
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -195,8 +218,8 @@ namespace ParkingMaster.DataAccess
 
 					// Queries for the user account based on username.
 					var userAccount = (from account in context.UserAccounts
-									   where account.Username == username
-									   select account).FirstOrDefault();
+									   where account.Id == userId
+                                       select account).FirstOrDefault();
 
 					// Checking if user account is null.
 					if (userAccount == null)
@@ -264,8 +287,10 @@ namespace ParkingMaster.DataAccess
 
         public ResponseDTO<List<ClaimDTO>> GetUserClaims(string username)
         {
-            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>();
-            response.Data = new List<ClaimDTO>();
+            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>
+            {
+                Data = new List<ClaimDTO>()
+            };
             List<Claim> claimsList = new List<Claim>();
             try
             {
@@ -281,12 +306,43 @@ namespace ParkingMaster.DataAccess
                     return response;
                 }
 
-                claimsList = (from claims in context.Claim
+                claimsList = (from claims in context.Claims
                                  where claims.UserClaimsId == userAccount.Id
                                  select claims).ToList<Claim>();
 
                 //Transform List of Claims into a List of ClaimDTOs
                 foreach(Claim claim in claimsList)
+                {
+                    response.Data.Add(new ClaimDTO(claim.Title, claim.Value));
+                }
+
+                return response;
+            }
+            catch
+            {
+                response.Data = null;
+                response.Error = "Failed to read UserAccount table";
+                return response;
+            }
+
+        }
+
+        public ResponseDTO<List<ClaimDTO>> GetUserClaims(Guid userId)
+        {
+            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>
+            {
+                Data = new List<ClaimDTO>()
+            };
+            List<Claim> claimsList = new List<Claim>();
+            try
+            {
+
+                claimsList = (from claims in context.Claims
+                              where claims.UserClaimsId == userId
+                              select claims).ToList<Claim>();
+
+                //Transform List of Claims into a List of ClaimDTOs
+                foreach (Claim claim in claimsList)
                 {
                     response.Data.Add(new ClaimDTO(claim.Title, claim.Value));
                 }
@@ -310,7 +366,7 @@ namespace ParkingMaster.DataAccess
 
             foreach(UserAccount acc in userAccounts)
             {
-                DeleteUser(acc.Username);
+                DeleteUser(acc.Id);
             }
 
         }

@@ -3,10 +3,37 @@
 import Vue from 'vue'
 import router from './router'
 import App from './App'
-import Home from './components/Home'
-import Vuetify from 'vuetify'
+import Vuetify, {
+  VToolbar,
+  VApp,
+  VBtn,
+  VTextField,
+  VForm,
+  VList,
+  VNavigationDrawer,
+  VToolbarTitle,
+  VSpacer,
+  VContent,
+  VToolbarItems
+} from 'vuetify/lib'
+import 'vuetify/src/stylus/app.styl'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  iconfont: 'md',
+  components: {
+    VApp,
+    VToolbar,
+    VBtn,
+    VTextField,
+    VForm,
+    VList,
+    VNavigationDrawer,
+    VToolbarTitle,
+    VSpacer,
+    VContent,
+    VToolbarItems
+  }
+})
 
 Vue.config.productionTip = false
 
@@ -14,6 +41,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { Home, App },
+  components: { App },
   template: '<App/>'
 })

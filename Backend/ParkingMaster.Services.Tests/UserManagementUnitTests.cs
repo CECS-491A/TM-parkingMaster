@@ -96,6 +96,7 @@ namespace ParkingMaster.Services.Tests
             var user = new UserAccount
             {
                 Username = "plaurent@yahoo.com",
+                Id = new Guid("88888888-4444-3333-2222-111111111111"),
                 IsActive = true,
                 IsFirstTimeUser = false,
                 RoleType = "standard"

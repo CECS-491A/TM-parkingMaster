@@ -4,8 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using ParkingMaster.Services.Services;
 
-namespace ParkingMaster.Manager.App_Logic
+namespace ParkingMaster.Manager.Controllers
 {
     public class TestingController : ApiController
     {
@@ -16,9 +17,10 @@ namespace ParkingMaster.Manager.App_Logic
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public int Get(string pw)
         {
-            return "value";
+            IPasswordService ps = new PasswordService();
+            return ps.CheckPassword(pw);
         }
 
         // POST api/<controller>

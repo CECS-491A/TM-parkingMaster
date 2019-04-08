@@ -1,31 +1,32 @@
 <template>
-  <div id="app">
-    <v-app>
-      <nav-bar />
-      <v-content>
-        <router-view />
-      </v-content>
+  <v-app>
+    <nav-bar />
+
+    <v-content>
+      <router-view />
+    </v-content>
   </v-app>
-  </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue'
+
 export default {
   name: 'app',
   components: {
     NavBar
   }
 }
+
+let userRole = sessionStorage.getItem('ParkingMasterRole')
+if (userRole === null) {
+  sessionStorage.setItem('ParkingMasterRole', 'unauthorized')
+}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  div[class^='view-'] {
+    padding: 10px;
+    text-align: center;
+  }
 </style>

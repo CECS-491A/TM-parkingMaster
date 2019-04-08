@@ -19,6 +19,11 @@ namespace ParkingMaster.Services.Services
             _userGateway = userGateway;
         }
 
+        public UserManagementService()
+        {
+            _userGateway = new UserGateway();
+        }
+
         public ResponseDTO<bool> CreateUser(UserAccount user, List<Claim> claims)
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
@@ -60,7 +65,7 @@ namespace ParkingMaster.Services.Services
             }
             try
             {
-                response = _userGateway.DeleteUser(user.Username);
+                response = _userGateway.DeleteUser(user.Id);
                 return response;
             }
             catch (Exception e)
@@ -71,11 +76,11 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<bool> DeleteUser(string username)
+        public ResponseDTO<bool> DeleteUser(Guid userId)
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
 
-            if (username == null)
+            if (userId == null)
             {
                 response.Data = false;
                 response.Error = "Attempted to delete Null username.";
@@ -83,7 +88,7 @@ namespace ParkingMaster.Services.Services
             }
             try
             {
-                response = _userGateway.DeleteUser(username);
+                response = _userGateway.DeleteUser(userId);
                 return response;
             }
             catch (Exception e)
@@ -99,9 +104,9 @@ namespace ParkingMaster.Services.Services
             throw new NotImplementedException();
         }
 
-        public ResponseDTO<UserAccount> GetUserByUsername(string username)
+        public ResponseDTO<UserAccountDTO> GetUserByUsername(string username)
         {
-            ResponseDTO<UserAccount> response = new ResponseDTO<UserAccount>();
+            ResponseDTO<UserAccountDTO> response = new ResponseDTO<UserAccountDTO>();
 
             if (username == null)
             {
@@ -122,22 +127,65 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<List<UserAccount>> GetAllUsers()
+        public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id)
         {
-            throw new NotImplementedException();
+            ResponseDTO<UserAccountDTO> response = new ResponseDTO<UserAccountDTO>();
+
+            if (id == null)
+            {
+                response.Data = null;
+                response.Error = "Attempted to read Null username.";
+                return response;
+            }
+            try
+            {
+                response = _userGateway.GetUserBySsoId(id);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response.Data = null;
+                response.Error = "Error occurred when searching for SssoId: " + id + "\n" + e.Message;
+                return response;
+            }
         }
 
-        public void AddUserClaim(UserAccount user, Claim claim)
+        public ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id)
         {
-            throw new NotImplementedException();
+            ResponseDTO<UserAccountDTO> response = new ResponseDTO<UserAccountDTO>();
+
+            if (id == null)
+            {
+                response.Data = null;
+                response.Error = "Attempted to read Null username.";
+                return response;
+            }
+            try
+            {
+                response = _userGateway.GetUserByUserId(id);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response.Data = null;
+                response.Error = "Error occurred when searching for UserId: " + id + "\n" + e.Message;
+                return response;
+            }
         }
 
         public ResponseDTO<List<ClaimDTO>> GetAllUserClaims(string username)
         {
-            ResponseDTO<List<ClaimDTO>> response = new ResponseDTO<List<ClaimDTO>>();
-            response = _userGateway.GetUserClaims(username);
+            return _userGateway.GetUserClaims(username);
+        }
 
-            return response;
+        public ResponseDTO<List<UserAccountDTO>> GetAllUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddUserClaim(UserAccountDTO user, Claim claim)
+        {
+            throw new NotImplementedException();
         }
     }
 }
