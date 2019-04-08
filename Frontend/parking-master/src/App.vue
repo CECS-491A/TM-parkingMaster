@@ -17,6 +17,11 @@ export default {
     NavBar
   }
 }
+
+let userRole = sessionStorage.getItem('ParkingMasterRole')
+if (userRole === null) {
+  sessionStorage.setItem('ParkingMasterRole', 'unauthorized')
+}
 </script>
 
 <style>
