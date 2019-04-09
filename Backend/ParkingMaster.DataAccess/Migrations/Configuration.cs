@@ -1,28 +1,26 @@
-﻿using ParkingMaster.Models.Models;
-using ParkingMaster.Models.DTO;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ParkingMaster.DataAccess.Migrations.UserDbContext
+namespace ParkingMaster.DataAccess.Migrations
 {
-	class Configuration : DbMigrationsConfiguration<ParkingMaster.DataAccess.UserContext>
-	{
-		public Configuration()
-		{
-			AutomaticMigrationsEnabled = false;
-			MigrationsDirectory = @"Migrations\UserDbContext";
-		}
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+    using ParkingMaster.Models.Models;
+    using ParkingMaster.Models.DTO;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Text;
+    using System.Threading.Tasks;
 
-		//Seed method
-		protected override void Seed(ParkingMaster.DataAccess.UserContext context)
-		{
-            
+    internal sealed class Configuration : DbMigrationsConfiguration<ParkingMaster.DataAccess.UserContext>
+    {
+        public Configuration()
+        {
+            AutomaticMigrationsEnabled = false;
+        }
+
+        protected override void Seed(ParkingMaster.DataAccess.UserContext context)
+        {
+
             var userGateway = new UserGateway(context);
             userGateway.ResetDatabase();
 
@@ -36,7 +34,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             };
             // Creating a list of claims
             List<Claim> claims = new List<Claim>
-			{
+            {
                 new Claim("User", "pnguyen@gmail.com"),
                 new Claim("Action", "DisabledAction"),
                 new Claim("Action", "CreateOtherUser"),

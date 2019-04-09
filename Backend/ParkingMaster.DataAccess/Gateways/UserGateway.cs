@@ -53,7 +53,6 @@ namespace ParkingMaster.DataAccess
 				};
 			}
 		}
-
         public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id)
         {
             try
