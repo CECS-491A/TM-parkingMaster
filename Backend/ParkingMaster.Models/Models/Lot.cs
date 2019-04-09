@@ -1,4 +1,4 @@
-﻿using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

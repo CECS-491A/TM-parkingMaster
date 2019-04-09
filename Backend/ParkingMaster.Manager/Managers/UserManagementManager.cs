@@ -84,8 +84,6 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
-            // TODO: Check signature
-
             UserAccountDTO userAccount;
             ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.GetUserBySsoId(ssoId);
             if(userAccountResponse.Data == null)
