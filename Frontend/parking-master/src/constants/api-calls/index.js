@@ -5,6 +5,7 @@ const LOT_REGISTRATION = PARKINGMASTER_BASE_URL + '/ParkingMaster/api/lot/regist
 const VEHICLE_REGISTRATION = PARKINGMASTER_BASE_URL + '/ParkingMaster/api/vehicle/register'
 const SESSION_CHECK = PARKINGMASTER_BASE_URL + '/api/user/session'
 const SSO_LOGIN = SSO_BASE_URL + '/users/login'
+const DELETE_FROM_APPS = PARKINGMASTER_BASE_URL + '/api/user/deleteallapps'
 
 export default {
   BASE_URL: PARKINGMASTER_BASE_URL,
@@ -12,5 +13,6 @@ export default {
   LOT_REGISTRATION,
   VEHICLE_REGISTRATION,
   SSO_LOGIN,
-  SESSION_CHECK
+  SESSION_CHECK,
+  DELETE_FROM_APPS
 }

@@ -9,8 +9,8 @@ namespace ParkingMaster.Services.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly string APISecret = "F74D9544CB5CA6F8F3A9F07DDE1EC75C102E013967364D52D6CE1CD3182029BA";
-                                            //secret key made on local apps, for dev only
+        private readonly string APISecret = "F54977EDD2DCF1FCDFA24B04D76A122300081EB50F631C67C265C39E8200414A";
+        //secret key made on local apps, for dev only
         public string GenerateToken()
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
