@@ -13,31 +13,173 @@ namespace ParkingMaster.Manager.Controllers
 {
     public class LotManagementController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        [HttpPost]
+        [Route("")] // api/user/lot/create
+        public IHttpActionResult CreateLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            return new string[] { "value1", "value2" };
+
+            /*
+             * append everything to form data and just parse from there
+             */
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                Guid ownerid = new Guid(request.Id);
+                //string 
+                //response = lotManagementManager.AddLot(ownerid, lotname, address, cost);
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
+
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        [HttpDelete]
+        [Route("")] // api/user/lot/delete
+        public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            return "value";
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        [HttpPut]
+        [Route("")] // api/user/lot/edit
+        public IHttpActionResult EditLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        [HttpGet]
+        [Route("")] // api/user/lot
+        public IHttpActionResult GetAllLots([FromBody, Required] ParkingMasterFrontendDTO request)
         {
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
         }
 
-        // DELETE api/<controller>/5
-        public void Delete(int id)
+        [HttpGet]
+        [Route("")]
+        public IHttpActionResult GetLotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
         {
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
         }
+
+        [HttpGet]
+        [Route("")]
+        public IHttpActionResult GetAllSpots([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
+        }
+
+        [HttpGet]
+        [Route("")]
+        public IHttpActionResult GetSpotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
+        }
+
+        [HttpGet]
+        [Route("")]
+        public IHttpActionResult GetSpotsByLot([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            LoginManager loginManager = new LoginManager();
+            LotManagementManager lotManagementManager = new LotManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
+        }
+
     }
 }
