@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201904081914558_Initial.Designer.cs">
       <DependentUpon>201904081914558_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904151847559_Initial1.cs" />
+    <Compile Include="Migrations\201904151847559_Initial1.Designer.cs">
+      <DependentUpon>201904151847559_Initial1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.Designer.cs">
@@ -97,6 +101,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904081914558_Initial.resx">
       <DependentUpon>201904081914558_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904151847559_Initial1.resx">
+      <DependentUpon>201904151847559_Initial1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\UserDbContext\201903170516359_Initial.resx">
       <DependentUpon>201903170516359_Initial.cs</DependentUpon>

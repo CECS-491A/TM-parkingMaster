@@ -324,6 +324,22 @@ namespace ParkingMaster.DataAccess.Gateways
             }
         }
 
+        public void ResetDatabase()
+        {
+            List<Spot> spots = GetAllSpots().Data;
+            List<Lot> lots = GetAllLots().Data;
+
+            foreach (Spot s in spots)
+            {
+                context.Spots.Remove(s);
+            }
+            foreach (Lot l in lots)
+            {
+                context.Lots.Remove(l);
+            }
+
+        }
+
         public void Dispose()
         {
             context.Dispose();
