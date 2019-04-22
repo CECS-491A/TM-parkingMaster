@@ -12,16 +12,18 @@ namespace ParkingMaster.Models.Models
     {
         // Automatic properties
         [Key]
-        public Guid SpotId { get; set; } // I don't think this should have to be a GUID, maybe just an int?
+        public Guid SpotId { get; set; }
         public string SpotName { get; set; }
         [ForeignKey("Lot")]
         public Guid LotId { get; set; }
         public string LotName { get; set; }
         public bool IsHandicappedAccessible { get; set; }
-        public bool IsTaken { get; set; }
+        public bool IsTaken { get; set; } // remove ? --> DateTime IsFreeAt --> datetimenow - something
+        // public Guid IsTakenBy --> FK UserID, null when added
 
         // Navigation properties
         public virtual Lot Lot { get; set; }
+        // nav prop for userID table ...
 
         // Constructors
         public Spot()
