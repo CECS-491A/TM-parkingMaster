@@ -13,8 +13,8 @@ namespace ParkingMaster.Services.Services
     {
         ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, FileInfo file);
         ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname);
-        ResponseDTO<Boolean> EditLotSpots(Guid ownerid, string lotname, FileInfo file);
-        ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname);
+        //ResponseDTO<Boolean> EditLotSpots(Guid ownerid, string lotname, FileInfo file);
+        //ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname);
 
         ResponseDTO<Lot> GetLotByName(Guid ownerid, string name);
         List<Spot> ParseSpotsFromFile(Guid lotid, string lotname, FileInfo file);

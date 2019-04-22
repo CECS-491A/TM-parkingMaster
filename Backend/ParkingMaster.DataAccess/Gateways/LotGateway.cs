@@ -91,13 +91,7 @@ namespace ParkingMaster.DataAccess.Gateways
             }
         }
 
-        public ResponseDTO<Boolean> EditLotSpots() // todo
-        {
-            ResponseDTO<bool> response = new ResponseDTO<bool>();
-
-            return response;
-        }
-
+        /*
         public ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
@@ -132,6 +126,7 @@ namespace ParkingMaster.DataAccess.Gateways
                 }
             }
         }
+        */
 
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string lotname)
         {

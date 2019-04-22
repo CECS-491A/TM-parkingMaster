@@ -67,40 +67,6 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<bool> EditLotSpots(Guid ownerid, string lotname, FileInfo file) //todo
-        {
-            try
-            {
-                ResponseDTO<bool> response = new ResponseDTO<bool>();
-                return response;
-            }
-            catch (Exception)
-            {
-                return new ResponseDTO<Boolean>()
-                {
-                    Data = false,
-                    Error = "[LOT MANAGEMENT SERVICE] Could not edit spots."
-                };
-            }
-        }
-
-        public ResponseDTO<bool> EditLotName(Guid ownerid, string oldlotname, string newlotname)
-        {
-            try
-            {
-                ResponseDTO<bool> response = _lotGateway.EditLotName(ownerid, oldlotname, newlotname);
-                return response;
-            }
-            catch (Exception)
-            {
-                return new ResponseDTO<Boolean>()
-                {
-                    Data = false,
-                    Error = "[LOT MANAGEMENT SERVICE] Could not edit lot name."
-                };
-            }
-        }
-
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string name)
         {
             try
