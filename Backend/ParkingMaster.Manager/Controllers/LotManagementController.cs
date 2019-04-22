@@ -8,35 +8,45 @@ using System.ComponentModel.DataAnnotations;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Manager.Managers;
+using System.Web;
 
 namespace ParkingMaster.Manager.Controllers
 {
     public class LotManagementController : ApiController
     {
-        [HttpPost]
-        [Route("")] // api/user/lot/create
-        public IHttpActionResult CreateLot([FromBody, Required] ParkingMasterFrontendDTO request)
+        [HttpPut]
+        [Route("/ParkingMaster/api/lot/register")] // api/user/lot/create
+        public IHttpActionResult CreateLot([FromBody, Required] ParkingMasterFrontendDTO request) // might be able to just remove params
         {
-
-            /*
-             * append everything to form data and just parse from there
-             */
             LoginManager loginManager = new LoginManager();
             LotManagementManager lotManagementManager = new LotManagementManager();
+            var httpRequest = HttpContext.Current.Request;
 
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
-
-            if (response.Data != null)
+            try
             {
-                Guid ownerid = new Guid(request.Id);
-                //string 
-                //response = lotManagementManager.AddLot(ownerid, lotname, address, cost);
-                return Ok(response.Data);
+                ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(httpRequest["token"]);
 
+                if (response.Data != null)
+                {
+                    Guid ownerid = new Guid(response.Data.Id);
+                    var username = httpRequest["username"];
+                    var lotname = httpRequest["lotname"];
+                    var address = httpRequest["address"];
+                    var cost = Convert.ToDouble(httpRequest["cost"]);
+                    var spotfile = httpRequest.Files["file"];
+                    var spotmap = httpRequest.Files["map"];
+                    ResponseDTO<Boolean> result = lotManagementManager.AddLot(ownerid, lotname, address, cost, spotfile);
+                    return Ok(result.Data);
+
+                }
+                else
+                {
+                    return Content((HttpStatusCode)404, response.Error);
+                }
             }
-            else
+            catch (Exception e)
             {
-                return Content((HttpStatusCode)404, response.Error);
+                return Content((HttpStatusCode)400, e.Message);
             }
 
         }

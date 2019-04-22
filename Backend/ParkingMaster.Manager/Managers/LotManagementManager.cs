@@ -25,7 +25,7 @@ namespace ParkingMaster.Manager.Managers
             _lotManagementService = new LotManagementService(_lotGateway, _userGateway);
         }
 
-        public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, FileInfo file)
+        public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
         {
             try
             {
