@@ -15,8 +15,8 @@ namespace ParkingMaster.Manager.Controllers
     public class LotManagementController : ApiController
     {
         [HttpPut]
-        [Route("/ParkingMaster/api/lot/register")] // api/user/lot/create
-        public IHttpActionResult CreateLot([FromBody, Required] ParkingMasterFrontendDTO request) // might be able to just remove params
+        [Route("ParkingMaster/api/lot/register")]
+        public IHttpActionResult CreateLot() // [FromBody, Required] ParkingMasterFrontendDTO request
         {
             LoginManager loginManager = new LoginManager();
             LotManagementManager lotManagementManager = new LotManagementManager();
@@ -52,7 +52,7 @@ namespace ParkingMaster.Manager.Controllers
         }
 
         [HttpDelete]
-        [Route("")] // api/user/lot/delete
+        [Route("ParkingMaster/api/lot/delete")] // api/user/lot/delete
         public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
@@ -71,6 +71,7 @@ namespace ParkingMaster.Manager.Controllers
             }
         }
 
+        /*
         [HttpPut]
         [Route("")] // api/user/lot/edit
         public IHttpActionResult EditLot([FromBody, Required] ParkingMasterFrontendDTO request)
@@ -90,9 +91,10 @@ namespace ParkingMaster.Manager.Controllers
                 return Content((HttpStatusCode)404, response.Error);
             }
         }
+        
 
         [HttpGet]
-        [Route("")] // api/user/lot
+        [Route("ParkingMaster/api/lot/all")] // api/user/lot
         public IHttpActionResult GetAllLots([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
@@ -112,7 +114,7 @@ namespace ParkingMaster.Manager.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("ParkingMaster/api/lot/all/owner")]
         public IHttpActionResult GetLotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
@@ -132,7 +134,7 @@ namespace ParkingMaster.Manager.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("ParkingMaster/api/spot/all")]
         public IHttpActionResult GetAllSpots([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
@@ -152,7 +154,7 @@ namespace ParkingMaster.Manager.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("ParkingMaster/api/spot/all/owner")]
         public IHttpActionResult GetSpotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
@@ -172,7 +174,7 @@ namespace ParkingMaster.Manager.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("ParkingMaster/api/spot/lot")]
         public IHttpActionResult GetSpotsByLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
@@ -189,7 +191,7 @@ namespace ParkingMaster.Manager.Controllers
             {
                 return Content((HttpStatusCode)404, response.Error);
             }
-        }
+        }*/
 
     }
 }

@@ -21,7 +21,7 @@ namespace ParkingMaster.Models.Models
         public double Cost { get; set; }
 
         // Navigation Properties
-        public virtual UserAccountDTO UserAccount { get; set; } // change to UserAccount if needed, not sure if removing DTOs
+        public virtual UserAccountDTO UserAccount { get; set; } // change to UserAccount
         public List<Spot> Spots { get; set; }
 
         //Constructors

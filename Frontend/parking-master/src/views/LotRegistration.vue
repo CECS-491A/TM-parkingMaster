@@ -33,44 +33,43 @@ export default {
     }
   },
   methods: {
-    async submitlot() {
-      let formData = new FormData();
-      let token = sessionStorage.getItem("ParkingMasterToken");
-      let username = sessionStorage.getItem("ParkingMasterUsername");
-      let role = sessionStorage.getItem("ParkingMasterRole");
-      
-      formData.append('file', this.file);
-      formData.append('map', this.map);
-      formData.append('lotname', document.getElementById("lotname"));
-      formData.append('address', document.getElementById("address"));
-      formData.append('cost', document.getElementById("cost"));
-      formData.append('token', token);
-      formData.append('username', username);
-      formData.append('role', role);
+    async submitlot () {
+      let formData = new FormData()
+      let token = sessionStorage.getItem('ParkingMasterToken')
+      let username = sessionStorage.getItem('ParkingMasterUsername')
+      let role = sessionStorage.getItem('ParkingMasterRole')
+      formData.append('file', this.file)
+      formData.append('map', this.map)
+      formData.append('lotname', document.getElementById('lotname'))
+      formData.append('address', document.getElementById('address'))
+      formData.append('cost', document.getElementById('cost'))
+      formData.append('token', token)
+      formData.append('username', username)
+      formData.append('role', role)
 
       await axios
-        .put(apiCalls.LOT_REGISTRATION + "/" + "",
+        .put(apiCalls.LOT_REGISTRATION,
           formData,
           {
             headers: {
-                'Content-Type': 'multipart/form-data'
+              'Content-Type': 'multipart/form-data'
             }
           }
         )
-        .then(function() {
-          console.log('OK');
-          this.file = '';
-          this.map = '';
+        .then(function () {
+          console.log('OK')
+          this.file = ''
+          this.map = ''
         })
         .catch(e => {
           console.log(e.response)
         })
     },
-    csvHandler() {
-      this.file = this.$refs.spotfile.files[0];
+    csvHandler () {
+      this.file = this.$refs.spotfile.files[0]
     },
-    imageHandler() {
-      this.map = this.$refs.spotmap.files[0];
+    imageHandler () {
+      this.map = this.$refs.spotmap.files[0]
     }
   }
 }
