@@ -7,13 +7,13 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Add_Lots : IMigrationMetadata
+    public sealed partial class Add_Lots_AND_Spots_AND_Vehicles : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Add_Lots));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Add_Lots_AND_Spots_AND_Vehicles));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904232222177_Add_Lots"; }
+            get { return "201904232305592_Add_Lots_AND_Spots_AND_Vehicles"; }
         }
         
         string IMigrationMetadata.Source

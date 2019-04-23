@@ -16,12 +16,13 @@ namespace ParkingMaster.Models.Models
     {
         // Automatic Properties
         [ForeignKey("UserAccount")]
-        public Guid Id { get; set; }
+        public Guid OwnerId { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
         public int Year { get; set; }
         public string State { get; set; }
         public string Plate { get; set; }
+        [Key]
         public string Vin { get; set; }
 
         // Navigational Property
@@ -42,7 +43,7 @@ namespace ParkingMaster.Models.Models
 
         public Vehicle(Guid id, string make, string model, int year, string state, string plate, string vin)
         {
-            Id = id;
+            OwnerId = id;
             Make = make;
             Model = model;
             Year = year;

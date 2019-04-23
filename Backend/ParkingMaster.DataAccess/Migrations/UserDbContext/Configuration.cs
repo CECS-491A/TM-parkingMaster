@@ -176,7 +176,6 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                     LotId = testLot.LotId,
                     LotName = testLot.LotName,
                     IsHandicappedAccessible = false,
-                    IsTaken = false,
                     Lot = testLot
                 },
                 new Spot
@@ -186,7 +185,6 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                     LotId = testLot.LotId,
                     LotName = testLot.LotName,
                     IsHandicappedAccessible = false,
-                    IsTaken = false,
                     Lot = testLot
                 }
             };

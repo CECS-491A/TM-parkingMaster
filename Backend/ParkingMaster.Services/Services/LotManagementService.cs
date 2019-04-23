@@ -104,8 +104,7 @@ namespace ParkingMaster.Services.Services
                             SpotName = vars[0],
                             LotId = lotid,
                             LotName = lotname,
-                            IsHandicappedAccessible = (vars[1].Equals("true")) ? true : false,
-                            IsTaken = false
+                            IsHandicappedAccessible = (vars[1].Equals("true")) ? true : false
                         };
                         response.Add(spot);
                     }

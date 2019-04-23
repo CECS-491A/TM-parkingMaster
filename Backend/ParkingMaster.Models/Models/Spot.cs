@@ -19,19 +19,29 @@ namespace ParkingMaster.Models.Models
         public Guid LotId { get; set; }
         public string LotName { get; set; }
         public bool IsHandicappedAccessible { get; set; }
-        public bool IsTaken { get; set; } // remove ? --> DateTime IsFreeAt --> datetimenow - something
-        // public Guid IsTakenBy --> FK UserID, null when added
+
+        // If current time is after this variable, that means the parking spot is empty and available for reservation
+        public DateTime ReservedUntil { get; set; } 
+
+        // User who is currently reserving or last reserved this Spot
+        [ForeignKey("User")]
+        public Guid? TakenBy { get; set; }
+
+        // Vehicle the user reserved the parking spot for
+        [ForeignKey("UserVehicle")]
+        public string VehicleVin { get; set; }
 
         // Navigation properties
         public virtual Lot Lot { get; set; }
-        // nav prop for userID table ...
+        public virtual UserAccount User { get; set; }
+        public virtual Vehicle UserVehicle { get; set; }
 
         // Constructors
         public Spot()
         {
             LotName = "DEFAULT";
             IsHandicappedAccessible = false;
-            IsTaken = false;
+            ReservedUntil = DateTime.Now;
         }
     }
 }
