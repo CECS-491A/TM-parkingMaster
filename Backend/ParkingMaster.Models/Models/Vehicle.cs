@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 namespace ParkingMaster.Models.Models
 {
-   
+
     // Defines properties of a vehicle registered to a user account
- 
+
     [Table("ParkingMaster.Vehicle")]
-    public class Vehicle 
+    public class Vehicle
     {
         // Automatic Properties
         [ForeignKey("UserAccount")]
@@ -20,9 +20,9 @@ namespace ParkingMaster.Models.Models
         public string Make { get; set; }
         public string Model { get; set; }
         public int Year { get; set; }
-        public string State { get; set;}
-        public string Plate { get; set;}
-        public string Vin { get; set;}
+        public string State { get; set; }
+        public string Plate { get; set; }
+        public string Vin { get; set; }
 
         // Navigational Property
         public virtual UserAccount UserAccount { get; set; }
@@ -51,3 +51,4 @@ namespace ParkingMaster.Models.Models
             Vin = vin;
         }
     }
+}
