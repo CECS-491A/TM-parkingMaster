@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ParkingMaster.Models.Models
 {
+    [Table("ParkingMaster.Spots")]
     public class Spot
     {
         // Automatic properties

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParkingMaster.DataAccess.Gateways
+namespace ParkingMaster.DataAccess
 {
     public class LotGateway : IDisposable
     {

@@ -154,6 +154,45 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 
             sessionGateway.StoreSession(new Session(user1.Id));
 
+            var lotGateway = new LotGateway(context);
+            lotGateway.ResetDatabase();
+
+            UserAccountDTO testUser = userGateway.GetUserByUsername("client1@yahoo.com").Data;
+            Lot testLot = new Lot
+            {
+                LotId = new Guid("205296C2-9827-404B-9C95-2A28E00BFE0A"),
+                OwnerId = testUser.Id,
+                LotName = "TestLot",
+                Address = "123 Testing St.",
+                Cost = 20.0,
+                UserAccount = testUser
+            };
+            List<Spot> testSpots = new List<Spot>
+            {
+                new Spot
+                {
+                    SpotId = new Guid("ABADF4D9-7310-4E1B-9A5C-66E0055DD99D"),
+                    SpotName = "1",
+                    LotId = testLot.LotId,
+                    LotName = testLot.LotName,
+                    IsHandicappedAccessible = false,
+                    IsTaken = false,
+                    Lot = testLot
+                },
+                new Spot
+                {
+                    SpotId = new Guid("D1B84BA3-21EE-4E44-A415-606E2F6F8FAA"),
+                    SpotName = "2",
+                    LotId = testLot.LotId,
+                    LotName = testLot.LotName,
+                    IsHandicappedAccessible = false,
+                    IsTaken = false,
+                    Lot = testLot
+                }
+            };
+
+            lotGateway.AddLot(testLot, testSpots);
+
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ParkingMaster.Models.Models
 {
+    [Table("ParkingMaster.Lots")]
     public class Lot
     {
         // Automatic properties
