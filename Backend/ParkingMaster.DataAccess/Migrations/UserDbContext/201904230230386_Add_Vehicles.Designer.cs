@@ -13,7 +13,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
         
         string IMigrationMetadata.Id
         {
-            get { return "201904230208054_Add_Vehicles"; }
+            get { return "201904230230386_Add_Vehicles"; }
         }
         
         string IMigrationMetadata.Source

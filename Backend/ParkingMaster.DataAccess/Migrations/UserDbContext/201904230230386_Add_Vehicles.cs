@@ -52,26 +52,26 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 "ParkingMaster.Vehicle",
                 c => new
                     {
-                        Id = c.Guid(nullable: false),
+                        Vin = c.String(nullable: false, maxLength: 128),
+                        OwnerId = c.Guid(nullable: false),
                         Make = c.String(),
                         Model = c.String(),
                         Year = c.Int(nullable: false),
                         State = c.String(),
                         Plate = c.String(),
-                        Vin = c.String(),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("ParkingMaster.UserAccounts", t => t.Id)
-                .Index(t => t.Id);
+                .PrimaryKey(t => t.Vin)
+                .ForeignKey("ParkingMaster.UserAccounts", t => t.OwnerId, cascadeDelete: true)
+                .Index(t => t.OwnerId);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("ParkingMaster.Vehicle", "Id", "ParkingMaster.UserAccounts");
+            DropForeignKey("ParkingMaster.Vehicle", "OwnerId", "ParkingMaster.UserAccounts");
             DropForeignKey("dbo.Lots", "OwnerId", "dbo.UserAccountDTOes");
             DropForeignKey("dbo.Spots", "LotId", "dbo.Lots");
-            DropIndex("ParkingMaster.Vehicle", new[] { "Id" });
+            DropIndex("ParkingMaster.Vehicle", new[] { "OwnerId" });
             DropIndex("dbo.Spots", new[] { "LotId" });
             DropIndex("dbo.Lots", new[] { "OwnerId" });
             DropTable("ParkingMaster.Vehicle");
