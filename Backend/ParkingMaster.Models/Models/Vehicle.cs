@@ -15,6 +15,7 @@ namespace ParkingMaster.Models.Models
     public class Vehicle
     {
         // Automatic Properties
+        [Key]
         [ForeignKey("UserAccount")]
         public Guid Id { get; set; }
         public string Make { get; set; }
