@@ -6,13 +6,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
+
 namespace ParkingMaster.Models.Models
 {
-
-    // Defines properties of a vehicle registered to a user account
-
+    [Serializable]
     [Table("ParkingMaster.Vehicle")]
-    public class Vehicle
+    public class Vehicle : ISerializable
     {
         // Automatic Properties
         [ForeignKey("UserAccount")]
@@ -50,6 +50,12 @@ namespace ParkingMaster.Models.Models
             State = state;
             Plate = plate;
             Vin = vin;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Vin", this.Vin);
+            info.AddValue("Plate", this.Plate);
         }
     }
 }

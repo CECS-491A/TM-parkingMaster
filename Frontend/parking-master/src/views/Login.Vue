@@ -25,18 +25,18 @@ export default {
     }
   },
   methods: {
-    ssoDelete (){
+    ssoDelete () {
       axios
-      .post(apiCalls.DELETE_FROM_APPS,{
-        Token: sessionStorage.getItem('ParkingMasterToken')
-      })
-      .then(resp => {
-        alert('Account has been deleted from SSO and its applications!')
-        window.location = 'http://localhost:8081/#/clearuserroute';
-      })
-      .catch(e => {
-        alert('Delete failed')
-      })
+        .post(apiCalls.DELETE_FROM_APPS, {
+          Token: sessionStorage.getItem('ParkingMasterToken')
+        })
+        .then(resp => {
+          alert('Account has been deleted from SSO and its applications!')
+          window.location = 'http://localhost:8081/#/clearuserroute'
+        })
+        .catch(e => {
+          alert('Delete failed')
+        })
     },
     ssoLogin () {
       axios

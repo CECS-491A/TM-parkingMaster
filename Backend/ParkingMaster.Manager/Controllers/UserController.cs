@@ -18,7 +18,7 @@ namespace ParkingMaster.Manager.Controllers
     public class UserController : ApiController
     {
         [HttpPost]
-        [Route("api/user/launch")]
+        [Route("")]
         public IHttpActionResult SsoLogin([FromBody, Required] SsoUserRequestDTO request)
         {
             LoginManager loginManager = new LoginManager();

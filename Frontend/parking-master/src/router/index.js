@@ -5,6 +5,7 @@ import Login from '@/views/Login'
 import Reservation from '@/views/Reservation'
 import LotRegistration from '@/views/LotRegistration'
 import VehicleRegistration from '@/views/VehicleRegistration'
+import ParkingLotDashboard from '@/views/ParkingLotDashboard'
 
 Vue.use(Router)
 
@@ -39,6 +40,11 @@ export default new Router({
       path: '/VehicleRegistration',
       name: 'vehicleRegistration',
       component: VehicleRegistration
+    },
+    {
+      path: '/ParkingLotDashboard',
+      name: 'parkingLotDashboard',
+      component: ParkingLotDashboard
     }
   ]
 })
