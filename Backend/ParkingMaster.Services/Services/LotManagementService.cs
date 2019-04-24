@@ -24,8 +24,8 @@ namespace ParkingMaster.Services.Services
             _userGateway = userGateway;
         }
 
-        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
-        {
+        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, UserAccount useraccount, HttpPostedFile spotfile)
+        { 
             try
             {
                 Lot newLot = new Lot()
@@ -35,9 +35,9 @@ namespace ParkingMaster.Services.Services
                     LotName = lotname,
                     Address = address,
                     Cost = cost,
-                    UserAccount = _userGateway.GetUserByUserId(ownerid).Data
+                    UserAccount = useraccount
                 };
-                newLot.Spots = ParseSpotsFromFile(newLot.LotId, newLot.LotName, file);
+                newLot.Spots = ParseSpotsFromFile(newLot.LotId, newLot.LotName, spotfile);
                 ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
                 return response;
             }

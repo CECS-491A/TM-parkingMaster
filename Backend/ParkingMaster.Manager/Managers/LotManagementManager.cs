@@ -15,6 +15,7 @@ namespace ParkingMaster.Manager.Managers
     public class LotManagementManager
     {
         private ILotManagementService _lotManagementService;
+        private ISessionService _sessionService;
         private readonly LotGateway _lotGateway;
         private readonly UserGateway _userGateway;
         private readonly SessionService _sessionServices;
@@ -27,12 +28,34 @@ namespace ParkingMaster.Manager.Managers
             _sessionServices = new SessionService();
         }
 
-        public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
+        public ResponseDTO<Boolean> AddLot(HttpRequest httprequest)//(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
         {
+            //ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(httpRequest["token"]);
             try
             {
-                ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, file);
-                return response;
+                var token = httprequest["token"];
+                ResponseDTO<Session> SessionDTO = _sessionService.GetSession(new Guid(token));
+                if (SessionDTO.Data != null)
+                {
+                    var ownerid = SessionDTO.Data.UserAccount.Id;
+                    //var username = httprequest["username"];
+                    var lotname = httprequest["lotname"];
+                    var address = httprequest["address"];
+                    var cost = Convert.ToDouble(httprequest["cost"]);
+                    var useraccount = SessionDTO.Data.UserAccount;
+                    var spotfile = httprequest.Files["file"];
+                    var spotmap = httprequest.Files["map"];
+                    ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, useraccount, spotfile);
+                    return response;
+                }
+                else
+                {
+                    return new ResponseDTO<Boolean>()
+                    {
+                        Data = false,
+                        Error = "[SESSION SERVICE] Invalid session."
+                    };
+                }
             }
             catch (Exception)
             {

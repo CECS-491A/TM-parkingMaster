@@ -15,29 +15,19 @@ namespace ParkingMaster.Manager.Controllers
     public class LotManagementController : ApiController
     {
         [HttpPut]
-        [Route("ParkingMaster/api/lot/register")]
+        [Route("api/lot/register")]
         public IHttpActionResult CreateLot() // [FromBody, Required] ParkingMasterFrontendDTO request
         {
             LoginManager loginManager = new LoginManager();
             LotManagementManager lotManagementManager = new LotManagementManager();
-            var httpRequest = HttpContext.Current.Request;
+            var httprequest = HttpContext.Current.Request;
 
             try
             {
-                ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(httpRequest["token"]);
-
-                if (response.Data != null)
+                ResponseDTO<Boolean> response = lotManagementManager.AddLot(httprequest);
+                if (response.Data == true)
                 {
-                    Guid ownerid = new Guid(response.Data.Id);
-                    var username = httpRequest["username"];
-                    var lotname = httpRequest["lotname"];
-                    var address = httpRequest["address"];
-                    var cost = Convert.ToDouble(httpRequest["cost"]);
-                    var spotfile = httpRequest.Files["file"];
-                    var spotmap = httpRequest.Files["map"];
-                    ResponseDTO<Boolean> result = lotManagementManager.AddLot(ownerid, lotname, address, cost, spotfile);
-                    return Ok(result.Data);
-
+                    return Ok(response.Data);
                 }
                 else
                 {
@@ -52,7 +42,7 @@ namespace ParkingMaster.Manager.Controllers
         }
 
         [HttpDelete]
-        [Route("ParkingMaster/api/lot/delete")] // api/user/lot/delete
+        [Route("api/lot/delete")] // api/user/lot/delete
         public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
