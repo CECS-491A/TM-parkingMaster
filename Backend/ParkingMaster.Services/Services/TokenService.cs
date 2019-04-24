@@ -4,6 +4,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Models;
+using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Services.Services
 {
@@ -11,14 +14,6 @@ namespace ParkingMaster.Services.Services
     {
         private readonly string APISecret = "F74D9544CB5CA6F8F3A9F07DDE1EC75C102E013967364D52D6CE1CD3182029BA";
                                             //secret key made on local apps, for dev only
-        public string GenerateToken()
-        {
-            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-            Byte[] b = new byte[64 / 2];
-            provider.GetBytes(b);
-            string hex = BitConverter.ToString(b).Replace("-", "");
-            return hex;
-        }
 
         public bool isValidSignature(string presignatureString, string signature)
         {

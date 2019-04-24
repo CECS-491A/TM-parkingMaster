@@ -22,9 +22,13 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 		//Seed method
 		protected override void Seed(ParkingMaster.DataAccess.UserContext context)
 		{
-            
+            // Reset Database
             var userGateway = new UserGateway(context);
             userGateway.ResetDatabase();
+            var functionGateway = new FunctionGateway(context);
+            functionGateway.ResetDatabase();
+            var lotGateway = new LotGateway(context);
+            lotGateway.ResetDatabase();
 
             UserAccount user = new UserAccount()
             {
@@ -46,6 +50,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             userGateway.StoreIndividualUser(user, claims);
 
 
+            // Do not use this user for tests because it will be deleted in UserManagementService tests
             user = new UserAccount()
             {
                 SsoId = new Guid("87654321-4321-4321-4321-CBA987654321"),
@@ -140,8 +145,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             userGateway.StoreIndividualUser(user1, claims);
 
 
-            var functionGateway = new FunctionGateway(context);
-            functionGateway.ResetDatabase();
+            
 
             functionGateway.StoreFunction(new Function("DisableAction", false));
             functionGateway.StoreFunction(new Function("CreateOtherUser", true));
@@ -154,8 +158,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 
             sessionGateway.StoreSession(new Session(user1.Id));
 
-            var lotGateway = new LotGateway(context);
-            lotGateway.ResetDatabase();
+            
 
             UserAccountDTO testUser = userGateway.GetUserByUsername("client1@yahoo.com").Data;
             Lot testLot = new Lot
@@ -191,6 +194,33 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 
             lotGateway.AddLot(testLot, testSpots);
 
+            // Add Vehicles
+            var vehicleGateway = new VehicleGateway(context);
+            testUser = userGateway.GetUserByUsername("pnguyen@gmail.com").Data;
+
+            Vehicle userVehicle = new Vehicle()
+            {
+                OwnerId = testUser.Id,
+                Make = "Car Make",
+                Model = "Car Model",
+                Year = 2019,
+                State = "CA",
+                Plate = "1ABC123",
+                Vin = "1ABCD12345A123456"
+            };
+
+            vehicleGateway.StoreVehicle(userVehicle);
+            
+
+            // Add Test Reservations
+            ReservationDTO reservation = new ReservationDTO()
+            {
+                SpotId = new Guid("ABADF4D9-7310-4E1B-9A5C-66E0055DD99D"),
+                UserId = testUser.Id,
+                VehicleVin = userVehicle.Vin,
+                DurationInMinutes = 2
+            };
+            lotGateway.ReserveSpot(reservation);
         }
     }
 }

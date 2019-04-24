@@ -65,10 +65,13 @@
     <Compile Include="DTO\ClaimDTO.cs" />
     <Compile Include="DTO\EditUserDTO.cs" />
     <Compile Include="DTO\ParkingMasterFrontendDTO.cs" />
+    <Compile Include="DTO\ReservationDTO.cs" />
+    <Compile Include="DTO\ReservationRequestDTO.cs" />
     <Compile Include="DTO\ResetPasswordDTO.cs" />
     <Compile Include="DTO\ResponseDTO.cs" />
     <Compile Include="DTO\UserAccountDTO.cs" />
     <Compile Include="DTO\SsoUserRequestDTO.cs" />
+    <Compile Include="DTO\VehicleDTO.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="Models\Function.cs" />
     <Compile Include="Models\Session.cs" />

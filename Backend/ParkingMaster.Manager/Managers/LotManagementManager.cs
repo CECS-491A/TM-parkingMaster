@@ -17,12 +17,14 @@ namespace ParkingMaster.Manager.Managers
         private ILotManagementService _lotManagementService;
         private readonly LotGateway _lotGateway;
         private readonly UserGateway _userGateway;
+        private readonly SessionService _sessionServices;
 
         public LotManagementManager()
         {
             _lotGateway = new LotGateway();
             _userGateway = new UserGateway();
             _lotManagementService = new LotManagementService(_lotGateway, _userGateway);
+            _sessionServices = new SessionService();
         }
 
         public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
@@ -145,21 +147,52 @@ namespace ParkingMaster.Manager.Managers
 
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(ReservationRequestDTO request)
         {
+            // Check if token is in Guid Format
+            Guid sessionId;
             try
             {
-                ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpotsByLot(ownerid, lotname);
-                return response;
+                sessionId = Guid.Parse(request.SessionId);
             }
             catch (Exception)
             {
                 return new ResponseDTO<List<Spot>>()
                 {
                     Data = null,
-                    Error = "[LOT MANAGEMENT MANAGER] Could not get spots."
+                    Error = "tokenString not a valid Guid"
                 };
             }
+
+            ResponseDTO<Session> sessionDTO = _sessionServices.GetSession(sessionId);
+
+            // If session data is null, then an error occured
+            if (sessionDTO.Data == null)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = sessionDTO.Error
+
+                };
+            }
+
+            // Check if OwnerId is formatted properly
+            Guid ownerId;
+            try
+            {
+                ownerId = Guid.Parse(request.OwnerId);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "OwnerId not in proper Guid format."
+                };
+            }
+
+            return _lotManagementService.GetAllSpotsByLot(ownerId, request.LotName);
         }
 
     }

@@ -57,8 +57,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Managers\Contracts\ILoginManager.cs" />
+    <Compile Include="Managers\Contracts\IReservationManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\LotManagementManager.cs" />
+    <Compile Include="Managers\ReservationManager.cs" />
     <Compile Include="Managers\UserManagementManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

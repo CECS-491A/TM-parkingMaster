@@ -5,11 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace ParkingMaster.Models.Models
 {
+    [Serializable]
     [Table("ParkingMaster.Spots")]
-    public class Spot
+    public class Spot : ISerializable
     {
         // Automatic properties
         [Key]
@@ -42,6 +44,23 @@ namespace ParkingMaster.Models.Models
             LotName = "DEFAULT";
             IsHandicappedAccessible = false;
             ReservedUntil = DateTime.Now;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("SpotId", this.SpotId);
+            info.AddValue("SpotName", this.SpotName);
+            info.AddValue("IsHandicappedAccessible", this.IsHandicappedAccessible);
+            // Check if this spot is currently available
+            if(DateTime.Now.CompareTo(this.ReservedUntil) != 1)
+            {
+                info.AddValue("IsAvailable", false);
+            }
+            else
+            {
+                info.AddValue("IsAvailable", true);
+            }
+
         }
     }
 }

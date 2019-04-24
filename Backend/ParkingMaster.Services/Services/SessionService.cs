@@ -30,15 +30,31 @@ namespace ParkingMaster.Services.Services
 
         public ResponseDTO<Session> GetSession(Guid sessionId)
         {
-            ResponseDTO<Session> response = _sessionGateway.GetSession(sessionId);
+            // Attempt to find session with corresponding Id
+            ResponseDTO<Session> sessionDTO = _sessionGateway.GetSession(sessionId);
 
-            // If session exists, make sure to update it everytime
-            if(response.Data != null)
+            // If session data is null then an error occured
+            if (sessionDTO.Data == null)
             {
-                response = UpdateSessionExpiration(sessionId);
+                return sessionDTO;
             }
 
-            return response;
+            // Check if session is expired
+            if(DateTime.Now.CompareTo(sessionDTO.Data.ExpiringAt) == 1)
+            {
+                // Because session is no longer valid, remove it from the data store
+                _sessionGateway.DeleteSession(sessionId);
+
+                return new ResponseDTO<Session>()
+                {
+                    Data = null,
+                    Error = "Session has expired"
+                };
+            }
+
+            // Update the session expiration and return session
+            return _sessionGateway.UpdateSessionExpiration(sessionId);
+
         }
 
         public ResponseDTO<Session> UpdateSessionExpiration(Guid sessionId)

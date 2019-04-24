@@ -53,6 +53,7 @@
     <Compile Include="Gateways\SessionGateway.cs" />
     <Compile Include="Gateways\LotGateway.cs" />
     <Compile Include="Gateways\UserGateway.cs" />
+    <Compile Include="Gateways\VehicleGateway.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.Designer.cs">
       <DependentUpon>201903170516359_Initial.cs</DependentUpon>

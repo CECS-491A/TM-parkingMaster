@@ -15,7 +15,7 @@ namespace ParkingMaster.DataAccess
             public DbSet<Claim> Claims { get; set; }
             public DbSet<Function> Functions { get; set; }
             public DbSet<Session> Sessions { get; set; }
-            //public DbSet<Vehicle> Vehicle { get; set; }
+            public DbSet<Vehicle> Vehicles { get; set; }
             public DbSet<Lot> Lots { get; set; }
             public DbSet<Spot> Spots { get; set; }
     }

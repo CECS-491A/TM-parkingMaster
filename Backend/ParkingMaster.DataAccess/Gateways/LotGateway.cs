@@ -23,7 +23,7 @@ namespace ParkingMaster.DataAccess
             context = c;
         }
 
-        public ResponseDTO<Boolean> AddLot(Lot lot, List<Spot> spotList)
+        public ResponseDTO<bool> AddLot(Lot lot, List<Spot> spotList)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -58,7 +58,7 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -313,6 +313,50 @@ namespace ParkingMaster.DataAccess
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = null,
+                        Error = "[DATA ACCESS] Could not fetch spots."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<bool> ReserveSpot(ReservationDTO reservation)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var _spot = (from spot in context.Spots where spot.SpotId == reservation.SpotId select spot).FirstOrDefault();
+
+                    // Check that spot is not currently occupied
+                    if (DateTime.Now.CompareTo(_spot.ReservedUntil) != 1)
+                    {
+                        return new ResponseDTO<bool>()
+                        {
+                            Data = false,
+                            Error = "[DATA ACCESS] Spot is already reserved."
+                        };
+                    }
+
+                    // If spot is free, reserve spot with new information
+                    _spot.ReservedUntil = DateTime.Now.AddMinutes(reservation.DurationInMinutes);
+                    _spot.TakenBy = reservation.UserId;
+                    _spot.VehicleVin = reservation.VehicleVin;
+                    
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
                         Error = "[DATA ACCESS] Could not fetch spots."
                     };
                 }
