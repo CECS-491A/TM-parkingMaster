@@ -6,11 +6,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace ParkingMaster.Models.Models
 {
+    [Serializable]
     [Table("ParkingMaster.Lots")]
-    public class Lot
+    public class Lot : ISerializable
     {
         // Automatic properties
         [Key]
@@ -31,5 +33,12 @@ namespace ParkingMaster.Models.Models
             this.Spots = new List<Spot>();
         }
 
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("LotId", this.LotId);
+            info.AddValue("LotName", this.LotName);
+            info.AddValue("Address", this.Address);
+            info.AddValue("Cost", this.Cost);
+        }
     }
 }

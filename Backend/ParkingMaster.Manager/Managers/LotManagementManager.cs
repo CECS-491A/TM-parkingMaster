@@ -78,21 +78,41 @@ namespace ParkingMaster.Manager.Managers
             }
         }
 
-        public ResponseDTO<List<Lot>> GetAllLots()
+        public ResponseDTO<List<Lot>> GetAllLots(string sessionIdString)
         {
+       
+            ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLots();
+            
+
+            // Check if token is in Guid Format
+            Guid sessionId;
             try
             {
-                ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLots();
-                return response;
+                sessionId = Guid.Parse(sessionIdString);
             }
             catch (Exception)
             {
                 return new ResponseDTO<List<Lot>>()
                 {
                     Data = null,
-                    Error = "[LOT MANAGEMENT MANAGER] Could not get lots."
+                    Error = "tokenString not a valid Guid"
                 };
             }
+
+            ResponseDTO<Session> sessionDTO = _sessionServices.GetSession(sessionId);
+
+            // If session data is null, then an error occured
+            if (sessionDTO.Data == null)
+            {
+                return new ResponseDTO<List<Lot>>()
+                {
+                    Data = null,
+                    Error = sessionDTO.Error
+
+                };
+            }
+
+            return _lotManagementService.GetAllLots();
         }
 
         public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)

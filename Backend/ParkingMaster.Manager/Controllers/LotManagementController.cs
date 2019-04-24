@@ -91,16 +91,14 @@ namespace ParkingMaster.Manager.Controllers
                 return Content((HttpStatusCode)404, response.Error);
             }
         }
-        
-
-        [HttpGet]
-        [Route("ParkingMaster/api/lot/all")] // api/user/lot
+        */
+        [HttpPost]
+        [Route("api/lotManagement/getAllLots")] // api/user/lot
         public IHttpActionResult GetAllLots([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            LoginManager loginManager = new LoginManager();
             LotManagementManager lotManagementManager = new LotManagementManager();
 
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+            ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
 
             if (response.Data != null)
             {
@@ -112,7 +110,7 @@ namespace ParkingMaster.Manager.Controllers
                 return Content((HttpStatusCode)404, response.Error);
             }
         }
-
+        /*
         [HttpGet]
         [Route("ParkingMaster/api/lot/all/owner")]
         public IHttpActionResult GetLotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
