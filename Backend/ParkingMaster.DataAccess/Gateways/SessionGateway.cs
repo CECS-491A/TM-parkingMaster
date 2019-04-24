@@ -108,7 +108,7 @@ namespace ParkingMaster.DataAccess
             {
                 var session = (from sessions in context.Sessions
                                    where sessions.SessionId == sessionId
-                                   select sessions).FirstOrDefault();
+                                   select sessions).First();
 
                 // Return a ResponseDto with a Session DTO
                 return new ResponseDTO<Session>()
@@ -120,7 +120,8 @@ namespace ParkingMaster.DataAccess
             {
                 return new ResponseDTO<Session>()
                 {
-                    Data = null
+                    Data = null,
+                    Error = "Error when reading session."
                 };
             }
         }

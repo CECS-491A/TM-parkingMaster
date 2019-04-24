@@ -9,8 +9,7 @@ namespace ParkingMaster.Models.DTO
     public class ReservationRequestDTO
     {
         public string SessionId { get; set; }
-        public string OwnerId { get; set; }
-        public string LotName { get; set; }
+        public string LotId { get; set; }
         public string SpotId { get; set; }
         public string VehicleVin { get; set; }
         public int DurationInMinutes { get; set; }

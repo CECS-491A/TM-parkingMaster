@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\LotManagementController.cs" />
+    <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\SsoController.cs" />
     <Compile Include="Controllers\TestingController.cs" />
     <Compile Include="App_Logic\LotManagerController.cs" />

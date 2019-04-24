@@ -185,11 +185,11 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid lotId)
         {
             try
             {
-                ResponseDTO<List<Spot>> response = _lotGateway.GetAllSpotsByLot(ownerid, lotname);
+                ResponseDTO<List<Spot>> response = _lotGateway.GetAllSpotsByLot(lotId);
                 return response;
             }
             catch (Exception)

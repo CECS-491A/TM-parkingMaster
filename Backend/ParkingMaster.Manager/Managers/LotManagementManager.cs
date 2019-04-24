@@ -169,7 +169,7 @@ namespace ParkingMaster.Manager.Managers
 
         public ResponseDTO<List<Spot>> GetAllSpotsByLot(ReservationRequestDTO request)
         {
-            // Check if token is in Guid Format
+            // Check if sessionId is in Guid Format
             Guid sessionId;
             try
             {
@@ -197,11 +197,11 @@ namespace ParkingMaster.Manager.Managers
                 };
             }
 
-            // Check if OwnerId is formatted properly
-            Guid ownerId;
+            // Check if LotId is formatted properly
+            Guid lotId;
             try
             {
-                ownerId = Guid.Parse(request.OwnerId);
+                lotId = Guid.Parse(request.LotId);
             }
             catch (Exception)
             {
@@ -212,7 +212,7 @@ namespace ParkingMaster.Manager.Managers
                 };
             }
 
-            return _lotManagementService.GetAllSpotsByLot(ownerId, request.LotName);
+            return _lotManagementService.GetAllSpotsByLot(lotId);
         }
 
     }

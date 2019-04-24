@@ -288,14 +288,13 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid lotId)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
                 {
-                    var _lot = (from lot in context.Lots where lot.OwnerId == ownerid && lot.LotName == lotname select lot).FirstOrDefault();
-                    List<Spot> lotspots = (from spot in context.Spots where spot.LotId == _lot.LotId select spot).ToList();
+                    List<Spot> lotspots = (from spot in context.Spots where spot.LotId == lotId select spot).ToList();
 
                     //context.SaveChanges();
 
@@ -357,7 +356,7 @@ namespace ParkingMaster.DataAccess
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "[DATA ACCESS] Could not fetch spots."
+                        Error = "[DATA ACCESS] Error occured while reserving spot."
                     };
                 }
             }

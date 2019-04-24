@@ -16,11 +16,64 @@ namespace ParkingMaster.Manager.Managers
         public ReservationManager()
         {
             _reservationServices = new ReservationServices();
+            _sessionServices = new SessionService();
         }
 
         public ResponseDTO<bool> ReserveSpot(ReservationRequestDTO request)
         {
-            throw new NotImplementedException();
+            // Check if all Guids are formatted properly
+            Guid sessionId;
+            try
+            {
+                sessionId = Guid.Parse(request.SessionId);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = "SessionId is not a valid Guid"
+                };
+            }
+
+            Guid spotId;
+            try
+            {
+                spotId = Guid.Parse(request.SpotId);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = "SpotId is not a valid Guid"
+                };
+            }
+
+            ResponseDTO<Session> sessionDTO = _sessionServices.GetSession(sessionId);
+
+            // If session data is null, then an error occured
+            if (sessionDTO.Data == null)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = sessionDTO.Error
+
+                };
+            }
+
+            // TODO: Check if vehicle exists in data store
+
+            ReservationDTO reservationDTO = new ReservationDTO()
+            {
+                DurationInMinutes = request.DurationInMinutes,
+                UserId = sessionDTO.Data.UserAccount.Id,
+                VehicleVin = request.VehicleVin,
+                SpotId = spotId
+            };
+
+            return _reservationServices.ReserveSpot(reservationDTO);
         }
     }
 }

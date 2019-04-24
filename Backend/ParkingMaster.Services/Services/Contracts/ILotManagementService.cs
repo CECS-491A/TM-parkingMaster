@@ -27,7 +27,7 @@ namespace ParkingMaster.Services.Services
         ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid); // use this + GetAllSpotsInLot to get all spots by user
         ResponseDTO<List<Spot>> GetAllSpots();
         ResponseDTO<List<Spot>> GetAllSpotsByOwner(Guid ownerid);
-        ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname);
+        ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid lotId);
 
     }
 }
