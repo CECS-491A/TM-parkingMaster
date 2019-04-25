@@ -16,10 +16,19 @@ namespace ParkingMaster.Models.DTO
         public string GetStringToSign()
         {
             string acc = "";
-            acc += "ssoUserId=" + SsoUserId + ";";
             acc += "email=" + Email + ";";
-            acc += "timestamp=" + Timestamp + ";";
+            acc += "ssoUserId=" + SsoUserId + ";";
+            acc += "timestamp=" + Timestamp.ToString() + ";";
             return acc;
         }
+        /*
+        public Dictionary<string, string> GetStringToSign()
+        {
+            var launchPayload = new Dictionary<string, string>();
+            launchPayload.Add("ssoUserId", SsoUserId);
+            launchPayload.Add("email", Email);
+            launchPayload.Add("timestamp", Timestamp.ToString());
+            return launchPayload;
+        }*/
     }
 }

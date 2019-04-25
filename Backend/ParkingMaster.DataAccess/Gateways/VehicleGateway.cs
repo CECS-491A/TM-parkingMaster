@@ -82,6 +82,27 @@ namespace ParkingMaster.DataAccess
             }
         }
 
+        // returns vehicle via responseDTO
+        public ResponseDTO<List<Vehicle>> GetAllUserVehicles(Guid id)
+        {
+
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                // Find all vehicles of associated account
+                List<Vehicle> userVehicles = (from vehicle in context.Vehicles
+                                   where vehicle.UserAccount.Id == id
+                                   select vehicle).ToList();
+
+                ResponseDTO<List<Vehicle>> responseDto = new ResponseDTO<List<Vehicle>>
+                {
+                    Data = userVehicles,
+                    Error = null
+                };
+
+                return responseDto;
+            }
+        }
+
         //update, true if successful
         /*
         TODO: MANAGER
@@ -123,8 +144,8 @@ namespace ParkingMaster.DataAccess
                 }
             }
         }
-*/ 
-    
+*/
+
         void IDisposable.Dispose()
         {
             context.Dispose();

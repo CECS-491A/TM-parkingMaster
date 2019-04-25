@@ -61,6 +61,7 @@
     <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\TokenService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
+    <Compile Include="Services\VehicleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Debug.config">
