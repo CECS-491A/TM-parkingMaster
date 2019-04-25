@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ParkingMaster.Models.DTO
 {
@@ -12,7 +13,7 @@ namespace ParkingMaster.Models.DTO
         public string SsoUserId { get; set; }
         [Required]
         public long Timestamp { get; set; }
-
+        /*
         public string GetStringToSign()
         {
             string acc = "";
@@ -20,8 +21,8 @@ namespace ParkingMaster.Models.DTO
             acc += "ssoUserId=" + SsoUserId + ";";
             acc += "timestamp=" + Timestamp.ToString() + ";";
             return acc;
-        }
-        /*
+        }*/
+        
         public Dictionary<string, string> GetStringToSign()
         {
             var launchPayload = new Dictionary<string, string>();
@@ -29,6 +30,6 @@ namespace ParkingMaster.Models.DTO
             launchPayload.Add("email", Email);
             launchPayload.Add("timestamp", Timestamp.ToString());
             return launchPayload;
-        }*/
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ParkingMaster.Models.DTO
 {
@@ -15,13 +16,13 @@ namespace ParkingMaster.Models.DTO
         [Required]
         public long Timestamp { get; set; }
 
-        public string PreSignatureString()
+        public Dictionary<string, string> GetStringToSign()
         {
-            string acc = "";
-            acc += "ssoUserId=" + SsoUserId + ";";
-            acc += "email=" + Email + ";";
-            acc += "timestamp=" + Timestamp + ";";
-            return acc;
+            var launchPayload = new Dictionary<string, string>();
+            launchPayload.Add("ssoUserId", SsoUserId);
+            launchPayload.Add("email", Email);
+            launchPayload.Add("timestamp", Timestamp.ToString());
+            return launchPayload;
         }
     }
 }
