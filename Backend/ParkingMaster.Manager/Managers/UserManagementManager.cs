@@ -77,7 +77,7 @@ namespace ParkingMaster.Manager.Managers
                 SsoUserId = user.Data.SsoId.ToString(),
                 Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
             };
-            requestPayload.Signature = _tokenService.GenerateSignature(requestPayload.PreSignatureString());
+            requestPayload.Signature = _tokenService.Sign(requestPayload.GetStringToSign());
             var stringPayload = JsonConvert.SerializeObject(requestPayload);
             var jsonPayload = new StringContent(stringPayload, Encoding.UTF8, "application/json");
             var request = await client.PostAsync("http://localhost:61348/api/users/appdeleteuser", jsonPayload);

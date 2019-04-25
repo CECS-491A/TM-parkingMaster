@@ -27,7 +27,7 @@ namespace ParkingMaster.Manager.Controllers
 
             if (response.Data != null)
             {
-                return Ok(new { redirectURL = "http://localhost:8080/#/login?token=" + response.Data.SessionId.ToString("D") });
+                return Redirect("http://localhost:8080/#/login?token=" + response.Data.SessionId.ToString("D"));
             }
             else
             {
