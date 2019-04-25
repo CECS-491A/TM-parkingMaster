@@ -25,7 +25,8 @@ import Vuetify, {
   VCardText,
   VDialog,
   VChip,
-  VCardActions
+  VCardActions,
+  VAlert
 } from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
 
@@ -53,7 +54,8 @@ Vue.use(Vuetify, {
     VCardText,
     VDialog,
     VChip,
-    VCardActions
+    VCardActions,
+    VAlert
   }
 })
 

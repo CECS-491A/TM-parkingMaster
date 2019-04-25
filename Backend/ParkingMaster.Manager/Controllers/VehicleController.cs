@@ -30,5 +30,22 @@ namespace ParkingMaster.Manager.Controllers
                 return Content((HttpStatusCode)404, response.Error);
             }
         }
+
+        [HttpPost]
+        [Route("api/vehicle/register")]
+        public IHttpActionResult RegisterVehicle([FromBody, Required] VehicleRequestDTO request)
+        {
+            VehicleManager _vehicleManager = new VehicleManager();
+            ResponseDTO<bool> response = _vehicleManager.StoreVehicle(request);
+
+            if (response.Data)
+            {
+                return Ok(response.Data);
+            }
+            else
+            {
+                return Content((HttpStatusCode)404, response.Error);
+            }
+        }
     }
 }

@@ -22,5 +22,10 @@ namespace ParkingMaster.Services.Services
         {
             return _vehicleGateway.GetAllUserVehicles(userId);
         }
+
+        public ResponseDTO<bool> StoreVehicle(Vehicle vehicle)
+        {
+            return _vehicleGateway.StoreVehicle(vehicle);
+        }
     }
 }

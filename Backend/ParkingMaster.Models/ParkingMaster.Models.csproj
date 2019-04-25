@@ -72,6 +72,7 @@
     <Compile Include="DTO\UserAccountDTO.cs" />
     <Compile Include="DTO\SsoUserRequestDTO.cs" />
     <Compile Include="DTO\VehicleDTO.cs" />
+    <Compile Include="DTO\VehicleRequestDTO.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="Models\Function.cs" />
     <Compile Include="Models\Session.cs" />

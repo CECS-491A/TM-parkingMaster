@@ -57,7 +57,7 @@ export default {
   async mounted () {
     await axios
       .post(apiCalls.GET_ALL_LOTS, {
-        Token: 'EEF462B2-303C-4FD6-A4BA-39A5B7F7D0E5'
+        Token: sessionStorage.getItem('ParkingMasterToken')
       })
       .then(response => (this.lots = response.data))
   }

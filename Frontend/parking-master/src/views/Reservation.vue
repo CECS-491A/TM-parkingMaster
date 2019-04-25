@@ -5,8 +5,8 @@
       <h3 class="form-reservation-address">Address: {{ lotAddress }}</h3>
       <v-form ref="form">
         <select v-model="selectedSpot">
-          <option disabled value="" v-if="!worked">Please Select a Parking Spot</option>
-          <option v-for="(spot, index) in spots" :key="index" v-bind:value="spot" v-if="!worked">{{ spot.SpotName }}</option>
+          <option disabled value="" v-if="!worked" >Please Select a Parking Spot</option>
+          <option v-for="(spot, index) in spots" :key="index" v-bind:value="spot" :class="{ 'taken-spot' : !spot.IsAvailable, 'available-spot' : spot.IsAvailable }" v-if="!worked">{{ spot.SpotName }}</option>
         </select>
         <select v-model="selectedVehicle">
           <option disabled value="" v-if="!worked">Please Select a Your Vehicle Plate</option>
@@ -14,17 +14,19 @@
         </select>
         <v-text-field id="duration" v-model="duration" class="form-control" placeholder="Length of Reservation (minutes)" required v-if="!worked"></v-text-field>
         <v-btn class="button-reservation" color="primary" v-on:click="submitReservation" v-if="!worked">Submit Reservation</v-btn>
+
+        <v-alert :value="errorOn" color="error" transition="scale-transition"><h3> {{error}} </h3></v-alert>
       </v-form>
 
       <div id="responseMessage" v-if="worked">
         <h3>Successfully reserved parking spot: {{ selectedSpot.SpotName }}</h3>
         <br />
       </div>
-      <div id="applicationId" v-if="worked">
+      <div id="licensePlateMessage" v-if="worked">
         <h3>License plate on reservation: {{ selectedVehicle.Plate }}</h3>
         <br />
       </div>
-      <div id="apiKeyMessage" v-if="worked">
+      <div id="reservationMessage" v-if="worked">
         <h3>Reservation ends at: {{ reservationEndsAt }}</h3>
       </div>
     </form>
@@ -51,14 +53,18 @@ export default {
       duration: null,
       vehicleVin: '',
       worked: false,
-      reservationEndsAt: ''
+      reservationEndsAt: '',
+      error: '',
+      errorOn: false
     }
   },
   methods: {
     submitReservation () {
+      this.error = ''
+      this.errorOn = false
       axios
         .post(apiCalls.RESERVE_PARKING_SPOT, {
-          SessionId: 'EEF462B2-303C-4FD6-A4BA-39A5B7F7D0E5',
+          SessionId: sessionStorage.getItem('ParkingMasterToken'),
           SpotId: this.selectedSpot.SpotId,
           VehicleVin: this.selectedVehicle.Vin,
           DurationInMinutes: this.duration
@@ -71,6 +77,8 @@ export default {
         }.bind(this))
         .catch(e => {
           console.log(e)
+          this.error = 'Failed to reserve parking spot.'
+          this.errorOn = true
         })
     }
   },
@@ -80,13 +88,13 @@ export default {
     this.lotAddress = sessionStorage.getItem('lotAddress')
     await axios
       .post(apiCalls.GET_ALL_SPOTS_FOR_LOT, {
-        SessionId: 'EEF462B2-303C-4FD6-A4BA-39A5B7F7D0E5',
+        SessionId: sessionStorage.getItem('ParkingMasterToken'),
         LotId: this.lotId
       })
       .then(response => (this.spots = response.data))
     await axios
       .post(apiCalls.GET_ALL_USER_VEHICLES, {
-        Token: 'EEF462B2-303C-4FD6-A4BA-39A5B7F7D0E5'
+        Token: sessionStorage.getItem('ParkingMasterToken')
       })
       .then(response => (this.vehicles = response.data))
   }
@@ -101,5 +109,13 @@ export default {
 .button-reservation {
   width: 330px;
   margin: 0 auto;
+}
+.taken-spot {
+  background: red;
+  color: white;
+}
+.available-spot {
+  background: green;
+  color: white;
 }
 </style>
