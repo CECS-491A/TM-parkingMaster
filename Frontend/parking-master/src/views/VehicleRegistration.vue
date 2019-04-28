@@ -84,6 +84,13 @@ export default {
             console.log('Vehicle Registered.')
             this.worked = true
           }.bind(this))
+          .catch(e => {
+            console.log(e)
+            if (e.response.status === 401) {
+              sessionStorage.clear()
+              this.$router.push('/Home')
+            }
+          })
       }
     }
   }

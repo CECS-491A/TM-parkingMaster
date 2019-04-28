@@ -60,6 +60,13 @@ export default {
         Token: sessionStorage.getItem('ParkingMasterToken')
       })
       .then(response => (this.lots = response.data))
+      .catch(e => {
+        console.log(e)
+        if (e.response.status === 401) {
+          sessionStorage.clear()
+          this.$router.push('/Home')
+        }
+      })
   }
 }
 </script>

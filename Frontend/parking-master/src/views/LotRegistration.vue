@@ -62,7 +62,11 @@ export default {
           this.map = ''
         })
         .catch(e => {
-          console.log(e.response)
+          console.log(e)
+          if (e.response.status === 401) {
+            sessionStorage.clear()
+            this.$router.push('/Home')
+          }
         })
     },
     csvHandler () {
