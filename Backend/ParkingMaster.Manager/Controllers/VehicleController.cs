@@ -27,7 +27,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                return Content((HttpStatusCode)404, response.Error);
+                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statuesResponse.Data, statuesResponse.Error);
             }
         }
 
@@ -44,7 +45,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                return Content((HttpStatusCode)404, response.Error);
+                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statuesResponse.Data, statuesResponse.Error);
             }
         }
     }

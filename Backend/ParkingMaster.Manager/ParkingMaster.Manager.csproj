@@ -63,6 +63,7 @@
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\LotManagementManager.cs" />
     <Compile Include="Managers\ReservationManager.cs" />
+    <Compile Include="Managers\ResponseManager.cs" />
     <Compile Include="Managers\UserManagementManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

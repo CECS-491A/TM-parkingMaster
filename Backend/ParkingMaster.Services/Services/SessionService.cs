@@ -48,7 +48,7 @@ namespace ParkingMaster.Services.Services
                 return new ResponseDTO<Session>()
                 {
                     Data = null,
-                    Error = "Session has expired"
+                    Error = "Session has expired."
                 };
             }
 

@@ -70,7 +70,7 @@ namespace ParkingMaster.DataAccess
                                    where sessions.SessionId == sessionId
                                    select sessions).FirstOrDefault();
 
-                    // Checking if user account is null.
+                    // Checking session exists
                     if (session == null)
                     {
                         return new ResponseDTO<bool>()
@@ -153,7 +153,17 @@ namespace ParkingMaster.DataAccess
             {
                 var session = (from sessions in context.Sessions
                                    where sessions.SessionId == sessionId
-                                   select sessions).First();
+                                   select sessions).FirstOrDefault();
+
+                // Check if session exists
+                if (session == null)
+                {
+                    return new ResponseDTO<Session>()
+                    {
+                        Data = null,
+                        Error = "Session does not exist."
+                    };
+                }
 
                 // Return a ResponseDto with a Session DTO
                 return new ResponseDTO<Session>()
