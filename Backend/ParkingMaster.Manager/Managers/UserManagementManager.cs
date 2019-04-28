@@ -13,6 +13,7 @@ namespace ParkingMaster.Manager.Managers
     {
 
         private UserManagementService _userManagementService;
+        private SessionService _sessionService;
 
         public UserManagementManager()
         {
@@ -198,5 +199,69 @@ namespace ParkingMaster.Manager.Managers
             return _userManagementService.GetAllUsers();
         }
     */
+        // Delete User From SsoRequest
+        public ResponseDTO<HttpStatusCode> LogoutUser(SsoUserRequestDTO request)
+        {
+            ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
+            ITokenService tokenService = new TokenService();
+
+            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            {
+                response.Data = (HttpStatusCode)400;
+                response.Error = "Signature not valid";
+                return response;
+            }
+
+            // Check if request id is in guid format
+            Guid ssoId;
+            try
+            {
+                ssoId = new Guid(request.SsoUserId);
+            }
+            catch (Exception e)
+            {
+                response.Data = (HttpStatusCode)400;
+                response.Error = "SsoId provided was invalid";
+                return response;
+            }
+
+            UserAccountDTO userAccount;
+            ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.GetUserBySsoId(ssoId);
+            if (userAccountResponse.Data == null)
+            {
+                // Returns a success because there are no sessions to delete
+                // The user has never opend our app so do not stop the SSO logout from continuing
+                response.Data = (HttpStatusCode)200;
+                return response;
+            }
+            else
+            {
+                userAccount = userAccountResponse.Data;
+            }
+
+            ResponseDTO<bool> boolResponse;
+            try
+            {
+                boolResponse = _sessionService.DeleteAllUserSessions(userAccount.Id);
+            }
+            catch (Exception e)
+            {
+                response.Data = (HttpStatusCode)500;
+                response.Error = "Failed to delete sessions for userID: " + userAccount.Id + "\n" + e.Message;
+                return response;
+            }
+
+            if (boolResponse.Data)
+            {
+                response.Data = (HttpStatusCode)200;
+                return response;
+            }
+            else
+            {
+                response.Data = (HttpStatusCode)500;
+                response.Error = boolResponse.Error;
+                return response;
+            }
+        }
     }
 }

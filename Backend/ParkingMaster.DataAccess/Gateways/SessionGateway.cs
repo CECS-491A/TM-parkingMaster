@@ -102,6 +102,51 @@ namespace ParkingMaster.DataAccess
             }
         }
 
+        public ResponseDTO<bool> DeleteAllUserSessions(Guid userId)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    // Queries for the session by sessionId.
+                    var sessionList = (from sessions in context.Sessions
+                                   where sessions.UserAccount.Id == userId
+                                   select sessions).ToList();
+
+                    // Checking if user account is null.
+                    if (sessionList == null)
+                    {
+                        return new ResponseDTO<bool>()
+                        {
+                            Data = false,
+                            Error = "User Account does not exist."
+                        };
+                    }
+
+                    // Delete all sessions tied to the account
+                    foreach (Session session in sessionList)
+                    {
+                        DeleteSession(session.SessionId);
+                    }
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = "Failed to delete all sessions."
+                    };
+                };
+            }
+        }
+
         public ResponseDTO<Session> GetSession(Guid sessionId)
         {
             try

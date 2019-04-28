@@ -57,6 +57,11 @@ namespace ParkingMaster.Services.Services
 
         }
 
+        public ResponseDTO<bool> DeleteAllUserSessions(Guid userId)
+        {
+            return _sessionGateway.DeleteAllUserSessions(userId);
+        }
+
         public ResponseDTO<Session> UpdateSessionExpiration(Guid sessionId)
         {
             return _sessionGateway.UpdateSessionExpiration(sessionId);
