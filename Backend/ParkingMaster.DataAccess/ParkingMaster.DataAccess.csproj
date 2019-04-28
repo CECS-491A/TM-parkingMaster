@@ -53,6 +53,7 @@
     <Compile Include="Gateways\SessionGateway.cs" />
     <Compile Include="Gateways\LotGateway.cs" />
     <Compile Include="Gateways\UserGateway.cs" />
+    <Compile Include="Gateways\VehicleGateway.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.Designer.cs">
       <DependentUpon>201903170516359_Initial.cs</DependentUpon>
@@ -61,9 +62,13 @@
     <Compile Include="Migrations\UserDbContext\201903271917275_Add_Sessions.Designer.cs">
       <DependentUpon>201903271917275_Add_Sessions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\UserDbContext\201904230230386_Add_Vehicles.cs" />
-    <Compile Include="Migrations\UserDbContext\201904230230386_Add_Vehicles.Designer.cs">
-      <DependentUpon>201904230230386_Add_Vehicles.cs</DependentUpon>
+    <Compile Include="Migrations\UserDbContext\201904232305592_Add_Lots_AND_Spots_AND_Vehicles.cs" />
+    <Compile Include="Migrations\UserDbContext\201904232305592_Add_Lots_AND_Spots_AND_Vehicles.Designer.cs">
+      <DependentUpon>201904232305592_Add_Lots_AND_Spots_AND_Vehicles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\UserDbContext\201904241815027_Fix.cs" />
+    <Compile Include="Migrations\UserDbContext\201904241815027_Fix.Designer.cs">
+      <DependentUpon>201904241815027_Fix.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,20 +94,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework">
-      <Version>6.2.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Migrations\UserDbContext\201903170516359_Initial.resx">
       <DependentUpon>201903170516359_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\UserDbContext\201903271917275_Add_Sessions.resx">
       <DependentUpon>201903271917275_Add_Sessions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\UserDbContext\201904230230386_Add_Vehicles.resx">
-      <DependentUpon>201904230230386_Add_Vehicles.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\UserDbContext\201904232305592_Add_Lots_AND_Spots_AND_Vehicles.resx">
+      <DependentUpon>201904232305592_Add_Lots_AND_Spots_AND_Vehicles.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserDbContext\201904241815027_Fix.resx">
+      <DependentUpon>201904241815027_Fix.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFramework">
+      <Version>6.2.0</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

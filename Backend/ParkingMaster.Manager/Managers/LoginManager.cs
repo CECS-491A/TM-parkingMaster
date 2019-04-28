@@ -34,7 +34,7 @@ namespace ParkingMaster.Manager.Managers
             if (!_tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = null;
-                response.Error = "Signature not valid";
+                response.Error = "My signature: " + _tokenService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
                 return response;
             }
 

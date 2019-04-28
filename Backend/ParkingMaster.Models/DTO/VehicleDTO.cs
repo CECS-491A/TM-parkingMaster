@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ParkingMaster.Models.Models;
 
 namespace ParkingMaster.Models.DTO
 {
@@ -24,7 +20,7 @@ namespace ParkingMaster.Models.DTO
         // Constructors
         public VehicleDTO() { }
 
-        public VehicleDTO(string make, string model, int year, string state, string plate, string vi)
+        public VehicleDTO(string make, string model, int year, string state, string plate, string vin)
         {
             Make = make;
             Model = model;
@@ -34,10 +30,10 @@ namespace ParkingMaster.Models.DTO
             Vin = vin;
         }
 
-        public VehicleDTO(VehicleDto vehicle)
+        public VehicleDTO(Vehicle vehicle)
         {
 
-            Account = vehicle.ID;
+            ID = vehicle.OwnerId;
             Make = vehicle.Make;
             Model = vehicle.Model;
             Year = vehicle.Year;

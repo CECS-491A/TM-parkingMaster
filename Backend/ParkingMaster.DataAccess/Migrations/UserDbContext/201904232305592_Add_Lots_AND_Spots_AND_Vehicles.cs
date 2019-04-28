@@ -3,12 +3,12 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Add_Vehicles : DbMigration
+    public partial class Add_Lots_AND_Spots_AND_Vehicles : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.Lots",
+                "ParkingMaster.Lots",
                 c => new
                     {
                         LotId = c.Guid(nullable: false),
@@ -22,7 +22,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 .Index(t => t.OwnerId);
             
             CreateTable(
-                "dbo.Spots",
+                "ParkingMaster.Spots",
                 c => new
                     {
                         SpotId = c.Guid(nullable: false),
@@ -30,23 +30,17 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                         LotId = c.Guid(nullable: false),
                         LotName = c.String(),
                         IsHandicappedAccessible = c.Boolean(nullable: false),
-                        IsTaken = c.Boolean(nullable: false),
+                        ReservedUntil = c.DateTime(nullable: false),
+                        TakenBy = c.Guid(),
+                        VehicleVin = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.SpotId)
-                .ForeignKey("dbo.Lots", t => t.LotId, cascadeDelete: true)
-                .Index(t => t.LotId);
-            
-            CreateTable(
-                "dbo.UserAccountDTOes",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        Username = c.String(nullable: false),
-                        IsActive = c.Boolean(),
-                        IsFirstTimeUser = c.Boolean(),
-                        RoleType = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
+                .ForeignKey("ParkingMaster.Lots", t => t.LotId, cascadeDelete: true)
+                .ForeignKey("ParkingMaster.UserAccounts", t => t.TakenBy)
+                .ForeignKey("ParkingMaster.Vehicle", t => t.VehicleVin)
+                .Index(t => t.LotId)
+                .Index(t => t.TakenBy)
+                .Index(t => t.VehicleVin);
             
             CreateTable(
                 "ParkingMaster.Vehicle",
@@ -64,20 +58,36 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 .ForeignKey("ParkingMaster.UserAccounts", t => t.OwnerId, cascadeDelete: true)
                 .Index(t => t.OwnerId);
             
+            CreateTable(
+                "dbo.UserAccountDTOes",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false),
+                        Username = c.String(nullable: false),
+                        IsActive = c.Boolean(),
+                        IsFirstTimeUser = c.Boolean(),
+                        RoleType = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
         }
         
         public override void Down()
         {
+            DropForeignKey("ParkingMaster.Lots", "OwnerId", "dbo.UserAccountDTOes");
+            DropForeignKey("ParkingMaster.Spots", "VehicleVin", "ParkingMaster.Vehicle");
             DropForeignKey("ParkingMaster.Vehicle", "OwnerId", "ParkingMaster.UserAccounts");
-            DropForeignKey("dbo.Lots", "OwnerId", "dbo.UserAccountDTOes");
-            DropForeignKey("dbo.Spots", "LotId", "dbo.Lots");
+            DropForeignKey("ParkingMaster.Spots", "TakenBy", "ParkingMaster.UserAccounts");
+            DropForeignKey("ParkingMaster.Spots", "LotId", "ParkingMaster.Lots");
             DropIndex("ParkingMaster.Vehicle", new[] { "OwnerId" });
-            DropIndex("dbo.Spots", new[] { "LotId" });
-            DropIndex("dbo.Lots", new[] { "OwnerId" });
-            DropTable("ParkingMaster.Vehicle");
+            DropIndex("ParkingMaster.Spots", new[] { "VehicleVin" });
+            DropIndex("ParkingMaster.Spots", new[] { "TakenBy" });
+            DropIndex("ParkingMaster.Spots", new[] { "LotId" });
+            DropIndex("ParkingMaster.Lots", new[] { "OwnerId" });
             DropTable("dbo.UserAccountDTOes");
-            DropTable("dbo.Spots");
-            DropTable("dbo.Lots");
+            DropTable("ParkingMaster.Vehicle");
+            DropTable("ParkingMaster.Spots");
+            DropTable("ParkingMaster.Lots");
         }
     }
 }

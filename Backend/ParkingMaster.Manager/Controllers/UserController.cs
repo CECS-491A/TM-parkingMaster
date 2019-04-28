@@ -10,6 +10,7 @@ using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Manager.Managers;
 using System.Web.Http.Cors;
+using System.Threading.Tasks;
 
 namespace ParkingMaster.Manager.Controllers
 {
@@ -21,17 +22,44 @@ namespace ParkingMaster.Manager.Controllers
         public IHttpActionResult SsoLogin([FromBody, Required] SsoUserRequestDTO request)
         {
             LoginManager loginManager = new LoginManager();
-            
+
             ResponseDTO<Session> response = loginManager.SsoLogin(request);
 
             if (response.Data != null)
             {
-                return Ok(new { redirectURL = "http://localhost:8080/#/login?token=" + response.Data.SessionId.ToString("D")});
+                return Redirect("http://localhost:8080/#/login?token=" + response.Data.SessionId.ToString("D"));
             }
             else
             {
-                return Content((HttpStatusCode)404, response.Error);
+                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statuesResponse.Data, statuesResponse.Error);
             }
+        }
+
+        [HttpPost]
+        [Route("api/user/deleteallapps")]
+        public async Task<IHttpActionResult> Delete([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            LoginManager loginManager = new LoginManager();
+            UserManagementManager userManager = new UserManagementManager();
+
+            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
+
+            if (response.Data != null)
+            {
+                var deleteResponse = await userManager.DeleteUserFromApps(Guid.Parse(response.Data.Id));
+                if (deleteResponse.IsSuccessStatusCode)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                    return Content(statuesResponse.Data, statuesResponse.Error);
+                }
+            }
+
+            return Content((HttpStatusCode)404, response.Error);
         }
 
         [HttpPost]
@@ -48,7 +76,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                return Content((HttpStatusCode)404, response.Error);
+                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statuesResponse.Data, statuesResponse.Error);
             }
         }
     }

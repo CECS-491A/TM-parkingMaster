@@ -14,7 +14,19 @@ import Vuetify, {
   VToolbarTitle,
   VSpacer,
   VContent,
-  VToolbarItems
+  VToolbarItems,
+  VCard,
+  VFlex,
+  VLayout,
+  VContainer,
+  VSelect,
+  VCardTitle,
+  VDivider,
+  VCardText,
+  VDialog,
+  VChip,
+  VCardActions,
+  VAlert
 } from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
 
@@ -31,7 +43,19 @@ Vue.use(Vuetify, {
     VToolbarTitle,
     VSpacer,
     VContent,
-    VToolbarItems
+    VToolbarItems,
+    VCard,
+    VFlex,
+    VLayout,
+    VContainer,
+    VSelect,
+    VCardTitle,
+    VDivider,
+    VCardText,
+    VDialog,
+    VChip,
+    VCardActions,
+    VAlert
   }
 })
 

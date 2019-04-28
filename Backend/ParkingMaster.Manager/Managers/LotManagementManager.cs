@@ -1,5 +1,6 @@
-using ParkingMaster.DataAccess.Gateways;
+//using ParkingMaster.DataAccess.Context;
 using ParkingMaster.DataAccess;
+using ParkingMaster.DataAccess.Gateways;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Services.Services;
@@ -9,107 +10,209 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace ParkingMaster.Manager.Managers // error handling and logging happens here?? or in controller
-    // also logic...? business rules
+namespace ParkingMaster.Manager.Managers
 {
     public class LotManagementManager
     {
         private ILotManagementService _lotManagementService;
         private readonly LotGateway _lotGateway;
         private readonly UserGateway _userGateway;
-        //private readonly LotContext _lotContext;
+        private readonly SessionService _sessionServices;
 
         public LotManagementManager()
         {
             _lotGateway = new LotGateway();
             _userGateway = new UserGateway();
             _lotManagementService = new LotManagementService(_lotGateway, _userGateway);
+            _sessionServices = new SessionService();
         }
 
-        // 'The file collection is populated only when the HTTP request Content-Type value is "multipart/form-data"'
-        public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, FileInfo file) // need another parameter, file
+        public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
         {
-
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
-
-            ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, file); //(lotname, spotfile)
-            return response;
+            try
+            {
+                ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, file);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Boolean>()
+                {
+                    Data = false,
+                    Error = "[LOT MANAGEMENT MANAGER] Could not add lot."
+                };
+            }
         }
 
         public ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname)
         {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
-
-            ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
-            return response;
-        }
-
-        public ResponseDTO<Boolean> EditLotSpots(Guid ownerid, string lotname, FileInfo file)
-        {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
-
-            ResponseDTO<Boolean> response = _lotManagementService.EditLotSpots(ownerid, lotname, file);
-            return response;
-        }
-
-        public ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname)
-        {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
-
-            ResponseDTO<Boolean> response = _lotManagementService.EditLotName(ownerid, oldlotname, newlotname);
-            return response;
+            try
+            {
+                ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Boolean>()
+                {
+                    Data = false,
+                    Error = "[LOT MANAGEMENT MANAGER] Could not delete lot."
+                };
+            }
         }
 
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string lotname)
         {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
-
-            ResponseDTO<Lot> response = _lotManagementService.GetLotByName(ownerid, lotname);
-            return response;
+            try
+            {
+                ResponseDTO<Lot> response = _lotManagementService.GetLotByName(ownerid, lotname);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<Lot>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT MANAGER] Could not get lot."
+                };
+            }
         }
 
-        public ResponseDTO<List<Lot>> GetAllLots()
+        public ResponseDTO<List<Lot>> GetAllLots(string sessionIdString)
         {
+       
             ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLots();
-            return response;
+            
+
+            // Check if token is in Guid Format
+            Guid sessionId;
+            try
+            {
+                sessionId = Guid.Parse(sessionIdString);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Lot>>()
+                {
+                    Data = null,
+                    Error = "tokenString not a valid Guid"
+                };
+            }
+
+            ResponseDTO<Session> sessionDTO = _sessionServices.GetSession(sessionId);
+
+            // If session data is null, then an error occured
+            if (sessionDTO.Data == null)
+            {
+                return new ResponseDTO<List<Lot>>()
+                {
+                    Data = null,
+                    Error = sessionDTO.Error
+
+                };
+            }
+
+            return _lotManagementService.GetAllLots();
         }
 
         public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)
         {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
-
-            ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
-            return response;
+            try
+            {
+                ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Lot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT MANAGER] Could not get lots."
+                };
+            }
         }
 
         public ResponseDTO<List<Spot>> GetAllSpots()
         {
-            ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpots();
-            return response;
+            try
+            {
+                ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpots();
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT MANAGER] Could not get spots."
+                };
+            }
         }
 
         public ResponseDTO<List<Spot>> GetAllSpotsByOwner(Guid ownerid)
         {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
+            try
+            {
+                ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpotsByOwner(ownerid);
+                return response;
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "[LOT MANAGEMENT MANAGER] Could not get spots."
+                };
+            }
 
-            ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpotsByOwner(ownerid);
-            return response;
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(ReservationRequestDTO request)
         {
-            // PLEASE REPLACE THE FOLLOWING LINE WITH APPROPRIATE CODE ONCE WE CAN EXTRACT GUID FROM LOGIN TOKENS //
-            ownerid = new Guid();
+            // Check if sessionId is in Guid Format
+            Guid sessionId;
+            try
+            {
+                sessionId = Guid.Parse(request.SessionId);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "tokenString not a valid Guid"
+                };
+            }
 
-            ResponseDTO<List<Spot>> response = _lotManagementService.GetAllSpotsByLot(ownerid, lotname);
-            return response;
+            ResponseDTO<Session> sessionDTO = _sessionServices.GetSession(sessionId);
+
+            // If session data is null, then an error occured
+            if (sessionDTO.Data == null)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = sessionDTO.Error
+
+                };
+            }
+
+            // Check if LotId is formatted properly
+            Guid lotId;
+            try
+            {
+                lotId = Guid.Parse(request.LotId);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<List<Spot>>()
+                {
+                    Data = null,
+                    Error = "OwnerId not in proper Guid format."
+                };
+            }
+
+            return _lotManagementService.GetAllSpotsByLot(lotId);
         }
 
     }

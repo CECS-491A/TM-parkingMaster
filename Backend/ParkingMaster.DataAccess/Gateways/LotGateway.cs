@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ParkingMaster.DataAccess.Gateways
+namespace ParkingMaster.DataAccess
 {
     public class LotGateway : IDisposable
     {
@@ -23,7 +23,7 @@ namespace ParkingMaster.DataAccess.Gateways
             context = c;
         }
 
-        public ResponseDTO<Boolean> AddLot(Lot lot, List<Spot> spotList)
+        public ResponseDTO<bool> AddLot(Lot lot, List<Spot> spotList)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -58,7 +58,7 @@ namespace ParkingMaster.DataAccess.Gateways
             }
         }
 
-        public ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -91,13 +91,7 @@ namespace ParkingMaster.DataAccess.Gateways
             }
         }
 
-        public ResponseDTO<Boolean> EditLotSpots() // todo
-        {
-            ResponseDTO<bool> response = new ResponseDTO<bool>();
-
-            return response;
-        }
-
+        /*
         public ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
@@ -132,6 +126,7 @@ namespace ParkingMaster.DataAccess.Gateways
                 }
             }
         }
+        */
 
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string lotname)
         {
@@ -293,14 +288,13 @@ namespace ParkingMaster.DataAccess.Gateways
             }
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid lotId)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
                 {
-                    var _lot = (from lot in context.Lots where lot.OwnerId == ownerid && lot.LotName == lotname select lot).FirstOrDefault();
-                    List<Spot> lotspots = (from spot in context.Spots where spot.LotId == _lot.LotId select spot).ToList();
+                    List<Spot> lotspots = (from spot in context.Spots where spot.LotId == lotId select spot).ToList();
 
                     //context.SaveChanges();
 
@@ -322,6 +316,66 @@ namespace ParkingMaster.DataAccess.Gateways
                     };
                 }
             }
+        }
+
+        public ResponseDTO<bool> ReserveSpot(ReservationDTO reservation)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var _spot = (from spot in context.Spots where spot.SpotId == reservation.SpotId select spot).FirstOrDefault();
+
+                    // Check that spot is not currently occupied
+                    if (DateTime.Now.CompareTo(_spot.ReservedUntil) != 1)
+                    {
+                        return new ResponseDTO<bool>()
+                        {
+                            Data = false,
+                            Error = "[DATA ACCESS] Spot is already reserved."
+                        };
+                    }
+
+                    // If spot is free, reserve spot with new information
+                    _spot.ReservedUntil = DateTime.Now.AddMinutes(reservation.DurationInMinutes);
+                    _spot.TakenBy = reservation.UserId;
+                    _spot.VehicleVin = reservation.VehicleVin;
+                    
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = "[DATA ACCESS] Error occured while reserving spot."
+                    };
+                }
+            }
+        }
+
+        public void ResetDatabase()
+        {
+            List<Spot> spots = GetAllSpots().Data;
+            List<Lot> lots = GetAllLots().Data;
+
+            foreach (Spot s in spots)
+            {
+                context.Spots.Remove(s);
+            }
+            foreach (Lot l in lots)
+            {
+                context.Lots.Remove(l);
+            }
+
         }
 
         public void Dispose()

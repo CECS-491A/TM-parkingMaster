@@ -1,14 +1,19 @@
 ﻿using System;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Services.Services;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Net.Http;
 using System.Net;
+using System.Text;
 
 namespace ParkingMaster.Manager.Managers
 {
     public class UserManagementManager
     {
-        
+
         private UserManagementService _userManagementService;
+        private SessionService _sessionService;
 
         public UserManagementManager()
         {
@@ -16,7 +21,6 @@ namespace ParkingMaster.Manager.Managers
         }
         /*
         // I am considering moving context.SaveChanges() here, but maybe later
-
         public bool CreateUser(string email, string password, string dob, string city, string state, string country, string role, bool act)
         {
             try
@@ -50,7 +54,7 @@ namespace ParkingMaster.Manager.Managers
             }
             catch (Exception e)
             {
-               return new ResponseDTO<bool>()
+                return new ResponseDTO<bool>()
                 {
                     Data = false,
                     Error = "Failed to delete userID: " + userId + "\n" + e.Message
@@ -58,12 +62,34 @@ namespace ParkingMaster.Manager.Managers
             }
         }
 
+        public async Task<HttpResponseMessage> DeleteUserFromApps(Guid id)
+        {
+            HttpClient client = new HttpClient();
+            ITokenService _tokenService = new TokenService();
+            // NEED A BETTER PLACE TO HOLD THIS... 
+            string appID = "4850df59-831f-4b2c-a035-9de6ad324d76";
+
+            ResponseDTO<UserAccountDTO> user = _userManagementService.GetUserByUserId(id);
+
+            SsoSendRequestDTO requestPayload = new SsoSendRequestDTO
+            {
+                AppId = appID,
+                Email = user.Data.Username,
+                SsoUserId = user.Data.SsoId.ToString(),
+                Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
+            };
+            requestPayload.Signature = _tokenService.Sign(requestPayload.GetStringToSign());
+            var stringPayload = JsonConvert.SerializeObject(requestPayload);
+            var jsonPayload = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+            var request = await client.PostAsync("http://localhost:61348/api/users/appdeleteuser", jsonPayload);
+            return request;
+        }
         // Delete User From SsoRequest
         public ResponseDTO<HttpStatusCode> DeleteUser(SsoUserRequestDTO request)
         {
             ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
             ITokenService tokenService = new TokenService();
-            if(!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = (HttpStatusCode)400;
                 response.Error = "Signature not valid";
@@ -79,17 +105,17 @@ namespace ParkingMaster.Manager.Managers
             }
             catch (Exception e)
             {
-                response.Data = (HttpStatusCode) 400;
+                response.Data = (HttpStatusCode)400;
                 response.Error = "SsoId provided was invalid";
                 return response;
             }
 
             UserAccountDTO userAccount;
             ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.GetUserBySsoId(ssoId);
-            if(userAccountResponse.Data == null)
+            if (userAccountResponse.Data == null)
             {
                 // TODO: Add a check if user did not exist or if it was a standard EntityFramework Error
-                response.Data = (HttpStatusCode) 404;
+                response.Data = (HttpStatusCode)404;
                 response.Error = "Unable to find ssoId";
                 return response;
             }
@@ -105,19 +131,19 @@ namespace ParkingMaster.Manager.Managers
             }
             catch (Exception e)
             {
-                response.Data = (HttpStatusCode) 500;
+                response.Data = (HttpStatusCode)500;
                 response.Error = "Failed to delete userID: " + userAccount.Id + "\n" + e.Message;
                 return response;
             }
 
             if (boolResponse.Data)
             {
-                response.Data = (HttpStatusCode) 200;
+                response.Data = (HttpStatusCode)200;
                 return response;
             }
             else
             {
-                response.Data = (HttpStatusCode) 500;
+                response.Data = (HttpStatusCode)500;
                 response.Error = boolResponse.Error;
                 return response;
             }
@@ -168,12 +194,74 @@ namespace ParkingMaster.Manager.Managers
                 return false;
             }
         }
-
         public IEnumerable<User> GetAllUsers()
         {
             return _userManagementService.GetAllUsers();
         }
-
     */
+        // Delete User From SsoRequest
+        public ResponseDTO<HttpStatusCode> LogoutUser(SsoUserRequestDTO request)
+        {
+            ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
+            ITokenService tokenService = new TokenService();
+
+            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            {
+                response.Data = (HttpStatusCode)400;
+                response.Error = "Signature not valid";
+                return response;
+            }
+
+            // Check if request id is in guid format
+            Guid ssoId;
+            try
+            {
+                ssoId = new Guid(request.SsoUserId);
+            }
+            catch (Exception e)
+            {
+                response.Data = (HttpStatusCode)400;
+                response.Error = "SsoId provided was invalid";
+                return response;
+            }
+
+            UserAccountDTO userAccount;
+            ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.GetUserBySsoId(ssoId);
+            if (userAccountResponse.Data == null)
+            {
+                // Returns a success because there are no sessions to delete
+                // The user has never opend our app so do not stop the SSO logout from continuing
+                response.Data = (HttpStatusCode)200;
+                return response;
+            }
+            else
+            {
+                userAccount = userAccountResponse.Data;
+            }
+
+            ResponseDTO<bool> boolResponse;
+            try
+            {
+                boolResponse = _sessionService.DeleteAllUserSessions(userAccount.Id);
+            }
+            catch (Exception e)
+            {
+                response.Data = (HttpStatusCode)500;
+                response.Error = "Failed to delete sessions for userID: " + userAccount.Id + "\n" + e.Message;
+                return response;
+            }
+
+            if (boolResponse.Data)
+            {
+                response.Data = (HttpStatusCode)200;
+                return response;
+            }
+            else
+            {
+                response.Data = (HttpStatusCode)500;
+                response.Error = boolResponse.Error;
+                return response;
+            }
+        }
     }
 }

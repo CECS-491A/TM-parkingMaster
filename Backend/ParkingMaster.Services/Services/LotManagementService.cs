@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using ParkingMaster.DataAccess;
 using ParkingMaster.DataAccess.Gateways;
 using ParkingMaster.Models.DTO;
@@ -23,7 +24,7 @@ namespace ParkingMaster.Services.Services
             _userGateway = userGateway;
         }
 
-        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, FileInfo file)
+        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
         {
             try
             {
@@ -67,40 +68,6 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<bool> EditLotSpots(Guid ownerid, string lotname, FileInfo file) //todo
-        {
-            try
-            {
-                ResponseDTO<bool> response = new ResponseDTO<bool>();
-                return response;
-            }
-            catch (Exception)
-            {
-                return new ResponseDTO<Boolean>()
-                {
-                    Data = false,
-                    Error = "[LOT MANAGEMENT SERVICE] Could not edit spots."
-                };
-            }
-        }
-
-        public ResponseDTO<bool> EditLotName(Guid ownerid, string oldlotname, string newlotname)
-        {
-            try
-            {
-                ResponseDTO<bool> response = _lotGateway.EditLotName(ownerid, oldlotname, newlotname);
-                return response;
-            }
-            catch (Exception)
-            {
-                return new ResponseDTO<Boolean>()
-                {
-                    Data = false,
-                    Error = "[LOT MANAGEMENT SERVICE] Could not edit lot name."
-                };
-            }
-        }
-
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string name)
         {
             try
@@ -118,16 +85,18 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public List<Spot> ParseSpotsFromFile(Guid lotid, string lotname, FileInfo file) // need to throw an exception here in case of formatting issues
+        public List<Spot> ParseSpotsFromFile(Guid lotid, string lotname, HttpPostedFile file) // need to throw an exception here in case of formatting issues
         {
             List<Spot> response = new List<Spot>();
             try
             {
-                using (StreamReader reader = file.OpenText())
+                //var lines = new List<string>();
+                using (StreamReader reader = new StreamReader(file.InputStream))
                 {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
+                    //string line;
+                    while (reader.Peek() != -1) // while ((line = reader.ReadLine()) != null)
                     {
+                        string line = reader.ReadLine();
                         string[] vars = line.Split(',');
                         Spot spot = new Spot()
                         {
@@ -135,8 +104,7 @@ namespace ParkingMaster.Services.Services
                             SpotName = vars[0],
                             LotId = lotid,
                             LotName = lotname,
-                            IsHandicappedAccessible = (vars[1].Equals("true")) ? true : false,
-                            IsTaken = false
+                            IsHandicappedAccessible = (vars[1].Equals("true")) ? true : false
                         };
                         response.Add(spot);
                     }
@@ -217,11 +185,11 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid ownerid, string lotname)
+        public ResponseDTO<List<Spot>> GetAllSpotsByLot(Guid lotId)
         {
             try
             {
-                ResponseDTO<List<Spot>> response = _lotGateway.GetAllSpotsByLot(ownerid, lotname);
+                ResponseDTO<List<Spot>> response = _lotGateway.GetAllSpotsByLot(lotId);
                 return response;
             }
             catch (Exception)

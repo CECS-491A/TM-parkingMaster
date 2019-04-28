@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using ParkingMaster.Models.DTO;
 
 namespace ParkingMaster.Services.Services
 {
     public interface ITokenService
     {
-        string GenerateToken();
-        bool isValidSignature(string preSig, string sig);
-        string GenerateSignature(string plaintext);
+        bool isValidSignature(Dictionary<string, string> preSig, string sig);
+        string Sign(Dictionary<string, string> plaintext);
     }
 }

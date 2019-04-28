@@ -8,8 +8,8 @@
 
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat key="Home" to="home"> Home </v-btn>
-        <v-btn flat key="Login" to="login" v-if="role === 'unauthorized'"> Login </v-btn>
-        <v-btn flat key="Reservation" to="reservation" v-if="role === 'standard'"> Reservation </v-btn>
+        <v-btn flat key="UserDashboard" to="userDashboard" v-if="role !== 'unauthorized'"> UserDashboard </v-btn>
+        <v-btn flat key="ParkingLotDashboard" to="parkingLotDashboard" v-if="role === 'standard'"> Parking Lots </v-btn>
         <v-btn flat key="Vehicle Registration" to="vehicleRegistration" v-if="role === 'standard'"> Vehicle Registration </v-btn>
         <v-btn flat key="Lot Registration" to="lotRegistration" v-if="role === 'lotmanager'"> Lot Registration </v-btn>
       </v-toolbar-items>
