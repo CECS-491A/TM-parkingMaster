@@ -88,8 +88,8 @@ namespace ParkingMaster.Manager.Managers
         public ResponseDTO<HttpStatusCode> DeleteUser(SsoUserRequestDTO request)
         {
             ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
-            ITokenService tokenService = new TokenService();
-            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            ISignatureService _signatureService = new SignatureService();
+            if (!_signatureService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = (HttpStatusCode)400;
                 response.Error = "Signature not valid";
@@ -203,9 +203,9 @@ namespace ParkingMaster.Manager.Managers
         public ResponseDTO<HttpStatusCode> LogoutUser(SsoUserRequestDTO request)
         {
             ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
-            ITokenService tokenService = new TokenService();
+            ISignatureService _signatureService = new SignatureService();
 
-            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            if (!_signatureService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = (HttpStatusCode)400;
                 response.Error = "Signature not valid";
