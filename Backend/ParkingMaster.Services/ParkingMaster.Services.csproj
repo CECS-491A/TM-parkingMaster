@@ -52,14 +52,14 @@
     <Compile Include="Services\Contracts\ISessionService.cs" />
     <Compile Include="Services\Contracts\ILotManagementService.cs" />
     <Compile Include="Services\Contracts\IPasswordService.cs" />
-    <Compile Include="Services\Contracts\ITokenService.cs" />
+    <Compile Include="Services\Contracts\ISignatureService.cs" />
     <Compile Include="Services\Contracts\IUserManagementService.cs" />
     <Compile Include="Services\LotManagementService.cs" />
     <Compile Include="Services\PasswordService.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
     <Compile Include="Services\ReservationServices.cs" />
     <Compile Include="Services\SessionService.cs" />
-    <Compile Include="Services\TokenService.cs" />
+    <Compile Include="Services\SignatureService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="Services\VehicleService.cs" />
   </ItemGroup>

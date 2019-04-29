@@ -65,7 +65,7 @@ namespace ParkingMaster.Manager.Managers
         public async Task<HttpResponseMessage> DeleteUserFromApps(Guid id)
         {
             HttpClient client = new HttpClient();
-            ITokenService _tokenService = new TokenService();
+            ISignatureService _signatureService = new SignatureService();
             // NEED A BETTER PLACE TO HOLD THIS... 
             string appID = "4850df59-831f-4b2c-a035-9de6ad324d76";
 
@@ -78,7 +78,7 @@ namespace ParkingMaster.Manager.Managers
                 SsoUserId = user.Data.SsoId.ToString(),
                 Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
             };
-            requestPayload.Signature = _tokenService.Sign(requestPayload.GetStringToSign());
+            requestPayload.Signature = _signatureService.Sign(requestPayload.GetStringToSign());
             var stringPayload = JsonConvert.SerializeObject(requestPayload);
             var jsonPayload = new StringContent(stringPayload, Encoding.UTF8, "application/json");
             var request = await client.PostAsync("http://localhost:61348/api/users/appdeleteuser", jsonPayload);
@@ -88,8 +88,8 @@ namespace ParkingMaster.Manager.Managers
         public ResponseDTO<HttpStatusCode> DeleteUser(SsoUserRequestDTO request)
         {
             ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
-            ITokenService tokenService = new TokenService();
-            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            ISignatureService _signatureService = new SignatureService();
+            if (!_signatureService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = (HttpStatusCode)400;
                 response.Error = "Signature not valid";
@@ -203,9 +203,9 @@ namespace ParkingMaster.Manager.Managers
         public ResponseDTO<HttpStatusCode> LogoutUser(SsoUserRequestDTO request)
         {
             ResponseDTO<HttpStatusCode> response = new ResponseDTO<HttpStatusCode>();
-            ITokenService tokenService = new TokenService();
+            ISignatureService _signatureService = new SignatureService();
 
-            if (!tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            if (!_signatureService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = (HttpStatusCode)400;
                 response.Error = "Signature not valid";
