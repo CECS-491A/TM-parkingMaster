@@ -15,14 +15,14 @@ namespace ParkingMaster.Manager.Managers
     {
         private ISessionService _sessionService;
         private IUserManagementService _userManagementService;
-        private ITokenService _tokenService;
+        private ISignatureService _signatureService;
         private IClaimService _claimService;
 
         public LoginManager()
         {
             _sessionService = new SessionService();
             _userManagementService = new UserManagementService();
-            _tokenService = new TokenService();
+            _signatureService = new SignatureService();
             _claimService = new ClaimService();
         }
 
@@ -31,10 +31,10 @@ namespace ParkingMaster.Manager.Managers
             ResponseDTO<Session> response = new ResponseDTO<Session>();
             
             // Before anything happens, validate that this request is coming from the known sso server
-            if (!_tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            if (!_signatureService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = null;
-                response.Error = "My signature: " + _tokenService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
+                response.Error = "My signature: " + _signatureService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
                 return response;
             }
 
