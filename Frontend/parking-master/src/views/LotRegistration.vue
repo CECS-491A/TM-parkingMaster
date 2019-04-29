@@ -9,10 +9,10 @@
         <!-- <v-text-field label="Spot File" @click='pickFile' v-model="spotfile" prepend-icon='attach_file'></v-text-field> -->
         <!-- <v-text-field label="Map" @click='pickFile' v-model="map" prepend-icon='attach_file'></v-text-field> -->
         <label> Spot File
-          <input type="file" id="spotfile" ref="spotfile" v-on:change="csvHandler()"/>
+          <input type="file" id="spotfile" ref="spotfile" accept=".txt,.csv" v-on:change="csvHandler()"/>
         </label>
         <label> Lot Map
-          <input type="file" id="spotmap" ref="spotmap" v-on:change="imageHandler()"/>
+          <input type="file" id="spotmap" ref="spotmap" accept="image/*" v-on:change="imageHandler()"/>
         </label>
         <v-btn depressed color="blue" v-on:click="submitlot" type="submit">Submit Lot</v-btn>
       </v-form>

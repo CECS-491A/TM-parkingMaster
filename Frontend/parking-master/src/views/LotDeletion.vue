@@ -2,6 +2,7 @@
   <div class="view-lot-deletion">
      <form class="form-lot-deletion">
       <h2 class="form-lot-registration-heading">Lot Deletion</h2>
+      <lot-component v-for="lot in lots" :lot= "lot" :key="lot.id"/>
       <v-form ref="form">
         <v-btn depressed color="blue" v-on:click="deletelot" type="submit">Delete Lot</v-btn>
       </v-form>
@@ -13,14 +14,46 @@
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
 
+var lotComponent = {
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+  template: `
+  <div class="lot">
+    name: {{lot.name}}
+    id: {{lot.id}} 
+    cost: {{lot.cost}}
+  </div>
+  `,
+  props: {
+    lot: Object
+  }
+}
+
 export default {
   name: 'lotDeletion',
   data () {
     return {
       pageTitle: '',
       msg: 'Our Lot Deletion page.',
-      lots: []
+      lots: [
+        {
+          id: 1,
+          name: 'Lot 1',
+          cost: '2.65'
+        },
+        {
+          id: 2,
+          name: 'Lot 2',
+          cost: '3.00'
+        }
+      ]
     }
+  },
+  components: {
+    'lot-component': lotComponent
   },
   methods: {
     async deletelot () {
