@@ -158,7 +158,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 
             sessionGateway.StoreSession(new Session(user1.Id));
             sessionGateway.StoreSession(new Session(userGateway.GetUserByUsername("pnguyen@gmail.com").Data.Id));
-            ResponseDTO<Session> sessionDTO = sessionGateway.StoreSession(new Session(userGateway.GetUserByUsername("client@yahoo.com").Data.Id));
+            ResponseDTO<Session> sessionDTO = sessionGateway.StoreSession(new Session(userGateway.GetUserByUsername("client1@yahoo.com").Data.Id));
 
             UserAccountDTO testUser = userGateway.GetUserByUsername("client1@yahoo.com").Data;
             Lot testLot = new Lot
