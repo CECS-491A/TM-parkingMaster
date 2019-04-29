@@ -104,47 +104,60 @@ namespace ParkingMaster.DataAccess
 
         public ResponseDTO<bool> DeleteAllUserSessions(Guid userId)
         {
+            List<Session> sessionList;
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
                 {
 
                     // Queries for the session by sessionId.
-                    var sessionList = (from sessions in context.Sessions
+                    sessionList = (from sessions in context.Sessions
                                    where sessions.UserAccount.Id == userId
                                    select sessions).ToList();
 
-                    // Checking if user account is null.
+                    // Check if any sessions were found
                     if (sessionList == null)
                     {
                         return new ResponseDTO<bool>()
                         {
-                            Data = false,
-                            Error = "User Account does not exist."
+                            Data = true
                         };
                     }
-
-                    // Delete all sessions tied to the account
-                    foreach (Session session in sessionList)
-                    {
-                        DeleteSession(session.SessionId);
-                    }
-
-                    return new ResponseDTO<bool>()
-                    {
-                        Data = true
-                    };
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     dbContextTransaction.Rollback();
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "Failed to delete all sessions."
+                        Error = "Failed to delete all sessions.  " + e
                     };
                 };
             }
+
+
+            try
+            {
+                // Delete all sessions tied to the account
+                foreach (Session session in sessionList)
+                {
+                    DeleteSession(session.SessionId);
+                }
+
+                return new ResponseDTO<bool>()
+                {
+                    Data = true
+                };
+            }
+            catch(Exception e)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = "Failed to delete all sessions.  " + e
+                };
+            }
+            
         }
 
         public ResponseDTO<Session> GetSession(Guid sessionId)

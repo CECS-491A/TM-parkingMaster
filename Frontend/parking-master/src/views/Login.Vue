@@ -29,6 +29,7 @@ export default {
             sessionStorage.setItem('ParkingMasterToken', resp.data.Token)
             sessionStorage.setItem('ParkingMasterUsername', resp.data.Username)
             sessionStorage.setItem('ParkingMasterRole', resp.data.Role)
+            sessionStorage.setItem('ParkingMasterRefresh', 'true')
             // Force the navBar to refresh
             this.$root.$emit('refreshNavBar')
             this.$router.push('/Home')

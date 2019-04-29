@@ -1,6 +1,6 @@
 <template>
   <div class = "view-user-dashboard">
-    <v-btn class="error" v-on:click="ssoDelete">Delete from SSO</v-btn>
+    <v-btn class="error" v-on:click="ssoDelete">User Deletetion from SSO</v-btn>
   </div>
 </template>
 <script>
