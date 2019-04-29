@@ -3,7 +3,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Add_Lots_AND_Spots_AND_Vehicles : DbMigration
+    public partial class Add_Lots_Spots_Vehicles : DbMigration
     {
         public override void Up()
         {
@@ -16,9 +16,10 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                         LotName = c.String(),
                         Address = c.String(),
                         Cost = c.Double(nullable: false),
+                        MapFilePath = c.String(),
                     })
                 .PrimaryKey(t => t.LotId)
-                .ForeignKey("dbo.UserAccountDTOes", t => t.OwnerId, cascadeDelete: true)
+                .ForeignKey("ParkingMaster.UserAccounts", t => t.OwnerId, cascadeDelete: true)
                 .Index(t => t.OwnerId);
             
             CreateTable(
@@ -58,23 +59,11 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 .ForeignKey("ParkingMaster.UserAccounts", t => t.OwnerId, cascadeDelete: true)
                 .Index(t => t.OwnerId);
             
-            CreateTable(
-                "dbo.UserAccountDTOes",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        Username = c.String(nullable: false),
-                        IsActive = c.Boolean(),
-                        IsFirstTimeUser = c.Boolean(),
-                        RoleType = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
-            
         }
         
         public override void Down()
         {
-            DropForeignKey("ParkingMaster.Lots", "OwnerId", "dbo.UserAccountDTOes");
+            DropForeignKey("ParkingMaster.Lots", "OwnerId", "ParkingMaster.UserAccounts");
             DropForeignKey("ParkingMaster.Spots", "VehicleVin", "ParkingMaster.Vehicle");
             DropForeignKey("ParkingMaster.Vehicle", "OwnerId", "ParkingMaster.UserAccounts");
             DropForeignKey("ParkingMaster.Spots", "TakenBy", "ParkingMaster.UserAccounts");
@@ -84,7 +73,6 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             DropIndex("ParkingMaster.Spots", new[] { "TakenBy" });
             DropIndex("ParkingMaster.Spots", new[] { "LotId" });
             DropIndex("ParkingMaster.Lots", new[] { "OwnerId" });
-            DropTable("dbo.UserAccountDTOes");
             DropTable("ParkingMaster.Vehicle");
             DropTable("ParkingMaster.Spots");
             DropTable("ParkingMaster.Lots");
