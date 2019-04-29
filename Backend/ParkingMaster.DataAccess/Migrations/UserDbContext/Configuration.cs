@@ -168,7 +168,8 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 LotName = "TestLot",
                 Address = "123 Testing St.",
                 Cost = 20.0,
-                UserAccount = sessionDTO.Data.UserAccount
+                UserAccount = sessionDTO.Data.UserAccount,
+                MapFilePath = "client1_TestLot_123"
             };
             List<Spot> testSpots = new List<Spot>
             {

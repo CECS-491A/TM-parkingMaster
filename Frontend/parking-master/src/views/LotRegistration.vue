@@ -74,3 +74,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .form-lot-registration {
+    max-width: 330px;
+    margin: 0 auto;
+  }
+</style>

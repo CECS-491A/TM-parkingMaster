@@ -24,7 +24,7 @@ namespace ParkingMaster.Services.Services
             _userGateway = userGateway;
         }
 
-        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, UserAccount useraccount, HttpPostedFile spotfile)
+        public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, UserAccount useraccount, HttpPostedFile spotfile, HttpPostedFile mapfile)
         { 
             try
             {
@@ -35,10 +35,19 @@ namespace ParkingMaster.Services.Services
                     LotName = lotname,
                     Address = address,
                     Cost = cost,
-                    UserAccount = useraccount
+                    UserAccount = useraccount,
+                    MapFilePath = useraccount.Username + "_" + lotname + "_" + Guid.NewGuid().ToString()
                 };
                 newLot.Spots = ParseSpotsFromFile(newLot.LotId, newLot.LotName, spotfile);
                 ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
+                if (response.Data == true)
+                {
+                    ResponseDTO<bool> saveMap = _lotGateway.AddMapFile(mapfile);
+                    if (saveMap.Data == false)
+                    {
+                        return saveMap;
+                    }
+                }
                 return response;
             }
             catch (Exception)

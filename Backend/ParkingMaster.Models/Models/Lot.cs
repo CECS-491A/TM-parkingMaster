@@ -22,11 +22,11 @@ namespace ParkingMaster.Models.Models
         public string LotName { get; set; }
         public string Address { get; set; }
         public double Cost { get; set; }
-        // public string mapfilepath { get; set; }
+        public string MapFilePath { get; set; }
 
         // Navigation Properties
-        public virtual UserAccount UserAccount { get; set; } // change to UserAccount
-        public List<Spot> Spots { get; set; }
+        public virtual UserAccount UserAccount { get; set; }
+        public virtual List<Spot> Spots { get; set; }
         
 
         //Constructors

@@ -18,7 +18,7 @@ namespace ParkingMaster.Manager.Controllers
         [Route("api/lot/register")]
         public IHttpActionResult CreateLot() // [FromBody, Required] ParkingMasterFrontendDTO request
         {
-            LoginManager loginManager = new LoginManager();
+            //LoginManager loginManager = new LoginManager();
             LotManagementManager lotManagementManager = new LotManagementManager();
             var httprequest = HttpContext.Current.Request;
 
@@ -41,23 +41,53 @@ namespace ParkingMaster.Manager.Controllers
 
         }
 
+        [HttpGet]
+        [Route("api/lot/delete")]
+        public IHttpActionResult ShowAllLotsToDelete([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            LotManagementManager lotManagementManager = new LotManagementManager();
+            var httprequest = HttpContext.Current.Request;
+
+            try
+            {
+                ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(httprequest);
+                if (response.Data != null)
+                {
+                    return Ok(response.Data);
+                }
+                else
+                {
+                    return Content((HttpStatusCode)404, response.Error);
+                }
+            }
+            catch (Exception e)
+            {
+                return Content((HttpStatusCode)400, e.Message);
+            }
+        }
+
         [HttpDelete]
         [Route("api/lot/delete")] // api/user/lot/delete
         public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            LoginManager loginManager = new LoginManager();
             LotManagementManager lotManagementManager = new LotManagementManager();
+            var httprequest = HttpContext.Current.Request;
 
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
-
-            if (response.Data != null)
+            try
             {
-                return Ok(response.Data);
-
+                ResponseDTO<Boolean> response = lotManagementManager.DeleteLot(httprequest);
+                if (response.Data == true)
+                {
+                    return Ok(response.Data);
+                }
+                else
+                {
+                    return Content((HttpStatusCode)404, response.Error);
+                }
             }
-            else
+            catch (Exception e)
             {
-                return Content((HttpStatusCode)404, response.Error);
+                return Content((HttpStatusCode)400, e.Message);
             }
         }
 

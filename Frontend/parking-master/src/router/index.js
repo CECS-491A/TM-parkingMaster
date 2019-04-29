@@ -4,6 +4,7 @@ import Home from '@/views/Home'
 import Login from '@/views/Login'
 import Reservation from '@/views/Reservation'
 import LotRegistration from '@/views/LotRegistration'
+import LotDeletion from '@/views/LotDeletion'
 import VehicleRegistration from '@/views/VehicleRegistration'
 import ParkingLotDashboard from '@/views/ParkingLotDashboard'
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/LotRegistration',
       name: 'lotRegistration',
       component: LotRegistration
+    },
+    {
+      path: '/LotDeletion',
+      name: 'lotDeletion',
+      component: LotDeletion
     },
     {
       path: '/VehicleRegistration',

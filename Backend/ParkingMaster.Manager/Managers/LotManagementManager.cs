@@ -14,8 +14,8 @@ namespace ParkingMaster.Manager.Managers
 {
     public class LotManagementManager
     {
-        private ILotManagementService _lotManagementService;
-        private ISessionService _sessionService;
+        private readonly LotManagementService _lotManagementService;
+        //private ISessionService _sessionService;
         private readonly LotGateway _lotGateway;
         private readonly UserGateway _userGateway;
         private readonly SessionService _sessionServices;
@@ -34,7 +34,7 @@ namespace ParkingMaster.Manager.Managers
             try
             {
                 var token = httprequest["token"];
-                ResponseDTO<Session> SessionDTO = _sessionService.GetSession(new Guid(token));
+                ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
                 if (SessionDTO.Data != null)
                 {
                     var ownerid = SessionDTO.Data.UserAccount.Id;
@@ -44,8 +44,8 @@ namespace ParkingMaster.Manager.Managers
                     var cost = Convert.ToDouble(httprequest["cost"]);
                     var useraccount = SessionDTO.Data.UserAccount;
                     var spotfile = httprequest.Files["file"];
-                    var spotmap = httprequest.Files["map"];
-                    ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, useraccount, spotfile);
+                    var mapfile = httprequest.Files["map"];
+                    ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, useraccount, spotfile, mapfile);
                     return response;
                 }
                 else
@@ -67,12 +67,27 @@ namespace ParkingMaster.Manager.Managers
             }
         }
 
-        public ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<Boolean> DeleteLot(HttpRequest httprequest)
         {
             try
             {
-                ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
-                return response;
+                var token = httprequest["token"];
+                ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
+                if (SessionDTO.Data != null)
+                {
+                    var ownerid = SessionDTO.Data.UserAccount.Id;
+                    var lotname = httprequest["lotname"];
+                    ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
+                    return response;
+                }
+                else
+                {
+                    return new ResponseDTO<Boolean>()
+                    {
+                        Data = false,
+                        Error = "[SESSION SERVICE] Invalid session."
+                    };
+                }
             }
             catch (Exception)
             {
@@ -138,19 +153,33 @@ namespace ParkingMaster.Manager.Managers
             return _lotManagementService.GetAllLots();
         }
 
-        public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)
+        public ResponseDTO<List<Lot>> GetAllLotsByOwner(HttpRequest httprequest)
         {
-            try
+            var token = httprequest["token"];
+            ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
+            if (SessionDTO.Data != null)
             {
-                ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
-                return response;
+                try
+                {
+                    var ownerid = SessionDTO.Data.UserAccount.Id;
+                    ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
+                    return response;
+                }
+                catch (Exception)
+                {
+                    return new ResponseDTO<List<Lot>>()
+                    {
+                        Data = null,
+                        Error = "[LOT MANAGEMENT MANAGER] Could not get lots."
+                    };
+                }
             }
-            catch (Exception)
+            else
             {
                 return new ResponseDTO<List<Lot>>()
                 {
                     Data = null,
-                    Error = "[LOT MANAGEMENT MANAGER] Could not get lots."
+                    Error = "[SESSION SERVICE] Invalid session."
                 };
             }
         }

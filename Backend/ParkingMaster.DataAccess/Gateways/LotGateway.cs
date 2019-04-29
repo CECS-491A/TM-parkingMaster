@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.IO;
 
 namespace ParkingMaster.DataAccess
 {
     public class LotGateway : IDisposable
     {
-        UserContext context; // used to be LotContext
+        UserContext context;
 
         public LotGateway()
         {
@@ -58,6 +60,29 @@ namespace ParkingMaster.DataAccess
             }
         }
 
+        public ResponseDTO<bool> AddMapFile(HttpPostedFile mapfile)
+        {
+            try
+            {
+                //Directory.CreateDirectory(@"C:\\MapFiles\\"); // Will do nothing if Directory already exists
+                //string filepath = "C:\\MapFiles\\" + lot.MapFilePath;
+                //mapfile.SaveAs(filepath);
+                return new ResponseDTO<bool>()
+                {
+                    Data = true
+                };
+
+            }
+            catch (HttpException)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = "[DATA ACCESS] Cannot save map file."
+                };
+            }
+        }
+
         public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
@@ -70,8 +95,11 @@ namespace ParkingMaster.DataAccess
                                select lot).FirstOrDefault();
                     context.Lots.Remove(deletelot);
                     context.SaveChanges();
-
+                    
                     dbContextTransaction.Commit();
+
+                    //string filepath = "C:\\MapFiles\\" + lot.MapFilePath;
+                    //File.Delete(filepath);
 
                     return new ResponseDTO<bool>()
                     {
