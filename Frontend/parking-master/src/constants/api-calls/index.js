@@ -11,6 +11,7 @@ const GET_ALL_LOTS = PARKINGMASTER_BASE_URL + '/api/lotManagement/getAllLots'
 const GET_ALL_SPOTS_FOR_LOT = PARKINGMASTER_BASE_URL + '/api/lotManagement/getSpotsByLot'
 const GET_ALL_USER_VEHICLES = PARKINGMASTER_BASE_URL + '/api/vehicle/getAllUserVehicles'
 const RESERVE_PARKING_SPOT = PARKINGMASTER_BASE_URL + '/api/reservation/add'
+const LOGOUT = PARKINGMASTER_BASE_URL + '/api/user/logout'
 
 export default {
   BASE_URL: PARKINGMASTER_BASE_URL,
@@ -24,5 +25,6 @@ export default {
   GET_ALL_SPOTS_FOR_LOT,
   RESERVE_PARKING_SPOT,
   GET_ALL_USER_VEHICLES,
-  SSO_FRONTEND_URL
+  SSO_FRONTEND_URL,
+  LOGOUT
 }

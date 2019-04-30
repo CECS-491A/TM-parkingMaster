@@ -75,7 +75,7 @@ namespace ParkingMaster.DataAccess
                     {
                         return new ResponseDTO<bool>()
                         {
-                            Data = false,
+                            Data = true,
                         };
                     }
                     
@@ -130,7 +130,7 @@ namespace ParkingMaster.DataAccess
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "Failed to delete all sessions.  " + e
+                        Error = "Failed to delete all sessions."
                     };
                 };
             }
@@ -154,7 +154,7 @@ namespace ParkingMaster.DataAccess
                 return new ResponseDTO<bool>()
                 {
                     Data = false,
-                    Error = "Failed to delete all sessions.  " + e
+                    Error = "Failed to delete all sessions."
                 };
             }
             
@@ -221,7 +221,7 @@ namespace ParkingMaster.DataAccess
                     return new ResponseDTO<Session>()
                     {
                         Data = null,
-                        Error = "Unable to update sessionId: " + sessionId
+                        Error = "Unable to update session."
                     };
                 }
             }
