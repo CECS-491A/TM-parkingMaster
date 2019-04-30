@@ -11,5 +11,6 @@ namespace ParkingMaster.Models.Constants
         public const string SESSION_EXPIRED = "Session has expired.";
         public const string SESSION_NOT_FOUND = "Session does not exist.";
         public const string REQUEST_FORMAT = "Invalid request format.";
+        public const string FAILED_CONNECTION_CHECK = "Database connection check failed.";
     }
 }
