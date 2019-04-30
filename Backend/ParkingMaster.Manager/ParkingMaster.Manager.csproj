@@ -51,7 +51,6 @@
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\SsoController.cs" />
     <Compile Include="Controllers\TestingController.cs" />
-    <Compile Include="App_Logic\LotManagerController.cs" />
     <Compile Include="App_Start\WebApiConfigure.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
@@ -107,7 +106,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Logic\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParkingMaster.DataAccess\ParkingMaster.DataAccess.csproj">
       <Project>{d2c4413b-8029-4148-af13-fcc74963bf33}</Project>
