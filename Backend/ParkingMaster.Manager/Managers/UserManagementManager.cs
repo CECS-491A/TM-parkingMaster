@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net;
 using System.Text;
+using ParkingMaster.Models.Constants;
 
 namespace ParkingMaster.Manager.Managers
 {
@@ -18,6 +19,7 @@ namespace ParkingMaster.Manager.Managers
         public UserManagementManager()
         {
             _userManagementService = new UserManagementService();
+            _sessionService = new SessionService();
         }
         /*
         // I am considering moving context.SaveChanges() here, but maybe later
@@ -262,6 +264,26 @@ namespace ParkingMaster.Manager.Managers
                 response.Error = boolResponse.Error;
                 return response;
             }
+        }
+
+        public ResponseDTO<bool> LogoutUser(ParkingMasterFrontendDTO request)
+        {
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+
+            // Check if request id is in guid format
+            Guid sessionId;
+            try
+            {
+                sessionId = new Guid(request.Token);
+            }
+            catch (Exception e)
+            {
+                response.Data = false;
+                response.Error = ErrorStrings.REQUEST_FORMAT;
+                return response;
+            }
+
+            return _sessionService.DeleteSession(sessionId);
         }
     }
 }

@@ -25,6 +25,15 @@ namespace ParkingMaster.Manager.Managers
                 };
             }
 
+            if(error == ErrorStrings.REQUEST_FORMAT)
+            {
+                return new ResponseDTO<HttpStatusCode>()
+                {
+                    Data = (HttpStatusCode)401,
+                    Error = "Invalid request formatting."
+                };
+            }
+
             // Default to Bad Request
             return new ResponseDTO<HttpStatusCode>()
             {

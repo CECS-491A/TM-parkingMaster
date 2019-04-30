@@ -80,5 +80,24 @@ namespace ParkingMaster.Manager.Controllers
                 return Content(statuesResponse.Data, statuesResponse.Error);
             }
         }
+
+        [HttpPost]
+        [Route("api/user/logout")]
+        public IHttpActionResult Logout([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            UserManagementManager _userManager = new UserManagementManager();
+
+            ResponseDTO<bool> response = _userManager.LogoutUser(request);
+
+            if (response.Data)
+            {
+                return Ok(response.Data);
+            }
+            else
+            {
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
+            }
+        }
     }
 }
