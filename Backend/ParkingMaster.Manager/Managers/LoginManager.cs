@@ -6,6 +6,7 @@ using ParkingMaster.Services.Services;
 using ParkingMaster.Manager.Managers.Contracts;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Models.Constants;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -56,28 +57,18 @@ namespace ParkingMaster.Manager.Managers
                     return response;
                 }
 
-                // Get standard user claims
-                ResponseDTO<List<Claim>> claimResponse = _claimService.GetStandardUserClaims(request.Email);
-
-                if(claimResponse.Data == null)
-                {
-                    response.Data = null;
-                    response.Error = "Server error while creating user claims.";
-                    return response;
-                }
-
-                // Create user account
+                // Create an unassigned user account
                 UserAccount user = new UserAccount()
                 {
                     SsoId = ssoId,
                     Username = request.Email,
                     IsActive = true,
                     IsFirstTimeUser = true,
-                    RoleType = "standard"
+                    RoleType = Roles.UNASSIGNED
                 };
 
                 // Add user to datastore
-                ResponseDTO<bool> createUserResponse = _userManagementService.CreateUser(user, claimResponse.Data);
+                ResponseDTO<bool> createUserResponse = _userManagementService.CreateUser(user, new List<Claim>());
 
                 // Check if user creation succeded
                 if (!createUserResponse.Data)
