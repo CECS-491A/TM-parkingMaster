@@ -54,6 +54,7 @@
     <Compile Include="Services\Contracts\IPasswordService.cs" />
     <Compile Include="Services\Contracts\ISignatureService.cs" />
     <Compile Include="Services\Contracts\IUserManagementService.cs" />
+    <Compile Include="Services\DatabaseCheckerService.cs" />
     <Compile Include="Services\LotManagementService.cs" />
     <Compile Include="Services\PasswordService.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
@@ -84,6 +85,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
   </ItemGroup>

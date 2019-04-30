@@ -34,6 +34,15 @@ namespace ParkingMaster.Manager.Managers
                 };
             }
 
+            if(error == ErrorStrings.FAILED_CONNECTION_CHECK)
+            {
+                return new ResponseDTO<HttpStatusCode>()
+                {
+                    Data = (HttpStatusCode)500,
+                    Error = "Data access error."
+                };
+            }
+
             // Default to Bad Request
             return new ResponseDTO<HttpStatusCode>()
             {
