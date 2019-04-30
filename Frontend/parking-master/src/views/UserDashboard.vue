@@ -17,7 +17,7 @@ export default {
         })
         .then(resp => {
           alert('Account has been deleted from SSO and its applications!')
-          window.location = 'http://localhost:8081/#/clearuserroute'
+          window.location = 'http://localhost:8081/#/landing'
         })
         .catch(e => {
           alert('Delete failed')

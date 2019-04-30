@@ -48,7 +48,7 @@ namespace ParkingMaster.Services.Services
             // This is necessary so that the recipient of the payload will be able to generate the
             // correct hash even if the order changes
             var orderedPayload = from payloadItem in payload
-                                 orderby payloadItem.Value ascending
+                                 orderby payloadItem.Value descending
                                  select payloadItem;
 
             var payloadString = "";

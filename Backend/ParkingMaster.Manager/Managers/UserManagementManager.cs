@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net;
 using System.Text;
+using System.Collections.Generic;
 using ParkingMaster.Models.Constants;
 
 namespace ParkingMaster.Manager.Managers
@@ -73,15 +74,14 @@ namespace ParkingMaster.Manager.Managers
 
             ResponseDTO<UserAccountDTO> user = _userManagementService.GetUserByUserId(id);
 
-            SsoSendRequestDTO requestPayload = new SsoSendRequestDTO
-            {
-                AppId = appID,
-                Email = user.Data.Username,
-                SsoUserId = user.Data.SsoId.ToString(),
-                Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds(),
-            };
-            requestPayload.Signature = _signatureService.Sign(requestPayload.GetStringToSign());
-            var stringPayload = JsonConvert.SerializeObject(requestPayload);
+            var payload = new Dictionary<string, string>();
+            payload.Add("appId", appID);
+            payload.Add("ssoUserId", user.Data.SsoId.ToString());
+            payload.Add("email", user.Data.Username);
+            payload.Add("timestamp", DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString());
+            var signature = _signatureService.Sign(payload);
+            payload.Add("signature", signature);
+            var stringPayload = JsonConvert.SerializeObject(payload);
             var jsonPayload = new StringContent(stringPayload, Encoding.UTF8, "application/json");
             var request = await client.PostAsync("http://localhost:61348/api/users/appdeleteuser", jsonPayload);
             return request;
