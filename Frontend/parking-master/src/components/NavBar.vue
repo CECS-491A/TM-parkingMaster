@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
 
 export default {
   name: 'NavBar',
@@ -52,6 +51,7 @@ export default {
       parkingLots: {name: 'Parking Lots', class: 'parking-lots-tile', value: '/ParkingLotDashboard'},
       vehicleReg: {name: 'Vehicle Registration', class: 'vehicle-registration-tile', value: '/VehicleRegistration'},
       lotReg: {name: 'Lot Registration', class: 'lot-registration-tile', value: '/LotRegistration'},
+      roleChoice: {name: 'Choose Account Type', class: 'role-choice-tile', value: '/RoleChoice'},
       logoutTile: {name: 'Logout', class: 'logout-tile', value: 'logout'},
       items: [],
       authorized: false
@@ -60,12 +60,8 @@ export default {
   methods: {
     navigate (location) {
       if (location === 'logout') {
-        axios
-          .post(apiCalls.LOGOUT, {
-            Token: sessionStorage.getItem('ParkingMasterToken')
-          })
-        sessionStorage.clear()
-        document.location.reload(true)
+        auth.logout()
+        return
       }
       this.$router.push(location)
     }
@@ -84,6 +80,10 @@ export default {
         this.userDash,
         this.lotReg,
         this.logoutTile]
+      this.authorized = true
+    } else if (this.role === 'unassigned') {
+      this.items = [this.home,
+        this.roleChoice]
       this.authorized = true
     } else {
       this.items = [this.home]

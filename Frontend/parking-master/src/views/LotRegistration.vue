@@ -23,6 +23,7 @@
 <script>
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization'
 
 export default {
   name: 'lotRegistration',
@@ -62,11 +63,7 @@ export default {
           this.map = ''
         })
         .catch(e => {
-          console.log(e)
-          if (e.response.status === 401) {
-            sessionStorage.clear()
-            this.$router.push('/Home')
-          }
+          auth.invalidSession()
         })
     },
     csvHandler () {
@@ -75,6 +72,9 @@ export default {
     imageHandler () {
       this.map = this.$refs.spotmap.files[0]
     }
+  },
+  beforeMount: function () {
+    auth.authorize('lotmanager')
   }
 }
 </script>

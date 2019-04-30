@@ -35,6 +35,7 @@
 <script>
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
 
 export default {
   name: 'reservations',
@@ -86,6 +87,9 @@ export default {
         })
     }
   },
+  beforeMount () {
+    auth.authorize('standard')
+  },
   async mounted () {
     this.lotId = sessionStorage.getItem('lotId')
     this.lotName = sessionStorage.getItem('lotName')
@@ -104,8 +108,7 @@ export default {
       .catch(e => {
         console.log(e)
         if (e.response.status === 401) {
-          sessionStorage.clear()
-          this.$router.push('/Home')
+          auth.invalidSession()
         }
       })
   }

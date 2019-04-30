@@ -7,6 +7,8 @@
 
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
+
 export default {
   name: 'userDashboard',
   methods: {
@@ -23,6 +25,9 @@ export default {
           alert('Delete failed')
         })
     }
+  },
+  beforeMount () {
+    auth.authorize('authorized')
   }
 }
 </script>
