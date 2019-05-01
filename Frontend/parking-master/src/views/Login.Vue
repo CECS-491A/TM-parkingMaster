@@ -8,6 +8,8 @@
 <script>
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
+
 export default {
   name: 'login',
   props: ['token'],
@@ -26,13 +28,7 @@ export default {
             Token: this.token
           })
           .then(resp => {
-            sessionStorage.setItem('ParkingMasterToken', resp.data.Token)
-            sessionStorage.setItem('ParkingMasterUsername', resp.data.Username)
-            sessionStorage.setItem('ParkingMasterRole', resp.data.Role)
-            sessionStorage.setItem('ParkingMasterRefresh', 'true')
-            // Force the navBar to refresh
-            this.$root.$emit('refreshNavBar')
-            this.$router.push('/Home')
+            auth.login(resp.data, this.$router)
           })
           .catch(e => {
             console.log(e.response)

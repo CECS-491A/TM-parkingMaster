@@ -88,14 +88,14 @@ export default {
           .catch(e => {
             console.log(e)
             if (e.response.status === 401) {
-              auth.logout()
+              auth.logout(this.$router)
             }
           })
       }
     }
   },
   beforeMount () {
-    auth.authorize('authorized')
+    auth.authorize('standard', this.$router)
   }
 }
 </script>

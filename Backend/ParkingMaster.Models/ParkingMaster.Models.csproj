@@ -64,11 +64,9 @@
   <ItemGroup>
     <Compile Include="Constants\Roles.cs" />
     <Compile Include="DTO\ClaimDTO.cs" />
-    <Compile Include="DTO\EditUserDTO.cs" />
     <Compile Include="DTO\ParkingMasterFrontendDTO.cs" />
     <Compile Include="DTO\ReservationDTO.cs" />
     <Compile Include="DTO\ReservationRequestDTO.cs" />
-    <Compile Include="DTO\ResetPasswordDTO.cs" />
     <Compile Include="DTO\ResponseDTO.cs" />
     <Compile Include="DTO\UserAccountDTO.cs" />
     <Compile Include="DTO\SsoUserRequestDTO.cs" />

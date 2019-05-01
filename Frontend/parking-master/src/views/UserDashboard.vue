@@ -27,7 +27,7 @@ export default {
     }
   },
   beforeMount () {
-    auth.authorize('authorized')
+    auth.authorize('authorized', this.$router)
   }
 }
 </script>

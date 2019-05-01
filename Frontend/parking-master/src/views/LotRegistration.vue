@@ -74,7 +74,7 @@ export default {
     }
   },
   beforeMount: function () {
-    auth.authorize('lotmanager')
+    auth.authorize('lotmanager', this.$router)
   }
 }
 </script>

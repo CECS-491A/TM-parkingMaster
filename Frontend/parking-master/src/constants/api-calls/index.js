@@ -1,5 +1,4 @@
 const PARKINGMASTER_BASE_URL = 'http://localhost:52324'
-const PARKINGMASTER_FRONTEND_URL = 'http://localhost:8080'
 const SSO_BASE_URL = 'http://localhost:61348'
 const SSO_FRONTEND_URL = 'http://localhost:61348'
 const HELLO_WORLD = PARKINGMASTER_BASE_URL + '/api/testing'
@@ -13,8 +12,7 @@ const GET_ALL_SPOTS_FOR_LOT = PARKINGMASTER_BASE_URL + '/api/lotManagement/getSp
 const GET_ALL_USER_VEHICLES = PARKINGMASTER_BASE_URL + '/api/vehicle/getAllUserVehicles'
 const RESERVE_PARKING_SPOT = PARKINGMASTER_BASE_URL + '/api/reservation/add'
 const LOGOUT = PARKINGMASTER_BASE_URL + '/api/user/logout'
-const HOME = PARKINGMASTER_FRONTEND_URL + '/#/Home'
-const ROLE_CHOICE = PARKINGMASTER_FRONTEND_URL + '/#/RoleChoice'
+const ROLE_SELECTION = PARKINGMASTER_BASE_URL + '/api/user/setrole'
 
 export default {
   BASE_URL: PARKINGMASTER_BASE_URL,
@@ -30,6 +28,5 @@ export default {
   GET_ALL_USER_VEHICLES,
   SSO_FRONTEND_URL,
   LOGOUT,
-  HOME,
-  ROLE_CHOICE
+  ROLE_SELECTION
 }

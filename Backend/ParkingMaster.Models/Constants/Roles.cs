@@ -14,5 +14,29 @@ namespace ParkingMaster.Models.Constants
         public const string ADMINISTRATOR = "administrator";
         public const string UNASSIGNED = "unassigned";
 
+        public static bool IsRole(string role)
+        {
+            if(role == STANDARD ||
+                role == LOTMANAGER ||
+                role == SECURITY ||
+                role == ADMINISTRATOR ||
+                role == UNASSIGNED)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsFrontendSelectableRole(string role)
+        {
+            if (role == STANDARD ||
+                role == LOTMANAGER)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

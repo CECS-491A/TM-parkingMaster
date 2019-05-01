@@ -56,7 +56,7 @@ export default {
     }
   },
   beforeMount () {
-    auth.authorize('standard')
+    auth.authorize('standard', this.$router)
   },
   async mounted () {
     await axios
@@ -67,7 +67,7 @@ export default {
       .catch(e => {
         console.log(e)
         if (e.response.status === 401) {
-          auth.invalidSession()
+          auth.invalidSession(this.$router)
         }
       })
   }

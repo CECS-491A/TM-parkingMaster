@@ -36,6 +36,17 @@ namespace ParkingMaster.Services.Services
             return response;
         }
 
+        public ResponseDTO<List<Claim>> GetUnassignedUserClaims()
+        {
+            ResponseDTO<List<Claim>> response = new ResponseDTO<List<Claim>>();
+            List<Claim> claimsList = new List<Claim>();
+
+            claimsList.Add(new Claim("Action", "SetRole"));
+
+            response.Data = claimsList;
+            return response;
+        }
+
         public ResponseDTO<List<Claim>> GetStandardUserClaims()
         {
             ResponseDTO<List<Claim>> response = new ResponseDTO<List<Claim>>();
@@ -49,10 +60,44 @@ namespace ParkingMaster.Services.Services
             return response;
         }
 
+        public ResponseDTO<List<Claim>> GetLotManagerUserClaims()
+        {
+            ResponseDTO<List<Claim>> response = new ResponseDTO<List<Claim>>();
+            List<Claim> claimsList = new List<Claim>();
+
+            claimsList.Add(new Claim("Action", "AddParkingLot"));
+            claimsList.Add(new Claim("Action", "DeleteParkingLot"));
+
+            response.Data = claimsList;
+            return response;
+        }
+
+        public ResponseDTO<List<Claim>> GetUnassignedUserClaims(string username)
+        {
+            // Get base standard user claims
+            ResponseDTO<List<Claim>> response = GetUnassignedUserClaims();
+
+            // Add user specific claims
+            response.Data.Add(new Claim("User", username));
+
+            return response;
+        }
+
         public ResponseDTO<List<Claim>> GetStandardUserClaims(string username)
         {
             // Get base standard user claims
             ResponseDTO<List<Claim>> response = GetStandardUserClaims();
+
+            // Add user specific claims
+            response.Data.Add(new Claim("User", username));
+
+            return response;
+        }
+
+        public ResponseDTO<List<Claim>> GetLotManagerUserClaims(string username)
+        {
+            // Get base standard user claims
+            ResponseDTO<List<Claim>> response = GetLotManagerUserClaims();
 
             // Add user specific claims
             response.Data.Add(new Claim("User", username));
