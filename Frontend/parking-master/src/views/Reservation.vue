@@ -4,14 +4,29 @@
       <h2 class="form-reservation-heading">Reservations: {{ lotName }}</h2>
       <h3 class="form-reservation-address">Address: {{ lotAddress }}</h3>
       <v-form ref="form">
-        <select v-model="selectedSpot">
-          <option disabled value="" v-if="!worked" >Please Select a Parking Spot</option>
-          <option v-for="(spot, index) in spots" :key="index" v-bind:value="spot" :class="{ 'taken-spot' : !spot.IsAvailable, 'available-spot' : spot.IsAvailable }" v-if="!worked">{{ spot.SpotName }}</option>
-        </select>
-        <select v-model="selectedVehicle">
+        <v-select v-model="selectedSpot"
+          label="Select"
+          hint="Select the parking spot you wish to reserve."
+          :items="spots"
+          item-text="SpotName"
+          item-disabled="!IsAvailable"
+          v-if="!worked"
+          persistent-hint
+          offset-y></v-select>
+        <v-select v-model="selectedSpot"
+          :items="spots"
+          item-text="SpotName"
+          item-disabled="!IsAvailable"
+          v-if="!worked"
+          return-object></v-select>
+        <v-select v-model="selectedVehicle"
+          :items="vehicles"
+          item-text="Plate"
+          v-if="!worked"
+          return-object>
           <option disabled value="" v-if="!worked">Please Select a Your Vehicle Plate</option>
           <option v-for="(vehicle, index) in vehicles" :key="index" v-bind:value="vehicle" v-if="!worked">{{ vehicle.Plate }}</option>
-        </select>
+        </v-select>
         <v-text-field id="duration" v-model="duration" class="form-control" placeholder="Length of Reservation (minutes)" required v-if="!worked"></v-text-field>
         <v-btn class="button-reservation" color="primary" v-on:click="submitReservation" v-if="!worked">Submit Reservation</v-btn>
 
@@ -118,4 +133,5 @@ export default {
   background: green;
   color: white;
 }
+
 </style>

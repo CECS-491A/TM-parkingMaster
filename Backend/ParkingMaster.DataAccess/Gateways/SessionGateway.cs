@@ -108,7 +108,17 @@ namespace ParkingMaster.DataAccess
             {
                 var session = (from sessions in context.Sessions
                                    where sessions.SessionId == sessionId
-                                   select sessions).First();
+                                   select sessions).FirstOrDefault();
+
+                if(session == null)
+                {
+                    // Return error
+                    return new ResponseDTO<Session>()
+                    {
+                        Data = null,
+                        Error = "No session found."
+                    };
+                }
 
                 // Return a ResponseDto with a Session DTO
                 return new ResponseDTO<Session>()
