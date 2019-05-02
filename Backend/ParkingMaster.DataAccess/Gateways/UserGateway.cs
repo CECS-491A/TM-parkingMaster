@@ -371,13 +371,12 @@ namespace ParkingMaster.DataAccess
                                          where users.Id == newAccountInfo.Id
                                          select users).FirstOrDefault();
 
-                    response.Data = new UserAccountDTO(currentUser);
-
                     currentUser.RoleType = newAccountInfo.RoleType;
                     context.SaveChanges();
                     dbContextTransaction.Commit();
 
-                    
+                    response.Data = new UserAccountDTO(currentUser);
+
                     return response;
                 }
                 catch
@@ -407,6 +406,7 @@ namespace ParkingMaster.DataAccess
 
 
                     context.UserClaims.Remove(currentUserClaims);
+                    context.SaveChanges();
                     context.UserClaims.Add(new UserClaims(userId, newClaims));
                     context.SaveChanges();
                     dbContextTransaction.Commit();

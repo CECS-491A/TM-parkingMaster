@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ParkingMaster.DataAccess;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Constants;
 
 namespace ParkingMaster.Services.Services
 {
@@ -72,32 +73,32 @@ namespace ParkingMaster.Services.Services
             return response;
         }
 
-        public ResponseDTO<List<Claim>> GetUnassignedUserClaims(string username)
+        public ResponseDTO<List<Claim>> GetUserClaims(string role, string username)
         {
-            // Get base standard user claims
-            ResponseDTO<List<Claim>> response = GetUnassignedUserClaims();
+            ResponseDTO<List<Claim>> response;
 
-            // Add user specific claims
-            response.Data.Add(new Claim("User", username));
+            // Get base user claims
+            switch (role)
+            {
+                case Roles.UNASSIGNED:
+                    response = GetUnassignedUserClaims();
+                    break;
 
-            return response;
-        }
+                case Roles.STANDARD:
+                    response = GetStandardUserClaims();
+                    break;
 
-        public ResponseDTO<List<Claim>> GetStandardUserClaims(string username)
-        {
-            // Get base standard user claims
-            ResponseDTO<List<Claim>> response = GetStandardUserClaims();
+                case Roles.LOTMANAGER:
+                    response = GetLotManagerUserClaims();
+                    break;
 
-            // Add user specific claims
-            response.Data.Add(new Claim("User", username));
-
-            return response;
-        }
-
-        public ResponseDTO<List<Claim>> GetLotManagerUserClaims(string username)
-        {
-            // Get base standard user claims
-            ResponseDTO<List<Claim>> response = GetLotManagerUserClaims();
+                default:
+                    return new ResponseDTO<List<Claim>>()
+                    {
+                        Data = null,
+                        Error = "Invalid roletype."
+                    };
+            }
 
             // Add user specific claims
             response.Data.Add(new Claim("User", username));

@@ -66,7 +66,7 @@ namespace ParkingMaster.Manager.Managers
                     IsFirstTimeUser = true,
                     RoleType = Roles.UNASSIGNED
                 };
-                List<Claim> newClaims = _claimService.GetUnassignedUserClaims(request.Email).Data;
+                List<Claim> newClaims = _claimService.GetUserClaims(Roles.UNASSIGNED, request.Email).Data;
 
                 // Add user to datastore
                 ResponseDTO<bool> createUserResponse = _userManagementService.CreateUser(user, newClaims);

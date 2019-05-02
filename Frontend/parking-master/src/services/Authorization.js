@@ -29,8 +29,9 @@ const login = (data, router) => {
 
   if (data.Role === 'unassigned') {
     router.push('/RoleChoice')
+  } else {
+    router.push('/Home')
   }
-  router.push('/Home')
 }
 
 const logout = (router) => {

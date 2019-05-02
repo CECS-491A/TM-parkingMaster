@@ -225,7 +225,7 @@ namespace ParkingMaster.Manager.Managers
                 response.Error = userAccountResponse.Error;
                 return response;
             }
-            List<Claim> newClaims = _claimService.GetLotManagerUserClaims(userAccountResponse.Data.Username).Data;
+            List<Claim> newClaims = _claimService.GetUserClaims(userAccountChanges.RoleType, userAccountResponse.Data.Username).Data;
 
             ResponseDTO<bool> editClaimsResponse;
             try
