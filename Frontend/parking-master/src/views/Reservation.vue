@@ -35,6 +35,7 @@
 <script>
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
 
 export default {
   name: 'reservations',
@@ -80,11 +81,13 @@ export default {
           this.error = 'Failed to reserve parking spot.'
           this.errorOn = true
           if (e.response.status === 401) {
-            sessionStorage.clear()
-            this.$router.push('/Home')
+            auth.invalidSession(this.$router)
           }
         })
     }
+  },
+  beforeMount () {
+    auth.authorize('standard', this.$router)
   },
   async mounted () {
     this.lotId = sessionStorage.getItem('lotId')
@@ -104,8 +107,7 @@ export default {
       .catch(e => {
         console.log(e)
         if (e.response.status === 401) {
-          sessionStorage.clear()
-          this.$router.push('/Home')
+          auth.invalidSession(this.$router)
         }
       })
   }

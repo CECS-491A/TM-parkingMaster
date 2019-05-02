@@ -25,16 +25,18 @@ export default {
   },
   methods: {
     checkLocalStorage () {
+      console.log(sessionStorage.getItem('ParkingMasterRole'))
       var username = sessionStorage.getItem('ParkingMasterUsername')
       if (username !== null) {
         this.pageTitle = 'Welcome ' + username
         this.authenticated = true
-        if (sessionStorage.getItem('ParkingMasterRefresh') === 'true') {
-          sessionStorage.setItem('ParkingMasterRefresh', 'false')
-          document.location.reload(true)
-        }
       } else {
         this.authenticated = false
+      }
+
+      if (sessionStorage.getItem('ParkingMasterRefresh') === 'true') {
+        sessionStorage.setItem('ParkingMasterRefresh', 'false')
+        document.location.reload(true)
       }
     }
   },

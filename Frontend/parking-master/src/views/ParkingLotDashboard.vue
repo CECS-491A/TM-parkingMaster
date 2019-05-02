@@ -36,6 +36,7 @@
 <script>
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
 
 export default {
   name: 'Reservation',
@@ -54,6 +55,9 @@ export default {
       this.$router.push('/Reservation')
     }
   },
+  beforeMount () {
+    auth.authorize('standard', this.$router)
+  },
   async mounted () {
     await axios
       .post(apiCalls.GET_ALL_LOTS, {
@@ -63,8 +67,7 @@ export default {
       .catch(e => {
         console.log(e)
         if (e.response.status === 401) {
-          sessionStorage.clear()
-          this.$router.push('/Home')
+          auth.invalidSession(this.$router)
         }
       })
   }

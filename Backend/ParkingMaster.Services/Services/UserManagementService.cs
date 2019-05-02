@@ -173,6 +173,16 @@ namespace ParkingMaster.Services.Services
             }
         }
 
+        public ResponseDTO<UserAccountDTO> SetRole(UserAccountDTO newInformation)
+        {
+            return _userGateway.SetRole(newInformation);
+        }
+
+        public ResponseDTO<bool> ResetUserClaims(Guid id, List<Claim> claims)
+        {
+            return _userGateway.ResetUserClaims(id, claims);
+        }
+
         public ResponseDTO<List<ClaimDTO>> GetAllUserClaims(string username)
         {
             return _userGateway.GetUserClaims(username);

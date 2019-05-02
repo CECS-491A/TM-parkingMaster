@@ -30,7 +30,8 @@ import Vuetify, {
   VMenu,
   VListTile,
   VListTileTitle,
-  VToolbarSideIcon
+  VToolbarSideIcon,
+  VIcon
 } from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -64,7 +65,8 @@ Vue.use(Vuetify, {
     VMenu,
     VListTile,
     VListTileTitle,
-    VToolbarSideIcon
+    VToolbarSideIcon,
+    VIcon
   }
 })
 

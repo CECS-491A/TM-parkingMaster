@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Collections.Generic;
 using ParkingMaster.Models.Constants;
+using ParkingMaster.Models.Models;
 
 namespace ParkingMaster.Manager.Managers
 {
@@ -16,11 +17,13 @@ namespace ParkingMaster.Manager.Managers
 
         private UserManagementService _userManagementService;
         private SessionService _sessionService;
+        private ClaimService _claimService;
 
         public UserManagementManager()
         {
             _userManagementService = new UserManagementService();
             _sessionService = new SessionService();
+            _claimService = new ClaimService();
         }
         /*
         // I am considering moving context.SaveChanges() here, but maybe later
@@ -86,6 +89,7 @@ namespace ParkingMaster.Manager.Managers
             var request = await client.PostAsync("http://localhost:61348/api/users/appdeleteuser", jsonPayload);
             return request;
         }
+
         // Delete User From SsoRequest
         public ResponseDTO<HttpStatusCode> DeleteUser(SsoUserRequestDTO request)
         {
@@ -151,37 +155,6 @@ namespace ParkingMaster.Manager.Managers
             }
         }
 
-        public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid ssoId)
-        {
-            try
-            {
-                return _userManagementService.GetUserBySsoId(ssoId);
-            }
-            catch (Exception e)
-            {
-                return new ResponseDTO<UserAccountDTO>()
-                {
-                    Data = null,
-                    Error = "Failed to get ssoId: " + ssoId + "\n" + e.Message
-                };
-            }
-        }
-
-        public ResponseDTO<UserAccountDTO> GetUserByUserId(Guid id)
-        {
-            try
-            {
-                return _userManagementService.GetUserByUserId(id);
-            }
-            catch (Exception e)
-            {
-                return new ResponseDTO<UserAccountDTO>()
-                {
-                    Data = null,
-                    Error = "Failed to get userId: " + id + "\n" + e.Message
-                };
-            }
-        }
         /*
         public bool UpdateUser(User user)
         {
@@ -201,6 +174,87 @@ namespace ParkingMaster.Manager.Managers
             return _userManagementService.GetAllUsers();
         }
     */
+        public ResponseDTO<ParkingMasterFrontendDTO> SetRole(ParkingMasterFrontendDTO request)
+        {
+            ResponseDTO<ParkingMasterFrontendDTO> response = new ResponseDTO<ParkingMasterFrontendDTO>();
+
+            // Check if request id is in guid format
+            Guid sessionId;
+            try
+            {
+                sessionId = new Guid(request.Token);
+            }
+            catch (Exception e)
+            {
+                response.Data = null;
+                response.Error = ErrorStrings.REQUEST_FORMAT;
+                return response;
+            }
+
+            // Check if role is allowed
+            if (!Roles.IsFrontendSelectableRole(request.Role))
+            {
+                response.Data = null;
+                response.Error = ErrorStrings.REQUEST_FORMAT;
+                return response;
+            }
+
+            // Check if session is active and get user information
+            ResponseDTO<Session> sessionDTO = _sessionService.GetSession(sessionId);
+
+            // Only users with unassigned role are allowed to perform this action
+            if (sessionDTO.Data.UserAccount.RoleType != Roles.UNASSIGNED)
+            {
+                //response.Data = null;
+                //response.Error = ErrorStrings.UNAUTHORIZED_ACTION;
+                //return response;
+            }
+
+            // Set up user information that will change
+            UserAccountDTO userAccountChanges = new UserAccountDTO()
+            {
+                Id = sessionDTO.Data.UserAccount.Id,
+                RoleType = request.Role
+            };
+
+            // Make user changes
+            ResponseDTO<UserAccountDTO> userAccountResponse = _userManagementService.SetRole(userAccountChanges);
+            if (userAccountResponse.Data == null)
+            {
+                response.Data = null;
+                response.Error = userAccountResponse.Error;
+                return response;
+            }
+            List<Claim> newClaims = _claimService.GetUserClaims(userAccountChanges.RoleType, userAccountResponse.Data.Username).Data;
+
+            ResponseDTO<bool> editClaimsResponse;
+            try
+            {
+                editClaimsResponse = _userManagementService.ResetUserClaims(userAccountChanges.Id, newClaims);
+            }
+            catch(Exception e)
+            {
+                response.Data = null;
+                response.Error = e.ToString();
+                return response;
+            }
+
+            if (!editClaimsResponse.Data)
+            {
+                response.Data = null;
+                response.Error = editClaimsResponse.Error;
+                return response;
+            }
+
+            response.Data = new ParkingMasterFrontendDTO();
+            response.Data.Id = userAccountResponse.Data.Id.ToString();
+            response.Data.Role = userAccountResponse.Data.RoleType;
+            response.Data.Token = sessionId.ToString();
+            
+
+            return response;
+        }
+
         // Delete User From SsoRequest
         public ResponseDTO<HttpStatusCode> LogoutUser(SsoUserRequestDTO request)
         {
@@ -265,7 +319,7 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
         }
-
+        
         public ResponseDTO<bool> LogoutUser(ParkingMasterFrontendDTO request)
         {
             ResponseDTO<bool> response = new ResponseDTO<bool>();
