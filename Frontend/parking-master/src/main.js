@@ -26,7 +26,12 @@ import Vuetify, {
   VDialog,
   VChip,
   VCardActions,
-  VAlert
+  VAlert,
+  VMenu,
+  VListTile,
+  VListTileTitle,
+  VToolbarSideIcon,
+  VIcon
 } from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
@@ -56,7 +61,12 @@ Vue.use(Vuetify, {
     VDialog,
     VChip,
     VCardActions,
-    VAlert
+    VAlert,
+    VMenu,
+    VListTile,
+    VListTileTitle,
+    VToolbarSideIcon,
+    VIcon
   }
 })
 

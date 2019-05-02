@@ -6,6 +6,7 @@ using ParkingMaster.Services.Services;
 using ParkingMaster.Manager.Managers.Contracts;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Models.Constants;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -15,14 +16,14 @@ namespace ParkingMaster.Manager.Managers
     {
         private ISessionService _sessionService;
         private IUserManagementService _userManagementService;
-        private ITokenService _tokenService;
+        private ISignatureService _signatureService;
         private IClaimService _claimService;
 
         public LoginManager()
         {
             _sessionService = new SessionService();
             _userManagementService = new UserManagementService();
-            _tokenService = new TokenService();
+            _signatureService = new SignatureService();
             _claimService = new ClaimService();
         }
 
@@ -31,10 +32,10 @@ namespace ParkingMaster.Manager.Managers
             ResponseDTO<Session> response = new ResponseDTO<Session>();
             
             // Before anything happens, validate that this request is coming from the known sso server
-            if (!_tokenService.isValidSignature(request.GetStringToSign(), request.Signature))
+            if (!_signatureService.isValidSignature(request.GetStringToSign(), request.Signature))
             {
                 response.Data = null;
-                response.Error = "My signature: " + _tokenService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
+                response.Error = "My signature: " + _signatureService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
                 return response;
             }
 
@@ -56,28 +57,19 @@ namespace ParkingMaster.Manager.Managers
                     return response;
                 }
 
-                // Get standard user claims
-                ResponseDTO<List<Claim>> claimResponse = _claimService.GetStandardUserClaims(request.Email);
-
-                if(claimResponse.Data == null)
-                {
-                    response.Data = null;
-                    response.Error = "Server error while creating user claims.";
-                    return response;
-                }
-
-                // Create user account
+                // Create an unassigned user account
                 UserAccount user = new UserAccount()
                 {
                     SsoId = ssoId,
                     Username = request.Email,
                     IsActive = true,
                     IsFirstTimeUser = true,
-                    RoleType = "standard"
+                    RoleType = Roles.UNASSIGNED
                 };
+                List<Claim> newClaims = _claimService.GetUserClaims(Roles.UNASSIGNED, request.Email).Data;
 
                 // Add user to datastore
-                ResponseDTO<bool> createUserResponse = _userManagementService.CreateUser(user, claimResponse.Data);
+                ResponseDTO<bool> createUserResponse = _userManagementService.CreateUser(user, newClaims);
 
                 // Check if user creation succeded
                 if (!createUserResponse.Data)

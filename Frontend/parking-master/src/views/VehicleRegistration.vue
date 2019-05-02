@@ -44,6 +44,7 @@
 <script>
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
 
 export default {
   name: 'vehicleRegistration',
@@ -84,8 +85,17 @@ export default {
             console.log('Vehicle Registered.')
             this.worked = true
           }.bind(this))
+          .catch(e => {
+            console.log(e)
+            if (e.response.status === 401) {
+              auth.logout(this.$router)
+            }
+          })
       }
     }
+  },
+  beforeMount () {
+    auth.authorize('standard', this.$router)
   }
 }
 </script>

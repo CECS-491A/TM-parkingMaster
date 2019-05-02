@@ -358,6 +358,73 @@ namespace ParkingMaster.DataAccess
 
         }
 
+        public ResponseDTO<UserAccountDTO> SetRole(UserAccountDTO newAccountInfo)
+        {
+            ResponseDTO<UserAccountDTO> response = new ResponseDTO<UserAccountDTO>();
+            
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    var currentUser = (from users in context.UserAccounts
+                                         where users.Id == newAccountInfo.Id
+                                         select users).FirstOrDefault();
+
+                    currentUser.RoleType = newAccountInfo.RoleType;
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    response.Data = new UserAccountDTO(currentUser);
+
+                    return response;
+                }
+                catch
+                {
+                    dbContextTransaction.Rollback();
+                    response.Data = null;
+                    response.Error = "Failed to write to UserAccount table.";
+                    return response;
+                }
+            }
+
+        }
+
+        public ResponseDTO<bool> ResetUserClaims (Guid userId, ICollection<Claim> newClaims)
+        {
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+
+            UserClaims currentUserClaims;
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    currentUserClaims = (from userClaims in context.UserClaims
+                                         where userClaims.Id == userId
+                                         select userClaims).FirstOrDefault();
+
+
+                    context.UserClaims.Remove(currentUserClaims);
+                    context.SaveChanges();
+                    context.UserClaims.Add(new UserClaims(userId, newClaims));
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    response.Data = true;
+                    return response;
+                }
+                catch
+                {
+                    dbContextTransaction.Rollback();
+                    response.Data = false;
+                    response.Error = "Failed to write to UserClaims table.";
+                    return response;
+                }
+            }
+
+        }
+
         //Deletes all users to reinitialize the database
         public void ResetDatabase()
         {

@@ -9,7 +9,9 @@ namespace ParkingMaster.Services.Services
     {
         ResponseDTO<List<ClaimDTO>> GetAllUserClaims(string username);
         ResponseDTO<List<ClaimDTO>> GetAllUserClaims(Guid userId);
+        ResponseDTO<List<Claim>> GetUnassignedUserClaims();
         ResponseDTO<List<Claim>> GetStandardUserClaims();
-        ResponseDTO<List<Claim>> GetStandardUserClaims(string username);
+        ResponseDTO<List<Claim>> GetLotManagerUserClaims();
+        ResponseDTO<List<Claim>> GetUserClaims(string role, string username);
     }
 }

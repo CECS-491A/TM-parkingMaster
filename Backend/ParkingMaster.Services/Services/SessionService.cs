@@ -48,13 +48,18 @@ namespace ParkingMaster.Services.Services
                 return new ResponseDTO<Session>()
                 {
                     Data = null,
-                    Error = "Session has expired"
+                    Error = "Session has expired."
                 };
             }
 
             // Update the session expiration and return session
             return _sessionGateway.UpdateSessionExpiration(sessionId);
 
+        }
+
+        public ResponseDTO<bool> DeleteAllUserSessions(Guid userId)
+        {
+            return _sessionGateway.DeleteAllUserSessions(userId);
         }
 
         public ResponseDTO<Session> UpdateSessionExpiration(Guid sessionId)

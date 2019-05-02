@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ParkingMaster.DataAccess;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Constants;
 
 namespace ParkingMaster.Services.Services
 {
@@ -36,6 +37,17 @@ namespace ParkingMaster.Services.Services
             return response;
         }
 
+        public ResponseDTO<List<Claim>> GetUnassignedUserClaims()
+        {
+            ResponseDTO<List<Claim>> response = new ResponseDTO<List<Claim>>();
+            List<Claim> claimsList = new List<Claim>();
+
+            claimsList.Add(new Claim("Action", "SetRole"));
+
+            response.Data = claimsList;
+            return response;
+        }
+
         public ResponseDTO<List<Claim>> GetStandardUserClaims()
         {
             ResponseDTO<List<Claim>> response = new ResponseDTO<List<Claim>>();
@@ -49,10 +61,44 @@ namespace ParkingMaster.Services.Services
             return response;
         }
 
-        public ResponseDTO<List<Claim>> GetStandardUserClaims(string username)
+        public ResponseDTO<List<Claim>> GetLotManagerUserClaims()
         {
-            // Get base standard user claims
-            ResponseDTO<List<Claim>> response = GetStandardUserClaims();
+            ResponseDTO<List<Claim>> response = new ResponseDTO<List<Claim>>();
+            List<Claim> claimsList = new List<Claim>();
+
+            claimsList.Add(new Claim("Action", "AddParkingLot"));
+            claimsList.Add(new Claim("Action", "DeleteParkingLot"));
+
+            response.Data = claimsList;
+            return response;
+        }
+
+        public ResponseDTO<List<Claim>> GetUserClaims(string role, string username)
+        {
+            ResponseDTO<List<Claim>> response;
+
+            // Get base user claims
+            switch (role)
+            {
+                case Roles.UNASSIGNED:
+                    response = GetUnassignedUserClaims();
+                    break;
+
+                case Roles.STANDARD:
+                    response = GetStandardUserClaims();
+                    break;
+
+                case Roles.LOTMANAGER:
+                    response = GetLotManagerUserClaims();
+                    break;
+
+                default:
+                    return new ResponseDTO<List<Claim>>()
+                    {
+                        Data = null,
+                        Error = "Invalid roletype."
+                    };
+            }
 
             // Add user specific claims
             response.Data.Add(new Claim("User", username));

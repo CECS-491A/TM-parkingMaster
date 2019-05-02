@@ -70,12 +70,12 @@ namespace ParkingMaster.DataAccess
                                    where sessions.SessionId == sessionId
                                    select sessions).FirstOrDefault();
 
-                    // Checking if user account is null.
+                    // Checking session exists
                     if (session == null)
                     {
                         return new ResponseDTO<bool>()
                         {
-                            Data = false,
+                            Data = true,
                         };
                     }
                     
@@ -102,6 +102,64 @@ namespace ParkingMaster.DataAccess
             }
         }
 
+        public ResponseDTO<bool> DeleteAllUserSessions(Guid userId)
+        {
+            List<Session> sessionList;
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    // Queries for the session by sessionId.
+                    sessionList = (from sessions in context.Sessions
+                                   where sessions.UserAccount.Id == userId
+                                   select sessions).ToList();
+
+                    // Check if any sessions were found
+                    if (sessionList == null)
+                    {
+                        return new ResponseDTO<bool>()
+                        {
+                            Data = true
+                        };
+                    }
+                }
+                catch (Exception e)
+                {
+                    dbContextTransaction.Rollback();
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = "Failed to delete all sessions."
+                    };
+                };
+            }
+
+
+            try
+            {
+                // Delete all sessions tied to the account
+                foreach (Session session in sessionList)
+                {
+                    DeleteSession(session.SessionId);
+                }
+
+                return new ResponseDTO<bool>()
+                {
+                    Data = true
+                };
+            }
+            catch(Exception e)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = "Failed to delete all sessions."
+                };
+            }
+            
+        }
+
         public ResponseDTO<Session> GetSession(Guid sessionId)
         {
             try
@@ -110,13 +168,13 @@ namespace ParkingMaster.DataAccess
                                    where sessions.SessionId == sessionId
                                    select sessions).FirstOrDefault();
 
-                if(session == null)
+                // Check if session exists
+                if (session == null)
                 {
-                    // Return error
                     return new ResponseDTO<Session>()
                     {
                         Data = null,
-                        Error = "No session found."
+                        Error = "Session does not exist."
                     };
                 }
 
@@ -163,7 +221,7 @@ namespace ParkingMaster.DataAccess
                     return new ResponseDTO<Session>()
                     {
                         Data = null,
-                        Error = "Unable to update sessionId: " + sessionId
+                        Error = "Unable to update session."
                     };
                 }
             }

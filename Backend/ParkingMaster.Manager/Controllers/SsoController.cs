@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Manager.Managers;
+using ParkingMaster.Services.Services;
 
 namespace ParkingMaster.Manager.Controllers
 {
@@ -30,6 +31,47 @@ namespace ParkingMaster.Manager.Controllers
             if(managerResponse.Data != (HttpStatusCode)200)
             {
                 return Content(managerResponse.Data, managerResponse.Error);
+            }
+            else
+            {
+                return Ok();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/sso/logoutuser")]
+        public IHttpActionResult LogoutUser([FromBody, Required] SsoUserRequestDTO request)
+        {
+            if (request == null)
+            {
+                return Content((HttpStatusCode)400, "Request is null.");
+            }
+
+            UserManagementManager _userManagementManager = new UserManagementManager();
+
+            ResponseDTO<HttpStatusCode> managerResponse = _userManagementManager.LogoutUser(request);
+
+            if (managerResponse.Data != (HttpStatusCode)200)
+            {
+                return Content(managerResponse.Data, managerResponse.Error);
+            }
+            else
+            {
+                return Ok();
+            }
+        }
+
+        [HttpGet]
+        [Route("api/sso/healthcheck")]
+        public IHttpActionResult HealthCheck()
+        {
+            DatabaseCheckerService _databaseChecker = new DatabaseCheckerService();
+            ResponseDTO<bool> response = _databaseChecker.CheckConnection();
+
+            if (!response.Data)
+            {
+                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statuesResponse.Data, statuesResponse.Error);
             }
             else
             {
