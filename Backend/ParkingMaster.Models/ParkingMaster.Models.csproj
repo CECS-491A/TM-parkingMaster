@@ -70,6 +70,7 @@
     <Compile Include="DTO\ResponseDTO.cs" />
     <Compile Include="DTO\UserAccountDTO.cs" />
     <Compile Include="DTO\SsoUserRequestDTO.cs" />
+    <Compile Include="DTO\UserSpotDTO.cs" />
     <Compile Include="DTO\VehicleDTO.cs" />
     <Compile Include="DTO\VehicleRequestDTO.cs" />
     <Compile Include="Constants\ErrorStrings.cs" />

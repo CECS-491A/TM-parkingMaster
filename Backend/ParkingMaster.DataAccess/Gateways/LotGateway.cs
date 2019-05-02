@@ -362,6 +362,44 @@ namespace ParkingMaster.DataAccess
             }
         }
 
+        public ResponseDTO<List<UserSpotDTO>> GetAllUserReservations(Guid userId)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    ResponseDTO<List<UserSpotDTO>> response = new ResponseDTO<List<UserSpotDTO>>()
+                    {
+                        Data = new List<UserSpotDTO>()
+                    };
+
+                    List<Spot> userSpots = (from spots in context.Spots where spots.TakenBy == userId select spots).ToList<Spot>();
+
+                    // Check that spot is not currently occupied
+                    for(int i = 0; i < userSpots.Count(); i++)
+                    {
+                        if (DateTime.Now.CompareTo(userSpots[i].ReservedUntil) != 1)
+                        {
+                            response.Data.Add(new UserSpotDTO(userSpots[i]));
+                        }
+                    }
+                    dbContextTransaction.Commit();
+
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<List<UserSpotDTO>>()
+                    {
+                        Data = null,
+                        Error = e.ToString()
+                    };
+                }
+            }
+        }
+
         public void ResetDatabase()
         {
             List<Spot> spots = GetAllSpots().Data;

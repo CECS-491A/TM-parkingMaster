@@ -4,33 +4,47 @@
       <h2 class="form-reservation-heading">Reservations: {{ lotName }}</h2>
       <h3 class="form-reservation-address">Address: {{ lotAddress }}</h3>
       <v-form ref="form">
+
         <v-select v-model="selectedSpot"
           label="Select"
           hint="Select the parking spot you wish to reserve."
           :items="spots"
           item-text="SpotName"
-          item-disabled="!IsAvailable"
+          item-value="SpotId"
+          item-disabled="IsTaken"
           v-if="!worked"
           persistent-hint
           offset-y></v-select>
-        <v-select v-model="selectedSpot"
-          :items="spots"
-          item-text="SpotName"
-          item-disabled="!IsAvailable"
-          v-if="!worked"
-          return-object></v-select>
+
         <v-select v-model="selectedVehicle"
+          label="Select"
+          hint="Select the vehicle you wish to put on the reservation."
           :items="vehicles"
           item-text="Plate"
+          item-value="Vin"
           v-if="!worked"
-          return-object>
-          <option disabled value="" v-if="!worked">Please Select a Your Vehicle Plate</option>
-          <option v-for="(vehicle, index) in vehicles" :key="index" v-bind:value="vehicle" v-if="!worked">{{ vehicle.Plate }}</option>
-        </v-select>
-        <v-text-field id="duration" v-model="duration" class="form-control" placeholder="Length of Reservation (minutes)" required v-if="!worked"></v-text-field>
-        <v-btn class="button-reservation" color="primary" v-on:click="submitReservation" v-if="!worked">Submit Reservation</v-btn>
+          persistent-hint
+          offset-y></v-select>
 
-        <v-alert :value="errorOn" color="error" transition="scale-transition"><h3> {{error}} </h3></v-alert>
+        <v-text-field id="duration"
+          v-model="duration"
+          class="form-control"
+          hint="Enter the length of your reservation in minutes."
+          placeholder="Duration"
+          type="number"
+          required v-if="!worked"
+          persistent-hint></v-text-field>
+        <br />
+
+        <v-btn class="button-reservation"
+          color="primary"
+          v-on:click="submitReservation"
+          v-if="!worked">Submit Reservation</v-btn>
+
+        <v-alert :value="errorOn"
+          color="error"
+          transition="scale-transition">
+            <h3> {{error}} </h3></v-alert>
       </v-form>
 
       <div id="responseMessage" v-if="worked">
@@ -81,8 +95,8 @@ export default {
       axios
         .post(apiCalls.RESERVE_PARKING_SPOT, {
           SessionId: sessionStorage.getItem('ParkingMasterToken'),
-          SpotId: this.selectedSpot.SpotId,
-          VehicleVin: this.selectedVehicle.Vin,
+          SpotId: this.selectedSpot,
+          VehicleVin: this.selectedVehicle,
           DurationInMinutes: this.duration
         })
         .then(function () {
@@ -137,14 +151,6 @@ export default {
 .button-reservation {
   width: 330px;
   margin: 0 auto;
-}
-.taken-spot {
-  background: red;
-  color: white;
-}
-.available-spot {
-  background: green;
-  color: white;
 }
 
 </style>

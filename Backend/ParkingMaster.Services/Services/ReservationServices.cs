@@ -27,5 +27,10 @@ namespace ParkingMaster.Services.Services
         {
             return _lotGateway.ReserveSpot(reservation);
         }
+
+        public ResponseDTO<List<UserSpotDTO>> GetAllUserResverations(Guid userId)
+        {
+            return _lotGateway.GetAllUserReservations(userId);
+        }
     }
 }

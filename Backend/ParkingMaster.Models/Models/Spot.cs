@@ -54,11 +54,11 @@ namespace ParkingMaster.Models.Models
             // Check if this spot is currently available
             if(DateTime.Now.CompareTo(this.ReservedUntil) != 1)
             {
-                info.AddValue("IsAvailable", false);
+                info.AddValue("IsTaken", true);
             }
             else
             {
-                info.AddValue("IsAvailable", true);
+                info.AddValue("IsTaken", false);
             }
 
         }
