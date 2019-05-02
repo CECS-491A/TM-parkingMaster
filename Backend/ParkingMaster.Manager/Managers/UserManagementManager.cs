@@ -205,9 +205,9 @@ namespace ParkingMaster.Manager.Managers
             // Only users with unassigned role are allowed to perform this action
             if (sessionDTO.Data.UserAccount.RoleType != Roles.UNASSIGNED)
             {
-                response.Data = null;
-                response.Error = ErrorStrings.UNAUTHORIZED_ACTION;
-                return response;
+                //response.Data = null;
+                //response.Error = ErrorStrings.UNAUTHORIZED_ACTION;
+                //return response;
             }
 
             // Set up user information that will change
@@ -246,9 +246,11 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
+            response.Data = new ParkingMasterFrontendDTO();
             response.Data.Id = userAccountResponse.Data.Id.ToString();
             response.Data.Role = userAccountResponse.Data.RoleType;
             response.Data.Token = sessionId.ToString();
+            
 
             return response;
         }

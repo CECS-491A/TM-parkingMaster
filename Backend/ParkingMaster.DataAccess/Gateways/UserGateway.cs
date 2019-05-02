@@ -405,7 +405,9 @@ namespace ParkingMaster.DataAccess
                                          where userClaims.Id == userId
                                          select userClaims).FirstOrDefault();
 
-                    currentUserClaims.Claims = newClaims;
+
+                    context.UserClaims.Remove(currentUserClaims);
+                    context.UserClaims.Add(new UserClaims(userId, newClaims));
                     context.SaveChanges();
                     dbContextTransaction.Commit();
 
