@@ -16,15 +16,18 @@ namespace ParkingMaster.Manager.Managers
     {
         private readonly LotManagementService _lotManagementService;
         //private ISessionService _sessionService;
-        private readonly LotGateway _lotGateway;
-        private readonly UserGateway _userGateway;
+        //private readonly LotGateway _lotGateway;
+        //private readonly UserGateway _userGateway;
         private readonly SessionService _sessionServices;
+        UserContext _dbcontext;
 
-        public LotManagementManager()
+        public LotManagementManager(UserContext context)
         {
-            _lotGateway = new LotGateway();
-            _userGateway = new UserGateway();
-            _lotManagementService = new LotManagementService(_lotGateway, _userGateway);
+            _dbcontext = context;
+            //_lotGateway = new LotGateway();
+            //_userGateway = new UserGateway();
+            //_lotManagementService = new LotManagementService(_lotGateway, _userGateway);
+            _lotManagementService = new LotManagementService(_dbcontext);
             _sessionServices = new SessionService();
         }
 
@@ -38,10 +41,13 @@ namespace ParkingMaster.Manager.Managers
                 if (SessionDTO.Data != null)
                 {
                     var ownerid = SessionDTO.Data.UserAccount.Id;
+
+                    String[] arr = httprequest.Form.AllKeys;
+                    
                     //var username = httprequest["username"];
                     var lotname = httprequest["lotname"];
                     var address = httprequest["address"];
-                    var cost = Convert.ToDouble(httprequest["cost"]);
+                    var cost = Double.Parse(httprequest["cost"]);
                     var useraccount = SessionDTO.Data.UserAccount;
                     var spotfile = httprequest.Files["file"];
                     var mapfile = httprequest.Files["map"];
@@ -57,12 +63,12 @@ namespace ParkingMaster.Manager.Managers
                     };
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return new ResponseDTO<Boolean>()
                 {
                     Data = false,
-                    Error = "[LOT MANAGEMENT MANAGER] Could not add lot."
+                    Error = httprequest.Form + e.ToString()
                 };
             }
         }

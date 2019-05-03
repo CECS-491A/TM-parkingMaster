@@ -14,14 +14,16 @@ namespace ParkingMaster.Services.Services
 {
     public class LotManagementService : ILotManagementService
     {
-
+        UserContext _dbcontext;
         private LotGateway _lotGateway;
-        private UserGateway _userGateway;
+        //private UserGateway _userGateway;
 
-        public LotManagementService(LotGateway lotGateway, UserGateway userGateway)
+        public LotManagementService(UserContext context)
         {
-            _lotGateway = lotGateway;
-            _userGateway = userGateway;
+            _dbcontext = context;
+            _lotGateway = new LotGateway(_dbcontext);
+            //_lotGateway = lotGateway;
+            //_userGateway = userGateway;
         }
 
         public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, UserAccount useraccount, HttpPostedFile spotfile, HttpPostedFile mapfile)
@@ -35,14 +37,14 @@ namespace ParkingMaster.Services.Services
                     LotName = lotname,
                     Address = address,
                     Cost = cost,
-                    UserAccount = useraccount,
+                    //UserAccount = useraccount,
                     MapFilePath = useraccount.Username + "_" + lotname + "_" + Guid.NewGuid().ToString()
                 };
                 newLot.Spots = ParseSpotsFromFile(newLot.LotId, newLot.LotName, spotfile);
                 ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
                 if (response.Data == true)
                 {
-                    ResponseDTO<bool> saveMap = _lotGateway.AddMapFile(mapfile);
+                    ResponseDTO<bool> saveMap = _lotGateway.AddMapFile(mapfile, newLot.MapFilePath);
                     if (saveMap.Data == false)
                     {
                         return saveMap;

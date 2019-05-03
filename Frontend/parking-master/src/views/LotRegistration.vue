@@ -29,7 +29,10 @@ export default {
   data () {
     return {
       file: '',
-      map: ''
+      map: '',
+      lotname: '',
+      address: '',
+      cost: ''
     }
   },
   methods: {
@@ -40,9 +43,9 @@ export default {
       let role = sessionStorage.getItem('ParkingMasterRole')
       formData.append('file', this.file)
       formData.append('map', this.map)
-      formData.append('lotname', document.getElementById('lotname'))
-      formData.append('address', document.getElementById('address'))
-      formData.append('cost', document.getElementById('cost'))
+      formData.append('lotname', document.getElementById('lotname').value)
+      formData.append('address', document.getElementById('address').value)
+      formData.append('cost', document.getElementById('cost').value)
       formData.append('token', token)
       formData.append('username', username)
       formData.append('role', role)

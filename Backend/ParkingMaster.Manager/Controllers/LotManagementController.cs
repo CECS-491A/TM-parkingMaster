@@ -9,6 +9,7 @@ using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Manager.Managers;
 using System.Web;
+using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Manager.Controllers
 {
@@ -18,25 +19,30 @@ namespace ParkingMaster.Manager.Controllers
         [Route("api/lot/register")]
         public IHttpActionResult CreateLot() // [FromBody, Required] ParkingMasterFrontendDTO request
         {
-            //LoginManager loginManager = new LoginManager();
-            LotManagementManager lotManagementManager = new LotManagementManager();
-            var httprequest = HttpContext.Current.Request;
+            using (var dbcontext = new UserContext())
+            {
+                //LoginManager loginManager = new LoginManager();
+                //LotManagementManager lotManagementManager = new LotManagementManager();
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+                var httprequest = HttpContext.Current.Request;
 
-            try
-            {
-                ResponseDTO<Boolean> response = lotManagementManager.AddLot(httprequest);
-                if (response.Data == true)
+                try
                 {
-                    return Ok(response.Data);
+                    ResponseDTO<Boolean> response = lotManagementManager.AddLot(httprequest);
+                    if (response.Data == true)
+                    {
+                        dbcontext.SaveChanges();
+                        return Ok(response.Data);
+                    }
+                    else
+                    {
+                        return Content((HttpStatusCode)404, response.Error);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    return Content((HttpStatusCode)404, response.Error);
+                    return Content((HttpStatusCode)400, e.Message);
                 }
-            }
-            catch (Exception e)
-            {
-                return Content((HttpStatusCode)400, e.Message);
             }
 
         }
@@ -45,24 +51,27 @@ namespace ParkingMaster.Manager.Controllers
         [Route("api/lot/delete")]
         public IHttpActionResult ShowAllLotsToDelete([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            LotManagementManager lotManagementManager = new LotManagementManager();
-            var httprequest = HttpContext.Current.Request;
+            using (var dbcontext = new UserContext())
+            {
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+                var httprequest = HttpContext.Current.Request;
 
-            try
-            {
-                ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(httprequest);
-                if (response.Data != null)
+                try
                 {
-                    return Ok(response.Data);
+                    ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(httprequest);
+                    if (response.Data != null)
+                    {
+                        return Ok(response.Data);
+                    }
+                    else
+                    {
+                        return Content((HttpStatusCode)404, response.Error);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    return Content((HttpStatusCode)404, response.Error);
+                    return Content((HttpStatusCode)400, e.Message);
                 }
-            }
-            catch (Exception e)
-            {
-                return Content((HttpStatusCode)400, e.Message);
             }
         }
 
@@ -70,24 +79,27 @@ namespace ParkingMaster.Manager.Controllers
         [Route("api/lot/delete")] // api/user/lot/delete
         public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            LotManagementManager lotManagementManager = new LotManagementManager();
-            var httprequest = HttpContext.Current.Request;
+            using (var dbcontext = new UserContext())
+            {
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+                var httprequest = HttpContext.Current.Request;
 
-            try
-            {
-                ResponseDTO<Boolean> response = lotManagementManager.DeleteLot(httprequest);
-                if (response.Data == true)
+                try
                 {
-                    return Ok(response.Data);
+                    ResponseDTO<Boolean> response = lotManagementManager.DeleteLot(httprequest);
+                    if (response.Data == true)
+                    {
+                        return Ok(response.Data);
+                    }
+                    else
+                    {
+                        return Content((HttpStatusCode)404, response.Error);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    return Content((HttpStatusCode)404, response.Error);
+                    return Content((HttpStatusCode)400, e.Message);
                 }
-            }
-            catch (Exception e)
-            {
-                return Content((HttpStatusCode)400, e.Message);
             }
         }
 
@@ -116,19 +128,23 @@ namespace ParkingMaster.Manager.Controllers
         [Route("api/lotManagement/getAllLots")] // api/user/lot
         public IHttpActionResult GetAllLots([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
-
-            if (response.Data != null)
+            using (var dbcontext = new UserContext())
             {
-                return Ok(response.Data);
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
 
+                ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
+
+                if (response.Data != null)
+                {
+                    return Ok(response.Data);
+
+                }
+                else
+                {
+                    return Content((HttpStatusCode)404, response.Error);
+                }
             }
-            else
-            {
-                return Content((HttpStatusCode)404, response.Error);
-            }
+            
         }
         /*
         [HttpGet]
@@ -195,18 +211,21 @@ namespace ParkingMaster.Manager.Controllers
         [Route("api/lotManagement/getSpotsByLot")]
         public IHttpActionResult GetSpotsByLot([FromBody, Required] ReservationRequestDTO request)
         {
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<List<Spot>> response = lotManagementManager.GetAllSpotsByLot(request);
-
-            if (response.Data != null)
+            using (var dbcontext = new UserContext())
             {
-                return Ok(response.Data);
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
 
-            }
-            else
-            {
-                return Content((HttpStatusCode)404, response.Error);
+                ResponseDTO<List<Spot>> response = lotManagementManager.GetAllSpotsByLot(request);
+
+                if (response.Data != null)
+                {
+                    return Ok(response.Data);
+
+                }
+                else
+                {
+                    return Content((HttpStatusCode)404, response.Error);
+                }
             }
         }
 
