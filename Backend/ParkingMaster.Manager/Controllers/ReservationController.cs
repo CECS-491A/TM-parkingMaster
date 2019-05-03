@@ -27,8 +27,44 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/reservation/getall")] // api/user/lot
+        public IHttpActionResult GetAllUserReservations([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            ReservationManager _reservationManager = new ReservationManager();
+            ResponseDTO<List<UserSpotDTO>> response = _reservationManager.GetAllUserReservations(request);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+            }
+            else
+            {
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/reservation/extend")] // api/user/lot
+        public IHttpActionResult ExtendUserReservation([FromBody, Required] ReservationRequestDTO request)
+        {
+            ReservationManager _reservationManager = new ReservationManager();
+            ResponseDTO<UserSpotDTO> response = _reservationManager.ExtendUserReservation(request);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+            }
+            else
+            {
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
             }
         }
     }

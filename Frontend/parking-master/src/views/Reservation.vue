@@ -4,18 +4,47 @@
       <h2 class="form-reservation-heading">Reservations: {{ lotName }}</h2>
       <h3 class="form-reservation-address">Address: {{ lotAddress }}</h3>
       <v-form ref="form">
-        <select v-model="selectedSpot">
-          <option disabled value="" v-if="!worked" >Please Select a Parking Spot</option>
-          <option v-for="(spot, index) in spots" :key="index" v-bind:value="spot" :class="{ 'taken-spot' : !spot.IsAvailable, 'available-spot' : spot.IsAvailable }" v-if="!worked">{{ spot.SpotName }}</option>
-        </select>
-        <select v-model="selectedVehicle">
-          <option disabled value="" v-if="!worked">Please Select a Your Vehicle Plate</option>
-          <option v-for="(vehicle, index) in vehicles" :key="index" v-bind:value="vehicle" v-if="!worked">{{ vehicle.Plate }}</option>
-        </select>
-        <v-text-field id="duration" v-model="duration" class="form-control" placeholder="Length of Reservation (minutes)" required v-if="!worked"></v-text-field>
-        <v-btn class="button-reservation" color="primary" v-on:click="submitReservation" v-if="!worked">Submit Reservation</v-btn>
 
-        <v-alert :value="errorOn" color="error" transition="scale-transition"><h3> {{error}} </h3></v-alert>
+        <v-select v-model="selectedSpot"
+          label="Select"
+          hint="Select the parking spot you wish to reserve."
+          :items="spots"
+          item-text="SpotName"
+          item-value="SpotId"
+          item-disabled="IsTaken"
+          v-if="!worked"
+          persistent-hint
+          offset-y></v-select>
+
+        <v-select v-model="selectedVehicle"
+          label="Select"
+          hint="Select the vehicle you wish to put on the reservation."
+          :items="vehicles"
+          item-text="Plate"
+          item-value="Vin"
+          v-if="!worked"
+          persistent-hint
+          offset-y></v-select>
+
+        <v-text-field id="duration"
+          v-model="duration"
+          class="form-control"
+          hint="Enter the length of your reservation in minutes."
+          placeholder="Duration"
+          type="number"
+          required v-if="!worked"
+          persistent-hint></v-text-field>
+        <br />
+
+        <v-btn class="button-reservation"
+          color="primary"
+          v-on:click="submitReservation"
+          v-if="!worked">Submit Reservation</v-btn>
+
+        <v-alert :value="errorOn"
+          color="error"
+          transition="scale-transition">
+            <h3> {{error}} </h3></v-alert>
       </v-form>
 
       <div id="responseMessage" v-if="worked">
@@ -26,8 +55,8 @@
         <h3>License plate on reservation: {{ selectedVehicle.Plate }}</h3>
         <br />
       </div>
-      <div id="reservationMessage" v-if="worked">
-        <h3>Reservation ends at: {{ reservationEndsAt }}</h3>
+      <div id="reservationMessage" class="reservation-message" v-if="worked">
+        <h3>Reservation lasts until: {{ reservationEndsAt }}</h3>
       </div>
     </form>
   </div>
@@ -36,6 +65,7 @@
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
 import auth from '@/services/Authorization.js'
+import moment from 'moment'
 
 export default {
   name: 'reservations',
@@ -66,14 +96,15 @@ export default {
       axios
         .post(apiCalls.RESERVE_PARKING_SPOT, {
           SessionId: sessionStorage.getItem('ParkingMasterToken'),
-          SpotId: this.selectedSpot.SpotId,
-          VehicleVin: this.selectedVehicle.Vin,
+          SpotId: this.selectedSpot,
+          VehicleVin: this.selectedVehicle,
           DurationInMinutes: this.duration
         })
         .then(function () {
           console.log('OK')
-          var date = new Date()
-          this.reservationEndsAt = new Date(date.getTime() + (this.duration * 60000)).toString()
+          let now = moment()
+          let endDate = now.add(this.duration, 'm')
+          this.reservationEndsAt = endDate.format('l') + ' at ' + endDate.format('LTS')
           this.worked = true
         }.bind(this))
         .catch(e => {
@@ -116,19 +147,16 @@ export default {
 
 <style>
 .form-reservation {
-  max-width: 330px;
+  max-width: 350px;
   margin: 0 auto;
 }
 .button-reservation {
-  width: 330px;
+  width: 350px;
   margin: 0 auto;
 }
-.taken-spot {
-  background: red;
-  color: white;
+.reservation-message {
+  width: 400px;
+  margin: 0 auto;
 }
-.available-spot {
-  background: green;
-  color: white;
-}
+
 </style>

@@ -13,6 +13,8 @@ const GET_ALL_USER_VEHICLES = PARKINGMASTER_BASE_URL + '/api/vehicle/getAllUserV
 const RESERVE_PARKING_SPOT = PARKINGMASTER_BASE_URL + '/api/reservation/add'
 const LOGOUT = PARKINGMASTER_BASE_URL + '/api/user/logout'
 const ROLE_SELECTION = PARKINGMASTER_BASE_URL + '/api/user/setrole'
+const GET_ALL_RESERVATIONS = PARKINGMASTER_BASE_URL + '/api/reservation/getall'
+const EXTEND_RESERVATION = PARKINGMASTER_BASE_URL + '/api/reservation/extend'
 
 export default {
   BASE_URL: PARKINGMASTER_BASE_URL,
@@ -28,5 +30,7 @@ export default {
   GET_ALL_USER_VEHICLES,
   SSO_FRONTEND_URL,
   LOGOUT,
-  ROLE_SELECTION
+  ROLE_SELECTION,
+  GET_ALL_RESERVATIONS,
+  EXTEND_RESERVATION
 }

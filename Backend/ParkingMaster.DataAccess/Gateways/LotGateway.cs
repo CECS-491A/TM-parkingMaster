@@ -362,6 +362,94 @@ namespace ParkingMaster.DataAccess
             }
         }
 
+        public ResponseDTO<UserSpotDTO> ExtendReservation(ReservationDTO reservation)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var _spot = (from spot in context.Spots where spot.SpotId == reservation.SpotId select spot).FirstOrDefault();
+
+                    // Check that spot is still being reserved by the same user
+                    if (DateTime.Now.CompareTo(_spot.ReservedUntil) == 1)
+                    {
+                        return new ResponseDTO<UserSpotDTO>()
+                        {
+                            Data = null,
+                            Error = "Unable to extend reservation when reservation is expired."
+                        };
+                    }
+                    if (_spot.TakenBy != reservation.UserId)
+                    {
+                        return new ResponseDTO<UserSpotDTO>()
+                        {
+                            Data = null,
+                            Error = "Unable to extend reservation of a different user."
+                        };
+                    }
+
+                    // Update ReservedUntil by adding the minutes
+                    _spot.ReservedUntil = _spot.ReservedUntil.AddMinutes(reservation.DurationInMinutes);
+
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<UserSpotDTO>()
+                    {
+                        Data = new UserSpotDTO(_spot)
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<UserSpotDTO>()
+                    {
+                        Data = null,
+                        Error = "[DATA ACCESS] Error occured while reserving spot."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<List<UserSpotDTO>> GetAllUserReservations(Guid userId)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    ResponseDTO<List<UserSpotDTO>> response = new ResponseDTO<List<UserSpotDTO>>()
+                    {
+                        Data = new List<UserSpotDTO>()
+                    };
+
+                    var userSpots = from spots in context.Spots where spots.TakenBy == userId select spots;
+
+                    // Check that spot is not currently occupied
+                    foreach(Spot spot in userSpots)
+                    {
+                        if (DateTime.Now.CompareTo(spot.ReservedUntil) != 1)
+                        {
+                            response.Data.Add(new UserSpotDTO(spot));
+                        }
+                    }
+                    dbContextTransaction.Commit();
+
+                    return response;
+                }
+                catch (Exception e)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<List<UserSpotDTO>>()
+                    {
+                        Data = null,
+                        Error = e.ToString()
+                    };
+                }
+            }
+        }
+
         public void ResetDatabase()
         {
             List<Spot> spots = GetAllSpots().Data;
