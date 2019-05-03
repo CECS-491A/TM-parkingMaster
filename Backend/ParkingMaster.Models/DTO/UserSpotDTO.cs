@@ -4,6 +4,7 @@ using ParkingMaster.Models.Models;
 
 namespace ParkingMaster.Models.DTO
 {
+    [Serializable]
     public class UserSpotDTO : ISerializable
     {
         // Automatic properties
@@ -41,7 +42,11 @@ namespace ParkingMaster.Models.DTO
             info.AddValue("LotName", this.LotName);
             info.AddValue("LotAddress", this.LotAddress);
             info.AddValue("IsHandicappedAccessible", this.IsHandicappedAccessible);
-            info.AddValue("ReservedUntil", this.ReservedUntil);
+
+            // Determine time left on reservation so frontend can calculate end time
+            TimeSpan timeLeft = this.ReservedUntil.Subtract(DateTime.Now);
+
+            info.AddValue("SecondsLeft", this.ReservedUntil.Subtract(DateTime.Now).TotalSeconds);
             info.AddValue("VehicleVin", this.VehicleVin);
             info.AddValue("VehiclePlate", this.VehiclePlate);
 

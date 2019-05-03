@@ -77,6 +77,60 @@ namespace ParkingMaster.Manager.Managers
             return _reservationServices.ReserveSpot(reservationDTO);
         }
 
+        public ResponseDTO<UserSpotDTO> ExtendUserReservation(ReservationRequestDTO request)
+        {
+            // Check if all Guids are formatted properly
+            Guid sessionId;
+            try
+            {
+                sessionId = Guid.Parse(request.SessionId);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<UserSpotDTO>()
+                {
+                    Data = null,
+                    Error = ErrorStrings.REQUEST_FORMAT
+                };
+            }
+
+            Guid spotId;
+            try
+            {
+                spotId = Guid.Parse(request.SpotId);
+            }
+            catch (Exception)
+            {
+                return new ResponseDTO<UserSpotDTO>()
+                {
+                    Data = null,
+                    Error = ErrorStrings.REQUEST_FORMAT
+                };
+            }
+
+            ResponseDTO<Session> sessionDTO = _sessionServices.GetSession(sessionId);
+
+            // If session data is null, then an error occured
+            if (sessionDTO.Data == null)
+            {
+                return new ResponseDTO<UserSpotDTO>()
+                {
+                    Data = null,
+                    Error = sessionDTO.Error
+
+                };
+            }
+
+            ReservationDTO reservationDTO = new ReservationDTO()
+            {
+                DurationInMinutes = request.DurationInMinutes,
+                UserId = sessionDTO.Data.UserAccount.Id,
+                SpotId = spotId
+            };
+
+            return _reservationServices.ExtendReservation(reservationDTO);
+        }
+
         public ResponseDTO<List<UserSpotDTO>> GetAllUserReservations(ParkingMasterFrontendDTO request)
         {
             // Check if all Guids are formatted properly

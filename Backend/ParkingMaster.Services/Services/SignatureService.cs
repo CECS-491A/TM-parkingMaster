@@ -12,7 +12,7 @@ namespace ParkingMaster.Services.Services
 {
     public class SignatureService : ISignatureService
     {
-        private readonly string APISecret = "A2260F500C932845C28CC21DD55E3D1E16B518E3EB1B2B548BD27897D9541C75";
+        private readonly string APISecret = "07D3E72B11AD4F056AAAC480A8896DC8EEF9AD684AF2F69428FC9E35EBDE713B";
         //secret key made on local apps, for dev only
 
         public bool isValidSignature(Dictionary<string, string> presignatureString, string signature)

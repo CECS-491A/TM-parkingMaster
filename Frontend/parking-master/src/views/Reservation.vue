@@ -55,8 +55,8 @@
         <h3>License plate on reservation: {{ selectedVehicle.Plate }}</h3>
         <br />
       </div>
-      <div id="reservationMessage" v-if="worked">
-        <h3>Reservation ends at: {{ reservationEndsAt }}</h3>
+      <div id="reservationMessage" class="reservation-message" v-if="worked">
+        <h3>Reservation lasts until: {{ reservationEndsAt }}</h3>
       </div>
     </form>
   </div>
@@ -65,6 +65,7 @@
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
 import auth from '@/services/Authorization.js'
+import moment from 'moment'
 
 export default {
   name: 'reservations',
@@ -101,8 +102,9 @@ export default {
         })
         .then(function () {
           console.log('OK')
-          var date = new Date()
-          this.reservationEndsAt = new Date(date.getTime() + (this.duration * 60000)).toString()
+          let now = moment()
+          let endDate = now.add(this.duration, 'm')
+          this.reservationEndsAt = endDate.format('l') + ' at ' + endDate.format('LTS')
           this.worked = true
         }.bind(this))
         .catch(e => {
@@ -145,11 +147,15 @@ export default {
 
 <style>
 .form-reservation {
-  max-width: 330px;
+  max-width: 350px;
   margin: 0 auto;
 }
 .button-reservation {
-  width: 330px;
+  width: 350px;
+  margin: 0 auto;
+}
+.reservation-message {
+  width: 400px;
   margin: 0 auto;
 }
 

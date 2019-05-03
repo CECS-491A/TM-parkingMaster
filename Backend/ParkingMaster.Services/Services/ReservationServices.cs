@@ -28,6 +28,11 @@ namespace ParkingMaster.Services.Services
             return _lotGateway.ReserveSpot(reservation);
         }
 
+        public ResponseDTO<UserSpotDTO> ExtendReservation(ReservationDTO reservation)
+        {
+            return _lotGateway.ExtendReservation(reservation);
+        }
+
         public ResponseDTO<List<UserSpotDTO>> GetAllUserResverations(Guid userId)
         {
             return _lotGateway.GetAllUserReservations(userId);

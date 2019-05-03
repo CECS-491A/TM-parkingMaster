@@ -49,5 +49,23 @@ namespace ParkingMaster.Manager.Controllers
                 return Content(statusResponse.Data, statusResponse.Error);
             }
         }
+
+        [HttpPost]
+        [Route("api/reservation/extend")] // api/user/lot
+        public IHttpActionResult ExtendUserReservation([FromBody, Required] ReservationRequestDTO request)
+        {
+            ReservationManager _reservationManager = new ReservationManager();
+            ResponseDTO<UserSpotDTO> response = _reservationManager.ExtendUserReservation(request);
+
+            if (response.Data != null)
+            {
+                return Ok(response.Data);
+            }
+            else
+            {
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
+            }
+        }
     }
 }

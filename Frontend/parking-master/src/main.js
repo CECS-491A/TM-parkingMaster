@@ -30,6 +30,7 @@ import Vuetify, {
   VMenu,
   VListTile,
   VListTileTitle,
+  VListTileContent,
   VToolbarSideIcon,
   VIcon
 } from 'vuetify/lib'
@@ -65,6 +66,7 @@ Vue.use(Vuetify, {
     VMenu,
     VListTile,
     VListTileTitle,
+    VListTileContent,
     VToolbarSideIcon,
     VIcon
   }
