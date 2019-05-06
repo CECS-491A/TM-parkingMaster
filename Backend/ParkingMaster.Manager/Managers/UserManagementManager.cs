@@ -102,6 +102,13 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
+            // Protect against replay attacks by checking the timestamp
+            if (DateTimeOffset.Now.AddSeconds(5).ToUnixTimeMilliseconds() < request.Timestamp)
+            {
+                response.Data = (HttpStatusCode)425;
+                response.Error = ErrorStrings.OLD_SSO_REQUEST;
+                return response;
+            }
 
             // Check if request id is in guid format
             Guid ssoId;
@@ -265,6 +272,14 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = (HttpStatusCode)400;
                 response.Error = "Signature not valid";
+                return response;
+            }
+
+            // Protect against replay attacks by checking the timestamp
+            if (DateTimeOffset.Now.AddSeconds(5).ToUnixTimeMilliseconds() < request.Timestamp)
+            {
+                response.Data = (HttpStatusCode)425;
+                response.Error = ErrorStrings.OLD_SSO_REQUEST;
                 return response;
             }
 

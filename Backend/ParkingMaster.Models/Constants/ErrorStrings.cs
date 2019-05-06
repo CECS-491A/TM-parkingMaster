@@ -15,5 +15,6 @@ namespace ParkingMaster.Models.Constants
         public const string REQUEST_FORMAT = "Invalid request format.";
         public const string FAILED_CONNECTION_CHECK = "Database connection check failed.";
         public const string DATA_ACCESS_ERROR = "Error when interacting with the data store.";
+        public const string OLD_SSO_REQUEST = "Timestamp on request is too old to be processed.";
     }
 }

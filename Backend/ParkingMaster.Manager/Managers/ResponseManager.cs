@@ -43,6 +43,15 @@ namespace ParkingMaster.Manager.Managers
                 };
             }
 
+            if (error == ErrorStrings.OLD_SSO_REQUEST)
+            {
+                return new ResponseDTO<HttpStatusCode>()
+                {
+                    Data = (HttpStatusCode)425,
+                    Error = "Request timestamp is too old."
+                };
+            }
+
             // Default to Bad Request
             return new ResponseDTO<HttpStatusCode>()
             {
