@@ -3,6 +3,7 @@
      <form class="form-reservation">
       <h2 class="form-reservation-heading">Reservations: {{ lotName }}</h2>
       <h3 class="form-reservation-address">Address: {{ lotAddress }}</h3>
+      <img :src="map">
       <v-form ref="form">
 
         <v-select v-model="selectedSpot"
@@ -129,7 +130,10 @@ export default {
         SessionId: sessionStorage.getItem('ParkingMasterToken'),
         LotId: this.lotId
       })
-      .then(response => (this.spots = response.data))
+      .then(function (response) {
+        this.spots = response.data.SpotsList
+        this.map = 'data:image/png;base64,' + response.data.LotMap
+      }.bind(this))
     await axios
       .post(apiCalls.GET_ALL_USER_VEHICLES, {
         Token: sessionStorage.getItem('ParkingMasterToken')

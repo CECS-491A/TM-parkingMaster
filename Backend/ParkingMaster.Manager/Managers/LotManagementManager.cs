@@ -6,6 +6,7 @@ using ParkingMaster.Models.Models;
 using ParkingMaster.Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -225,7 +226,7 @@ namespace ParkingMaster.Manager.Managers
 
         }
 
-        public ResponseDTO<List<Spot>> GetAllSpotsByLot(ReservationRequestDTO request)
+        public ResponseDTO<LotResponseDTO> GetAllSpotsByLot(ReservationRequestDTO request)
         {
             // Check if sessionId is in Guid Format
             Guid sessionId;
@@ -235,7 +236,7 @@ namespace ParkingMaster.Manager.Managers
             }
             catch (Exception)
             {
-                return new ResponseDTO<List<Spot>>()
+                return new ResponseDTO<LotResponseDTO>()
                 {
                     Data = null,
                     Error = "tokenString not a valid Guid"
@@ -247,11 +248,10 @@ namespace ParkingMaster.Manager.Managers
             // If session data is null, then an error occured
             if (sessionDTO.Data == null)
             {
-                return new ResponseDTO<List<Spot>>()
+                return new ResponseDTO<LotResponseDTO>()
                 {
                     Data = null,
                     Error = sessionDTO.Error
-
                 };
             }
 
@@ -263,14 +263,67 @@ namespace ParkingMaster.Manager.Managers
             }
             catch (Exception)
             {
-                return new ResponseDTO<List<Spot>>()
+                return new ResponseDTO<LotResponseDTO>()
                 {
                     Data = null,
                     Error = "OwnerId not in proper Guid format."
                 };
             }
 
-            return _lotManagementService.GetAllSpotsByLot(lotId);
+            // Get parking lot information for reading the parking lot map
+            ResponseDTO<Lot> lotResponse = _lotManagementService.GetLotByLotId(lotId);
+            if(lotResponse.Data == null)
+            {
+                return new ResponseDTO<LotResponseDTO>()
+                {
+                    Data = null,
+                    Error = lotResponse.Error
+                };
+            }
+
+            ResponseDTO<Image> lotMap = _lotManagementService.GetLotImage(lotResponse.Data.MapFilePath);
+
+            if (lotMap.Data == null)
+            {
+                return new ResponseDTO<LotResponseDTO>()
+                {
+                    Data = null,
+                    Error = lotMap.Error
+                };
+            }
+
+            // Convert image to a byte array
+            byte[] mapBytes;
+            using (var ms = new MemoryStream())
+            {
+                lotMap.Data.Save(ms, lotMap.Data.RawFormat);
+                mapBytes =  ms.ToArray();
+            }
+
+            // Get the list of parking spots
+            ResponseDTO<List<Spot>> spotsList = _lotManagementService.GetAllSpotsByLot(lotId);
+
+            if (spotsList.Data == null)
+            {
+                return new ResponseDTO<LotResponseDTO>()
+                {
+                    Data = null,
+                    Error = spotsList.Error
+                };
+            }
+
+            // Set up data to be returned
+            LotResponseDTO lotResponseDTO = new LotResponseDTO()
+            {
+                SpotsList = spotsList.Data,
+                LotMap = mapBytes
+            };
+
+            return new ResponseDTO<LotResponseDTO>()
+            {
+                Data = lotResponseDTO
+            };
+
         }
 
     }

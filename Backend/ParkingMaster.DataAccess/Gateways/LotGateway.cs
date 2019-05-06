@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.IO;
+using System.Drawing;
+using ParkingMaster.Models.Constants;
 
 namespace ParkingMaster.DataAccess
 {
@@ -119,6 +121,28 @@ namespace ParkingMaster.DataAccess
             }
         }
 
+        public ResponseDTO<Image> GetMapFile(string mapfilepath) // DTO ?
+        {
+            try
+            {
+                string filepath = "C:\\MapFiles\\" + mapfilepath + ".png";
+                Image readImage = Image.FromFile(filepath);
+                return new ResponseDTO<Image>()
+                {
+                    Data = readImage
+                };
+
+            }
+            catch (HttpException e)
+            {
+                return new ResponseDTO<Image>()
+                {
+                    Data = null,
+                    Error = e.ToString()
+                };
+            }
+        }
+
         public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
@@ -222,6 +246,43 @@ namespace ParkingMaster.DataAccess
                     {
                         Data = null,
                         Error = "[DATA ACCESS] Could not fetch lot."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<Lot> GetLotByLotId(Guid lotId)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var returnlot = (from lot in context.Lots
+                                     where lot.LotId == lotId
+                                     select lot).FirstOrDefault();
+
+                    if(returnlot == null)
+                    {
+                        return new ResponseDTO<Lot>()
+                        {
+                            Data = returnlot,
+                            Error = ErrorStrings.LOT_NOT_FOUND
+                        };
+                    }
+
+                    return new ResponseDTO<Lot>()
+                    {
+                        Data = returnlot
+                    };
+                }
+                catch (Exception)
+                {
+                    //dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<Lot>()
+                    {
+                        Data = null,
+                        Error = ErrorStrings.DATA_ACCESS_ERROR
                     };
                 }
             }

@@ -214,7 +214,7 @@ namespace ParkingMaster.Manager.Controllers
             {
                 LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
 
-                ResponseDTO<List<Spot>> response = lotManagementManager.GetAllSpotsByLot(request);
+                ResponseDTO<LotResponseDTO> response = lotManagementManager.GetAllSpotsByLot(request);
 
                 if (response.Data != null)
                 {

@@ -9,6 +9,7 @@ using ParkingMaster.DataAccess;
 using ParkingMaster.DataAccess.Gateways;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
+using System.Drawing;
 
 namespace ParkingMaster.Services.Services
 {
@@ -106,6 +107,11 @@ namespace ParkingMaster.Services.Services
             }
         }
 
+        public ResponseDTO<Lot> GetLotByLotId(Guid lotId)
+        {
+            return _lotGateway.GetLotByLotId(lotId);
+        }
+
         public List<Spot> ParseSpotsFromFile(Guid lotid, string lotname, HttpPostedFile file)
         {
             List<Spot> response = new List<Spot>();
@@ -140,6 +146,11 @@ namespace ParkingMaster.Services.Services
             {
                 throw e;
             }
+        }
+
+        public ResponseDTO<Image> GetLotImage(string imagepath)
+        {
+            return _lotGateway.GetMapFile(imagepath);
         }
 
         public ResponseDTO<List<Lot>> GetAllLots()
