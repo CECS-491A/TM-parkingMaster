@@ -14,42 +14,86 @@ namespace ParkingMaster.Manager.Managers
 {
     public class LotManagementManager
     {
-        private ILotManagementService _lotManagementService;
-        private readonly LotGateway _lotGateway;
-        private readonly UserGateway _userGateway;
+        private readonly LotManagementService _lotManagementService;
         private readonly SessionService _sessionServices;
+        UserContext _dbcontext;
 
         public LotManagementManager()
         {
-            _lotGateway = new LotGateway();
-            _userGateway = new UserGateway();
-            _lotManagementService = new LotManagementService(_lotGateway, _userGateway);
+            _lotManagementService = new LotManagementService();
             _sessionServices = new SessionService();
         }
 
-        public ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
+        public LotManagementManager(UserContext context)
         {
+            _dbcontext = context;
+            _lotManagementService = new LotManagementService(_dbcontext);
+            _sessionServices = new SessionService();
+        }
+
+        public ResponseDTO<Boolean> AddLot(HttpRequest httprequest)//(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
+        {
+            //ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(httpRequest["token"]);
             try
             {
-                ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, file);
-                return response;
+                var token = httprequest["token"];
+                ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
+                if (SessionDTO.Data != null)
+                {
+                    var ownerid = SessionDTO.Data.UserAccount.Id;
+
+                    String[] arr = httprequest.Form.AllKeys;
+                    
+                    //var username = httprequest["username"];
+                    var lotname = httprequest["lotname"];
+                    var address = httprequest["address"];
+                    var cost = Double.Parse(httprequest["cost"]);
+                    var useraccount = SessionDTO.Data.UserAccount;
+                    var spotfile = httprequest.Files["file"];
+                    var mapfile = httprequest.Files["map"];
+                    ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, useraccount, spotfile, mapfile);
+                    return response;
+                }
+                else
+                {
+                    return new ResponseDTO<Boolean>()
+                    {
+                        Data = false,
+                        Error = "[SESSION SERVICE] Invalid session."
+                    };
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return new ResponseDTO<Boolean>()
                 {
                     Data = false,
-                    Error = "[LOT MANAGEMENT MANAGER] Could not add lot."
+                    Error = httprequest.Form + e.ToString()
                 };
             }
         }
 
-        public ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<Boolean> DeleteLot(HttpRequest httprequest)
         {
             try
             {
-                ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
-                return response;
+                var token = httprequest["token"];
+                ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
+                if (SessionDTO.Data != null)
+                {
+                    var ownerid = SessionDTO.Data.UserAccount.Id;
+                    var lotname = httprequest["lotname"];
+                    ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
+                    return response;
+                }
+                else
+                {
+                    return new ResponseDTO<Boolean>()
+                    {
+                        Data = false,
+                        Error = "[SESSION SERVICE] Invalid session."
+                    };
+                }
             }
             catch (Exception)
             {
@@ -115,19 +159,33 @@ namespace ParkingMaster.Manager.Managers
             return _lotManagementService.GetAllLots();
         }
 
-        public ResponseDTO<List<Lot>> GetAllLotsByOwner(Guid ownerid)
+        public ResponseDTO<List<Lot>> GetAllLotsByOwner(HttpRequest httprequest)
         {
-            try
+            var token = httprequest["token"];
+            ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
+            if (SessionDTO.Data != null)
             {
-                ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
-                return response;
+                try
+                {
+                    var ownerid = SessionDTO.Data.UserAccount.Id;
+                    ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
+                    return response;
+                }
+                catch (Exception)
+                {
+                    return new ResponseDTO<List<Lot>>()
+                    {
+                        Data = null,
+                        Error = "[LOT MANAGEMENT MANAGER] Could not get lots."
+                    };
+                }
             }
-            catch (Exception)
+            else
             {
                 return new ResponseDTO<List<Lot>>()
                 {
                     Data = null,
-                    Error = "[LOT MANAGEMENT MANAGER] Could not get lots."
+                    Error = "[SESSION SERVICE] Invalid session."
                 };
             }
         }

@@ -3,6 +3,7 @@ const SSO_BASE_URL = 'http://localhost:61348'
 const SSO_FRONTEND_URL = 'http://localhost:61348'
 const HELLO_WORLD = PARKINGMASTER_BASE_URL + '/api/testing'
 const LOT_REGISTRATION = PARKINGMASTER_BASE_URL + '/api/lot/register'
+const LOT_DELETION = PARKINGMASTER_BASE_URL + 'api/lot/delete'
 const VEHICLE_REGISTRATION = PARKINGMASTER_BASE_URL + '/api/vehicle/register'
 const SESSION_CHECK = PARKINGMASTER_BASE_URL + '/api/user/session'
 const SSO_LOGIN = SSO_BASE_URL + '/api/users/login'
@@ -20,6 +21,7 @@ export default {
   BASE_URL: PARKINGMASTER_BASE_URL,
   HELLO_WORLD: HELLO_WORLD,
   LOT_REGISTRATION,
+  LOT_DELETION,
   VEHICLE_REGISTRATION,
   SSO_LOGIN,
   SESSION_CHECK,

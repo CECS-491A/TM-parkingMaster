@@ -7,7 +7,7 @@ namespace ParkingMaster.DataAccess
 	{
         public UserContext()
         {
-            this.Database.Connection.ConnectionString = "Data Source=localhost;Initial Catalog=ParkingMaster;Integrated Security=True";
+            this.Database.Connection.ConnectionString = "Data Source=localhost;Initial Catalog=ParkingMasterLocal;Integrated Security=True";
         }
 
 		    public DbSet<UserAccount> UserAccounts { get; set; }

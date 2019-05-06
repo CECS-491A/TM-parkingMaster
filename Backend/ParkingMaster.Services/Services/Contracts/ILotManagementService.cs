@@ -12,7 +12,7 @@ namespace ParkingMaster.Services.Services
 {
     public interface ILotManagementService
     {
-        ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file);
+        ResponseDTO<Boolean> AddLot(Guid ownerid, string lotname, string address, double cost, UserAccount useraccount, HttpPostedFile spotfile, HttpPostedFile mapfile);
         ResponseDTO<Boolean> DeleteLot(Guid ownerid, string lotname);
         //ResponseDTO<Boolean> EditLotSpots(Guid ownerid, string lotname, FileInfo file);
         //ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname);

@@ -9,10 +9,10 @@
         <!-- <v-text-field label="Spot File" @click='pickFile' v-model="spotfile" prepend-icon='attach_file'></v-text-field> -->
         <!-- <v-text-field label="Map" @click='pickFile' v-model="map" prepend-icon='attach_file'></v-text-field> -->
         <label> Spot File
-          <input type="file" id="spotfile" ref="spotfile" v-on:change="csvHandler()"/>
+          <input type="file" id="spotfile" ref="spotfile" accept=".txt,.csv" v-on:change="csvHandler()"/>
         </label>
         <label> Lot Map
-          <input type="file" id="spotmap" ref="spotmap" v-on:change="imageHandler()"/>
+          <input type="file" id="spotmap" ref="spotmap" accept="image/*" v-on:change="imageHandler()"/>
         </label>
         <v-btn depressed color="blue" v-on:click="submitlot" type="submit">Submit Lot</v-btn>
       </v-form>
@@ -30,7 +30,10 @@ export default {
   data () {
     return {
       file: '',
-      map: ''
+      map: '',
+      lotname: '',
+      address: '',
+      cost: ''
     }
   },
   methods: {
@@ -41,9 +44,9 @@ export default {
       let role = sessionStorage.getItem('ParkingMasterRole')
       formData.append('file', this.file)
       formData.append('map', this.map)
-      formData.append('lotname', document.getElementById('lotname'))
-      formData.append('address', document.getElementById('address'))
-      formData.append('cost', document.getElementById('cost'))
+      formData.append('lotname', document.getElementById('lotname').value)
+      formData.append('address', document.getElementById('address').value)
+      formData.append('cost', document.getElementById('cost').value)
       formData.append('token', token)
       formData.append('username', username)
       formData.append('role', role)
@@ -78,3 +81,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .form-lot-registration {
+    max-width: 330px;
+    margin: 0 auto;
+  }
+</style>

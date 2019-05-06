@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.IO;
 
 namespace ParkingMaster.DataAccess
 {
     public class LotGateway : IDisposable
     {
-        UserContext context; // used to be LotContext
+        UserContext context;
 
         public LotGateway()
         {
@@ -29,9 +31,45 @@ namespace ParkingMaster.DataAccess
             {
                 try
                 {
+                    // check for dupe names
                     context.Lots.Add(lot);
+ 
+                    /*
+                    foreach (Spot spot in spotList) // apparently if a lot is added the spots are automatically added???
+                    {
+                        context.Spots.Add(spot);
+                    }*/
 
-                    foreach (Spot spot in spotList)
+                    context.SaveChanges();
+
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception e)
+                {
+                    dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = e.ToString() + "[DATA ACCESS] Failed to add lot to data store."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<bool> AddSpots(List<Spot> spotlist) // testing
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    foreach (Spot spot in spotlist)
                     {
                         context.Spots.Add(spot);
                     }
@@ -45,16 +83,40 @@ namespace ParkingMaster.DataAccess
                         Data = true
                     };
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     dbContextTransaction.Rollback();
 
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "[DATA ACCESS] Failed to add lot to data store."
+                        Error = e.ToString() + "[DATA ACCESS] Failed to add spots to data store."
                     };
                 }
+            }
+        }
+
+        public ResponseDTO<bool> AddMapFile(HttpPostedFile mapfile, string mapfilepath) // DTO ?
+        {
+            try
+            {
+                Directory.CreateDirectory(@"C:\\MapFiles\\"); // Will do nothing if Directory already exists
+                string extension = Path.GetExtension(mapfile.FileName);
+                string filepath = "C:\\MapFiles\\" + mapfilepath + extension;
+                mapfile.SaveAs(filepath);
+                return new ResponseDTO<bool>()
+                {
+                    Data = true
+                };
+
+            }
+            catch (HttpException e)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = e.ToString()
+                };
             }
         }
 
@@ -68,10 +130,15 @@ namespace ParkingMaster.DataAccess
                                where lot.OwnerId == ownerid &&
                                lot.LotName == lotname
                                select lot).FirstOrDefault();
+
+                    //and remove spots
                     context.Lots.Remove(deletelot);
                     context.SaveChanges();
-
+                    
                     dbContextTransaction.Commit();
+
+                    //string filepath = "C:\\MapFiles\\" + lot.MapFilePath;
+                    //File.Delete(filepath);
 
                     return new ResponseDTO<bool>()
                     {
