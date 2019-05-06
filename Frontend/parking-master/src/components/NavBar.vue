@@ -84,6 +84,7 @@ export default {
       this.authorized = true
     } else if (this.role === 'unassigned') {
       this.items = [this.home,
+        this.userDash,
         this.roleChoice]
       this.authorized = true
     } else {

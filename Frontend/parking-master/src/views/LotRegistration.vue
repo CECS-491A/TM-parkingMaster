@@ -64,7 +64,7 @@ export default {
           console.log('OK')
           this.file = ''
           this.map = ''
-        })
+        }.bind(this))
         .catch(e => {
           auth.invalidSession()
         })

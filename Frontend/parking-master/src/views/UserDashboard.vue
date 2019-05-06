@@ -3,13 +3,13 @@
     <v-btn class="error" v-on:click="ssoDelete">User Deletetion from SSO</v-btn>
     <br />
 
-    <h2>Current Reservations</h2>
-    <v-list>
+    <v-list v-if="role == 'standard'">
+      <h2>Current Reservations</h2>
       <v-list-tile
         v-for="(reservation, index) in reservations"
         :key="reservation.name"
         :id="'reservationTile'+index"
-        :class="{ 'even-reservation-tile' : index%2, 'odd-reservation-tile' : !index%2 }"
+        :class="{ 'even-reservation-tile' : index%2===0, 'odd-reservation-tile' : index%2===1 }"
       >
         <v-list-tile-title v-text="'Lot: ' + reservation.LotName + '  For spot: ' + reservation.SpotName + '    reservation ends at: ' + reservation.EndsAt.format('lll')"></v-list-tile-title>
         <v-list-tile-content>
@@ -45,7 +45,8 @@ export default {
     return {
       reservations: [],
       duration: [],
-      now: moment()
+      now: moment(),
+      role: ''
     }
   },
   methods: {
@@ -93,9 +94,10 @@ export default {
   },
   beforeMount () {
     auth.authorize('authorized', this.$router)
+    this.role = sessionStorage.getItem('ParkingMasterRole')
   },
   mounted () {
-    if (sessionStorage.getItem('ParkingMasterRole') === 'standard') {
+    if (this.role === 'standard') {
       axios
         .post(apiCalls.GET_ALL_RESERVATIONS, {
           Token: sessionStorage.getItem('ParkingMasterToken')

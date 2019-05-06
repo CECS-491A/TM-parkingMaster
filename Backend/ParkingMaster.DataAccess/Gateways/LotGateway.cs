@@ -34,11 +34,10 @@ namespace ParkingMaster.DataAccess
                     // check for dupe names
                     context.Lots.Add(lot);
  
-                    /*
-                    foreach (Spot spot in spotList) // apparently if a lot is added the spots are automatically added???
+                    foreach (Spot spot in spotList)
                     {
                         context.Spots.Add(spot);
-                    }*/
+                    }
 
                     context.SaveChanges();
 
