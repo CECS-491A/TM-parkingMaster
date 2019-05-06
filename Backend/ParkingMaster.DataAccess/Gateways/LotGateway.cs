@@ -101,7 +101,8 @@ namespace ParkingMaster.DataAccess
             try
             {
                 Directory.CreateDirectory(@"C:\\MapFiles\\"); // Will do nothing if Directory already exists
-                string filepath = "C:\\MapFiles\\" + mapfilepath;
+                string extension = Path.GetExtension(mapfile.FileName);
+                string filepath = "C:\\MapFiles\\" + mapfilepath + extension;
                 mapfile.SaveAs(filepath);
                 return new ResponseDTO<bool>()
                 {

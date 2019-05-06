@@ -21,7 +21,6 @@ namespace ParkingMaster.Manager.Controllers
         {
             using (var dbcontext = new UserContext())
             {
-                //LoginManager loginManager = new LoginManager();
                 //LotManagementManager lotManagementManager = new LotManagementManager();
                 LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
                 var httprequest = HttpContext.Current.Request;

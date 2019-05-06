@@ -16,14 +16,16 @@ namespace ParkingMaster.Services.Services
     {
         UserContext _dbcontext;
         private LotGateway _lotGateway;
-        //private UserGateway _userGateway;
+
+        public LotManagementService()
+        {
+            _lotGateway = new LotGateway();
+        }
 
         public LotManagementService(UserContext context)
         {
             _dbcontext = context;
             _lotGateway = new LotGateway(_dbcontext);
-            //_lotGateway = lotGateway;
-            //_userGateway = userGateway;
         }
 
         public ResponseDTO<bool> AddLot(Guid ownerid, string lotname, string address, double cost, UserAccount useraccount, HttpPostedFile spotfile, HttpPostedFile mapfile)
@@ -51,6 +53,14 @@ namespace ParkingMaster.Services.Services
                     }
                 }
                 return response;
+            }
+            catch (ArgumentException)
+            {
+                return new ResponseDTO<Boolean>()
+                {
+                    Data = false,
+                    Error = "[LOT MANAGEMENT SERVICE] Improperly formatted file."
+                };
             }
             catch (Exception)
             {
@@ -96,7 +106,7 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public List<Spot> ParseSpotsFromFile(Guid lotid, string lotname, HttpPostedFile file) // need to throw an exception here in case of formatting issues
+        public List<Spot> ParseSpotsFromFile(Guid lotid, string lotname, HttpPostedFile file)
         {
             List<Spot> response = new List<Spot>();
             try
@@ -121,6 +131,10 @@ namespace ParkingMaster.Services.Services
                     }
                 }
                 return response;
+            }
+            catch (ArgumentException e)
+            {
+                throw e;
             }
             catch (Exception e)
             {

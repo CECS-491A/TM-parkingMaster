@@ -15,18 +15,18 @@ namespace ParkingMaster.Manager.Managers
     public class LotManagementManager
     {
         private readonly LotManagementService _lotManagementService;
-        //private ISessionService _sessionService;
-        //private readonly LotGateway _lotGateway;
-        //private readonly UserGateway _userGateway;
         private readonly SessionService _sessionServices;
         UserContext _dbcontext;
+
+        public LotManagementManager()
+        {
+            _lotManagementService = new LotManagementService();
+            _sessionServices = new SessionService();
+        }
 
         public LotManagementManager(UserContext context)
         {
             _dbcontext = context;
-            //_lotGateway = new LotGateway();
-            //_userGateway = new UserGateway();
-            //_lotManagementService = new LotManagementService(_lotGateway, _userGateway);
             _lotManagementService = new LotManagementService(_dbcontext);
             _sessionServices = new SessionService();
         }
