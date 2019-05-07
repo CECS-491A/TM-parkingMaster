@@ -1,6 +1,7 @@
 //using ParkingMaster.DataAccess.Context;
 using ParkingMaster.DataAccess;
 using ParkingMaster.DataAccess.Gateways;
+using ParkingMaster.Models.Constants;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Services.Services;
@@ -60,7 +61,7 @@ namespace ParkingMaster.Manager.Managers
                     return new ResponseDTO<Boolean>()
                     {
                         Data = false,
-                        Error = "[SESSION SERVICE] Invalid session."
+                        Error = ErrorStrings.SESSION_EXPIRED
                     };
                 }
             }

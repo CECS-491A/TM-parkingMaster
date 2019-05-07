@@ -97,13 +97,13 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<bool> AddMapFile(HttpPostedFile mapfile, string mapfilepath) // DTO ?
+        public ResponseDTO<bool> AddMapFile(HttpPostedFile mapfile, string mapfilepath)
         {
             try
             {
                 Directory.CreateDirectory(@"C:\\MapFiles\\"); // Will do nothing if Directory already exists
-                string extension = Path.GetExtension(mapfile.FileName);
-                string filepath = "C:\\MapFiles\\" + mapfilepath + extension;
+                //string extension = Path.GetExtension(mapfile.FileName);
+                string filepath = "C:\\MapFiles\\" + mapfilepath;
                 mapfile.SaveAs(filepath);
                 return new ResponseDTO<bool>()
                 {
@@ -121,11 +121,11 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<Image> GetMapFile(string mapfilepath) // DTO ?
+        public ResponseDTO<Image> GetMapFile(string mapfilepath)
         {
             try
             {
-                string filepath = "C:\\MapFiles\\" + mapfilepath + ".png";
+                string filepath = "C:\\MapFiles\\" + mapfilepath;
                 Image readImage = Image.FromFile(filepath);
                 return new ResponseDTO<Image>()
                 {
