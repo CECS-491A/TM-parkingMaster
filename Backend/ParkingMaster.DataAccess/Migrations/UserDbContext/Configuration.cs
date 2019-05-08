@@ -153,6 +153,8 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             functionGateway.StoreFunction(new Function("Client1Action", true));
             functionGateway.StoreFunction(new Function("Client2Action", true));
 
+            functionGateway.StoreFunction(new Function("SetRole", true));
+
             var sessionGateway = new SessionGateway(context);
             sessionGateway.ResetDatabase();
 

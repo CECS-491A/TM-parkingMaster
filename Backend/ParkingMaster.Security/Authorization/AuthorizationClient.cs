@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ParkingMaster.Security.Authorization.Contracts;
 using ParkingMaster.DataAccess;
 using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Constants;
 
 namespace ParkingMaster.Security.Authorization
 {
@@ -57,14 +58,11 @@ namespace ParkingMaster.Security.Authorization
             if(claimResponse == null)
             {
                 response.Data = false;
-                response.Error = "Failed to read claims of user: " + username;
+                response.Error = claimResponse.Error;
                 return response;
             }
             // place user claims in a new object for better code readability
-            else
-            {
-                userClaims = claimResponse.Data;
-            }
+            userClaims = claimResponse.Data;
 
             // Check if user has a parent claim
             // The existance of a parent claim indicates that the current user authorization depends on the parent user
@@ -91,14 +89,17 @@ namespace ParkingMaster.Security.Authorization
 
             // Check if user has all claims to use the function
             foreach(ClaimDTO claim in functionClaims)
-            if (userClaims.Contains(claim))
             {
-                response.Data = true;
-                return response;
+                if (!userClaims.Contains(claim))
+                {
+                    response.Data = false;
+                    response.Error = ErrorStrings.UNAUTHORIZED_ACTION;
+                    return response;
+                }
             }
 
-            // Default to an unauthorized user
-            response.Data = false;
+            // If the function reaches the end, the user is authorized
+            response.Data = true;
             return response;
         }
 
@@ -119,7 +120,7 @@ namespace ParkingMaster.Security.Authorization
             if (functionName == "N/A")
             {
                 response.Data = false;
-                response.Error = "Function Claims did not include an Action claim indicating the name of the function.";
+                response.Error = ErrorStrings.NO_FUNCTION_TO_AUTHORIZE;
                 return response;
             }
 
