@@ -66,7 +66,7 @@ export default {
           this.map = ''
         }.bind(this))
         .catch(e => {
-          auth.invalidSession()
+          auth.invalidSession(this.$router)
         })
     },
     csvHandler () {

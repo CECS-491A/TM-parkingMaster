@@ -3,7 +3,11 @@
      <form class="form-reservation">
       <h2 class="form-reservation-heading">Reservations: {{ lotName }}</h2>
       <h3 class="form-reservation-address">Address: {{ lotAddress }}</h3>
-      <img :src="map">
+    </form>
+    <div class="map-container">
+      <img class="parking-lot-map-image" :src="map">
+    </div>
+    <form class="form-reservation">
       <v-form ref="form">
 
         <v-select v-model="selectedSpot"
@@ -153,6 +157,7 @@ export default {
 .form-reservation {
   max-width: 350px;
   margin: 0 auto;
+
 }
 .button-reservation {
   width: 350px;
@@ -162,5 +167,12 @@ export default {
   width: 400px;
   margin: 0 auto;
 }
-
+.parking-lot-map-image {
+  max-width: 100%;
+  max-height: auto;
+}
+.map-container {
+  width: 600px;
+  margin: 0 auto;
+}
 </style>
