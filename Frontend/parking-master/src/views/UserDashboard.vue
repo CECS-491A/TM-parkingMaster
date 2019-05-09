@@ -57,7 +57,7 @@ export default {
         })
         .then(resp => {
           alert('Account has been deleted from SSO and its applications!')
-          window.location = 'http://localhost:8081/#/landing'
+          window.location = apiCalls.SSO_LANDING
         })
         .catch(e => {
           alert('Delete failed')

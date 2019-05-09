@@ -121,7 +121,7 @@
       <Name>ParkingMaster.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\ParkingMaster.Security\ParkingMaster.Security.csproj">
-      <Project>{2442720E-0E32-42A5-A141-67FE8A05FCB0}</Project>
+      <Project>{2442720e-0e32-42a5-a141-67fe8a05fcb0}</Project>
       <Name>ParkingMaster.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\ParkingMaster.Services\ParkingMaster.Services.csproj">

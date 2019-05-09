@@ -133,12 +133,21 @@ namespace ParkingMaster.DataAccess
                 };
 
             }
-            catch (HttpException e)
+            catch (FileNotFoundException e)
+            {
+                string filepath = "C:\\MapFiles\\Default.png";
+                Image readImage = Image.FromFile(filepath);
+                return new ResponseDTO<Image>()
+                {
+                    Data = readImage
+                };
+            }
+            catch (Exception e)
             {
                 return new ResponseDTO<Image>()
                 {
                     Data = null,
-                    Error = e.ToString()
+                    Error = ErrorStrings.DATA_ACCESS_ERROR
                 };
             }
         }

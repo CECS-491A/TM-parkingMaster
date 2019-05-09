@@ -56,7 +56,7 @@ export default {
         })
         .catch(e => {
           console.log(e)
-          this.error = 'Failed to reserve parking spot.'
+          this.error = 'Failed to set your account type.'
           this.errorOn = true
           if (e.response.status === 401) {
             auth.invalidSession(this.$router)

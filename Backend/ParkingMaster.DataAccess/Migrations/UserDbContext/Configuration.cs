@@ -155,6 +155,8 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             functionGateway.StoreFunction(new Function("AddParkingLot", true));
             functionGateway.StoreFunction(new Function("DeleteParkingLot", true));
 
+            functionGateway.StoreFunction(new Function("SetRole", true));
+
             var sessionGateway = new SessionGateway(context);
             sessionGateway.ResetDatabase();
 

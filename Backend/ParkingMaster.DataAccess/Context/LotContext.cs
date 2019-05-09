@@ -12,7 +12,7 @@ namespace ParkingMaster.DataAccess.Context // SUPERFLUOUS - DELETE
     {
         public LotContext()
         {
-            this.Database.Connection.ConnectionString = "Data Source=localhost;Initial Catalog=ParkingMaster;Integrated Security=True";
+            this.Database.Connection.ConnectionString = "Data Source=localhost;Initial Catalog=ParkingMasterLocal;Integrated Security=True";
         }
 
         public DbSet<Lot> Lots { get; set; }
