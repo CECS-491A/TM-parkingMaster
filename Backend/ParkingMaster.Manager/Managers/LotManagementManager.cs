@@ -4,6 +4,7 @@ using ParkingMaster.DataAccess.Gateways;
 using ParkingMaster.Models.Constants;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Security.Authorization;
 using ParkingMaster.Services.Services;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace ParkingMaster.Manager.Managers
             _sessionServices = new SessionService();
         }
 
-        public ResponseDTO<Boolean> AddLot(HttpRequest httprequest)//(Guid ownerid, string lotname, string address, double cost, HttpPostedFile file)
+        public ResponseDTO<Boolean> AddLot(HttpRequest httprequest)
         {
             //ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(httpRequest["token"]);
             try
@@ -42,26 +43,43 @@ namespace ParkingMaster.Manager.Managers
                 ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
                 if (SessionDTO.Data != null)
                 {
-                    var ownerid = SessionDTO.Data.UserAccount.Id;
+                    AuthorizationClient authorizationClient = new AuthorizationClient();
+                    List<ClaimDTO> functionClaims = new List<ClaimDTO>()
+                    {
+                        new ClaimDTO(new Claim("Action", "AddParkingLot"))
+                    };
+                    var username = httprequest["username"]; 
+                    ResponseDTO<Boolean> authCheck = authorizationClient.Authorize(username, functionClaims);
 
-                    String[] arr = httprequest.Form.AllKeys;
-                    
-                    //var username = httprequest["username"];
-                    var lotname = httprequest["lotname"];
-                    var address = httprequest["address"];
-                    var cost = Double.Parse(httprequest["cost"]);
-                    var useraccount = SessionDTO.Data.UserAccount;
-                    var spotfile = httprequest.Files["file"];
-                    var mapfile = httprequest.Files["map"];
-                    ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, useraccount, spotfile, mapfile);
-                    return response;
+                    if (authCheck.Data == true)
+                    {
+                        //String[] arr = httprequest.Form.AllKeys;
+                        var ownerid = SessionDTO.Data.UserAccount.Id;
+                        var lotname = httprequest["lotname"];
+                        var address = httprequest["address"];
+                        var cost = Double.Parse(httprequest["cost"]);
+                        var useraccount = SessionDTO.Data.UserAccount;
+                        var spotfile = httprequest.Files["file"];
+                        var mapfile = httprequest.Files["map"];
+                        ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, useraccount, spotfile, mapfile);
+                        return response;
+                    }
+                    else
+                    {
+                        return new ResponseDTO<Boolean>()
+                        {
+                            Data = false,
+                            Error = ErrorStrings.UNAUTHORIZED_ACTION
+                        };
+                    }
+
                 }
                 else
                 {
                     return new ResponseDTO<Boolean>()
                     {
                         Data = false,
-                        Error = ErrorStrings.SESSION_EXPIRED
+                        Error = ErrorStrings.SESSION_NOT_FOUND
                     };
                 }
             }
@@ -83,26 +101,44 @@ namespace ParkingMaster.Manager.Managers
                 ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
                 if (SessionDTO.Data != null)
                 {
-                    var ownerid = SessionDTO.Data.UserAccount.Id;
-                    var lotname = httprequest["lotname"];
-                    ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
-                    return response;
+                    AuthorizationClient authorizationClient = new AuthorizationClient();
+                    List<ClaimDTO> functionClaims = new List<ClaimDTO>()
+                    {
+                        new ClaimDTO(new Claim("Action", "DeleteParkingLot"))
+                    };
+                    var username = httprequest["username"];
+                    ResponseDTO<Boolean> authCheck = authorizationClient.Authorize(username, functionClaims);
+                    if (authCheck.Data == true)
+                    {
+                        var ownerid = SessionDTO.Data.UserAccount.Id;
+                        var lotname = httprequest["lotname"];
+                        ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
+                        return response;
+                    }
+                    else
+                    {
+                        return new ResponseDTO<Boolean>()
+                        {
+                            Data = false,
+                            Error = ErrorStrings.UNAUTHORIZED_ACTION
+                        };
+                    }
                 }
                 else
                 {
                     return new ResponseDTO<Boolean>()
                     {
                         Data = false,
-                        Error = "[SESSION SERVICE] Invalid session."
+                        Error = ErrorStrings.SESSION_EXPIRED
                     };
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return new ResponseDTO<Boolean>()
                 {
                     Data = false,
-                    Error = "[LOT MANAGEMENT MANAGER] Could not delete lot."
+                    Error = "[LOT MANAGEMENT MANAGER] Could not delete lot. " + e.ToString()
                 };
             }
         }
@@ -163,31 +199,32 @@ namespace ParkingMaster.Manager.Managers
 
         public ResponseDTO<List<Lot>> GetAllLotsByOwner(HttpRequest httprequest)
         {
-            var token = httprequest["token"];
-            ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
-            if (SessionDTO.Data != null)
+            try
             {
-                try
+
+                var token = httprequest["token"];
+                ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
+                if (SessionDTO.Data != null)
                 {
                     var ownerid = SessionDTO.Data.UserAccount.Id;
                     ResponseDTO<List<Lot>> response = _lotManagementService.GetAllLotsByOwner(ownerid);
                     return response;
                 }
-                catch (Exception)
+                else
                 {
                     return new ResponseDTO<List<Lot>>()
                     {
                         Data = null,
-                        Error = "[LOT MANAGEMENT MANAGER] Could not get lots."
+                        Error = SessionDTO.Error
                     };
                 }
             }
-            else
+            catch (Exception e)
             {
                 return new ResponseDTO<List<Lot>>()
                 {
                     Data = null,
-                    Error = "[SESSION SERVICE] Invalid session."
+                    Error = "[LOT MANAGEMENT MANAGER] Could not fetch lots. " + e.ToString()
                 };
             }
         }

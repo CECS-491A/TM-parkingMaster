@@ -154,13 +154,15 @@ namespace ParkingMaster.DataAccess
                                lot.LotName == lotname
                                select lot).FirstOrDefault();
 
-                    //and remove spots
+                    // Spots should be removed by cascading delete
+
                     context.Lots.Remove(deletelot);
                     context.SaveChanges();
                     
                     dbContextTransaction.Commit();
 
-                    //string filepath = "C:\\MapFiles\\" + lot.MapFilePath;
+                    //
+                    //string filepath = "C:\\MapFiles\\" + deletelot.MapFilePath;
                     //File.Delete(filepath);
 
                     return new ResponseDTO<bool>()

@@ -17,7 +17,7 @@ namespace ParkingMaster.Manager.Controllers
     {
         [HttpPut]
         [Route("api/lot/register")]
-        public IHttpActionResult CreateLot() // [FromBody, Required] ParkingMasterFrontendDTO request
+        public IHttpActionResult CreateLot()
         {
             using (var dbcontext = new UserContext())
             {
@@ -47,36 +47,8 @@ namespace ParkingMaster.Manager.Controllers
 
         }
 
-        [HttpGet]
-        [Route("api/lot/delete")]
-        public IHttpActionResult ShowAllLotsToDelete([FromBody, Required] ParkingMasterFrontendDTO request)
-        {
-            using (var dbcontext = new UserContext())
-            {
-                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
-                var httprequest = HttpContext.Current.Request;
-
-                try
-                {
-                    ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(httprequest);
-                    if (response.Data != null)
-                    {
-                        return Ok(response.Data);
-                    }
-                    else
-                    {
-                        return Content((HttpStatusCode)404, response.Error);
-                    }
-                }
-                catch (Exception e)
-                {
-                    return Content((HttpStatusCode)400, e.Message);
-                }
-            }
-        }
-
         [HttpDelete]
-        [Route("api/lot/delete")] // api/user/lot/delete
+        [Route("api/lot/delete")]
         public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             using (var dbcontext = new UserContext())
@@ -93,7 +65,8 @@ namespace ParkingMaster.Manager.Controllers
                     }
                     else
                     {
-                        return Content((HttpStatusCode)404, response.Error);
+                        ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                        return Content(statusResponse.Data, statusResponse.Error);
                     }
                 }
                 catch (Exception e)
@@ -104,7 +77,7 @@ namespace ParkingMaster.Manager.Controllers
         }
 
         [HttpPost]
-        [Route("api/lotManagement/getAllLots")] // api/user/lot
+        [Route("api/lotManagement/getAllLots")]
         public IHttpActionResult GetAllLots([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             using (var dbcontext = new UserContext())
@@ -120,10 +93,40 @@ namespace ParkingMaster.Manager.Controllers
                 }
                 else
                 {
-                    return Content((HttpStatusCode)404, response.Error);
+                    ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                    return Content(statusResponse.Data, statusResponse.Error);
                 }
             }
             
+        }
+
+        [HttpPost]
+        [Route("api/lotManagement/getAllLotsByOwner")]
+        public IHttpActionResult GetAllLotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            using (var dbcontext = new UserContext())
+            {
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+                var httprequest = HttpContext.Current.Request;
+                //ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
+                try
+                {
+                    ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(httprequest);
+                    if (response.Data != null)
+                    {
+                        return Ok(response.Data);
+                    }
+                    else
+                    {
+                        ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                        return Content(statusResponse.Data, statusResponse.Error);
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Content((HttpStatusCode)400, e.Message);
+                }
+            }
         }
 
         [HttpPost]
@@ -143,7 +146,8 @@ namespace ParkingMaster.Manager.Controllers
                 }
                 else
                 {
-                    return Content((HttpStatusCode)404, response.Error);
+                    ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                    return Content(statusResponse.Data, statusResponse.Error);
                 }
             }
         }
