@@ -1,5 +1,6 @@
 ﻿using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Models.Constants;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
@@ -50,7 +51,8 @@ namespace ParkingMaster.DataAccess
 				return new ResponseDTO<UserAccountDTO>()
 				{
 					Data = null,
-				};
+                    Error =ErrorStrings.DATA_ACCESS_ERROR
+                };
 			}
 		}
         public ResponseDTO<UserAccountDTO> GetUserBySsoId(Guid id)
@@ -71,7 +73,8 @@ namespace ParkingMaster.DataAccess
             {
                 return new ResponseDTO<UserAccountDTO>()
                 {
-                    Data = null
+                    Data = null,
+                    Error = ErrorStrings.DATA_ACCESS_ERROR
                 };
             }
         }
@@ -94,7 +97,8 @@ namespace ParkingMaster.DataAccess
             {
                 return new ResponseDTO<UserAccountDTO>()
                 {
-                    Data = null
+                    Data = null,
+                    Error = ErrorStrings.DATA_ACCESS_ERROR
                 };
             }
         }
@@ -132,7 +136,8 @@ namespace ParkingMaster.DataAccess
 					return new ResponseDTO<bool>()
 					{
 						Data = false,
-					};
+                        Error = ErrorStrings.DATA_ACCESS_ERROR
+                    };
 				}
 			}
 		}
@@ -168,8 +173,9 @@ namespace ParkingMaster.DataAccess
 					return new ResponseDTO<bool>()
 					{
 						Data = false,
+                        Error = ErrorStrings.DATA_ACCESS_ERROR
 
-					};
+                    };
 				}
 			}
 		}
@@ -199,11 +205,12 @@ namespace ParkingMaster.DataAccess
 				{
 					dbContextTransaction.Rollback();
 
-					return new ResponseDTO<bool>()
-					{
-						Data = false,
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = ErrorStrings.DATA_ACCESS_ERROR
 
-					};
+                    };
 				}
 			}
 		}
@@ -258,11 +265,11 @@ namespace ParkingMaster.DataAccess
 				catch (Exception)
 				{
 					dbContextTransaction.Rollback();
-					return new ResponseDTO<bool>()
-					{
-						Data = false,
-
-					};
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = ErrorStrings.DATA_ACCESS_ERROR
+                    };
 				};
 			}
 		}
@@ -280,7 +287,7 @@ namespace ParkingMaster.DataAccess
             catch
             {
                 response.Data = null;
-                response.Error = "Failed to read UserAccount table";
+                response.Error = ErrorStrings.DATA_ACCESS_ERROR;
                 return response;
             }
         }
@@ -302,7 +309,7 @@ namespace ParkingMaster.DataAccess
                 if(userAccount == null)
                 {
                     response.Data = null;
-                    response.Error = "Username is not in the database.";
+                    response.Error = ErrorStrings.USER_NOT_FOUND;
                     return response;
                 }
 
@@ -321,7 +328,7 @@ namespace ParkingMaster.DataAccess
             catch
             {
                 response.Data = null;
-                response.Error = "Failed to read UserAccount table";
+                response.Error = ErrorStrings.DATA_ACCESS_ERROR;
                 return response;
             }
 
@@ -352,7 +359,7 @@ namespace ParkingMaster.DataAccess
             catch
             {
                 response.Data = null;
-                response.Error = "Failed to read UserAccount table";
+                response.Error = ErrorStrings.DATA_ACCESS_ERROR;
                 return response;
             }
 
@@ -383,7 +390,7 @@ namespace ParkingMaster.DataAccess
                 {
                     dbContextTransaction.Rollback();
                     response.Data = null;
-                    response.Error = "Failed to write to UserAccount table.";
+                    response.Error = ErrorStrings.DATA_ACCESS_ERROR;
                     return response;
                 }
             }
@@ -418,7 +425,7 @@ namespace ParkingMaster.DataAccess
                 {
                     dbContextTransaction.Rollback();
                     response.Data = false;
-                    response.Error = "Failed to write to UserClaims table.";
+                    response.Error = ErrorStrings.DATA_ACCESS_ERROR;
                     return response;
                 }
             }

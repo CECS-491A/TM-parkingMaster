@@ -42,7 +42,7 @@ Vue.use(Vuetify, {
   iconfont: 'md',
   theme: {
     primary: '#4a266f',
-    secondary: colors.grey.darken1,
+    secondary: '#BDBDBD',
     accent: colors.shades.black,
     error: colors.red.accent3
   },

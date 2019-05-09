@@ -8,13 +8,21 @@
         <v-text-field id="cost" v-model="cost" class="form-control" placeholder="Cost" required></v-text-field>
         <!-- <v-text-field label="Spot File" @click='pickFile' v-model="spotfile" prepend-icon='attach_file'></v-text-field> -->
         <!-- <v-text-field label="Map" @click='pickFile' v-model="map" prepend-icon='attach_file'></v-text-field> -->
-        <label> Spot File
-          <input type="file" id="spotfile" ref="spotfile" accept=".txt,.csv" v-on:change="csvHandler()"/>
-        </label>
-        <label> Lot Map
-          <input type="file" id="spotmap" ref="spotmap" accept="image/*" v-on:change="imageHandler()"/>
-        </label>
-        <v-btn depressed color="blue" v-on:click="submitlot" type="submit">Submit Lot</v-btn>
+        <div class="file-upload-div">
+          <label for="spotfile" class="upload-label">
+            <span id="spotfiletext">Upload Parking Spot File</span>
+            <v-icon right dark>cloud_upload</v-icon>
+          </label>
+          <input type="file" class="file-upload" id="spotfile" ref="spotfile" accept=".txt,.csv" v-on:change="csvHandler()"/>
+        </div>
+        <div class="file-upload-div">
+          <label for="spotmap" class="upload-label" id="spotfilelabel">
+            <span id="mapfiletext">Upload Parking Lot Map</span>
+            <v-icon right dark>cloud_upload</v-icon>
+          </label>
+          <input type="file" class="file-upload" id="spotmap" ref="spotmap" accept=".png" v-on:change="imageHandler()"/>
+        </div>
+        <v-btn depressed color="primary" v-on:click="submitlot" type="submit">Submit Lot</v-btn>
       </v-form>
     </form>
   </div>
@@ -71,9 +79,11 @@ export default {
     },
     csvHandler () {
       this.file = this.$refs.spotfile.files[0]
+      document.getElementById('spotfiletext').textContent = this.$refs.spotfile.files[0].name
     },
     imageHandler () {
       this.map = this.$refs.spotmap.files[0]
+      document.getElementById('mapfiletext').textContent = this.$refs.spotmap.files[0].name
     }
   },
   beforeMount: function () {
@@ -86,5 +96,24 @@ export default {
   .form-lot-registration {
     max-width: 330px;
     margin: 0 auto;
+  }
+  .file-upload-div {
+    width: 330px;
+  }
+  input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+  .upload-label{
+    border: 1px solid #ccc;
+    display: block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: rgb(95, 95, 95);
+    color: white
   }
 </style>

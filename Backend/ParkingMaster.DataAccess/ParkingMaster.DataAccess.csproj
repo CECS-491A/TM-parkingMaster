@@ -66,6 +66,10 @@
     <Compile Include="Migrations\UserDbContext\201904291726586_Add_Lots_Spots_Vehicles.Designer.cs">
       <DependentUpon>201904291726586_Add_Lots_Spots_Vehicles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\UserDbContext\201905082044289_Fix-Functions.cs" />
+    <Compile Include="Migrations\UserDbContext\201905082044289_Fix-Functions.Designer.cs">
+      <DependentUpon>201905082044289_Fix-Functions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -100,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\UserDbContext\201904291726586_Add_Lots_Spots_Vehicles.resx">
       <DependentUpon>201904291726586_Add_Lots_Spots_Vehicles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserDbContext\201905082044289_Fix-Functions.resx">
+      <DependentUpon>201905082044289_Fix-Functions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -24,6 +24,7 @@
         <v-select v-model="selectedVehicle"
           label="Select"
           hint="Select the vehicle you wish to put on the reservation."
+          no-data-text="Please register a vehicle before making a reservation."
           :items="vehicles"
           item-text="Plate"
           item-value="Vin"
@@ -36,7 +37,7 @@
           class="form-control"
           hint="Enter the length of your reservation in minutes."
           placeholder="Duration"
-          type="number"
+          mask="#####"
           required v-if="!worked"
           persistent-hint></v-text-field>
         <br />
@@ -98,28 +99,33 @@ export default {
     submitReservation () {
       this.error = ''
       this.errorOn = false
-      axios
-        .post(apiCalls.RESERVE_PARKING_SPOT, {
-          SessionId: sessionStorage.getItem('ParkingMasterToken'),
-          SpotId: this.selectedSpot,
-          VehicleVin: this.selectedVehicle,
-          DurationInMinutes: this.duration
-        })
-        .then(function () {
-          console.log('OK')
-          let now = moment()
-          let endDate = now.add(this.duration, 'm')
-          this.reservationEndsAt = endDate.format('l') + ' at ' + endDate.format('LTS')
-          this.worked = true
-        }.bind(this))
-        .catch(e => {
-          console.log(e)
-          this.error = 'Failed to reserve parking spot.'
-          this.errorOn = true
-          if (e.response.status === 401) {
-            auth.invalidSession(this.$router)
-          }
-        })
+      if (this.selectedSpot === '' || this.selectedVehicle === '' || this.duration === null) {
+        this.error = 'Please fill every box.'
+        this.errorOn = true
+      } else {
+        axios
+          .post(apiCalls.RESERVE_PARKING_SPOT, {
+            SessionId: sessionStorage.getItem('ParkingMasterToken'),
+            SpotId: this.selectedSpot,
+            VehicleVin: this.selectedVehicle,
+            DurationInMinutes: this.duration
+          })
+          .then(function () {
+            console.log('OK')
+            let now = moment()
+            let endDate = now.add(this.duration, 'm')
+            this.reservationEndsAt = endDate.format('l') + ' at ' + endDate.format('LTS')
+            this.worked = true
+          }.bind(this))
+          .catch(e => {
+            console.log(e)
+            this.error = 'Failed to reserve parking spot.'
+            this.errorOn = true
+            if (e.response.status === 401) {
+              auth.invalidSession(this.$router)
+            }
+          })
+      }
     }
   },
   beforeMount () {
