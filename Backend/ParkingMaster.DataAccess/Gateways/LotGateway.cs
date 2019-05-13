@@ -63,7 +63,7 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<bool> AddSpots(List<Spot> spotlist) // testing
+        public ResponseDTO<bool> AddSpots(List<Spot> spotlist) // Not wholly necessary, but here in case spots must be added manually
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
@@ -97,13 +97,12 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<bool> AddMapFile(HttpPostedFile mapfile, string mapfilepath) // DTO ?
+        public ResponseDTO<bool> AddMapFile(HttpPostedFile mapfile, string mapfilepath)
         {
             try
             {
                 Directory.CreateDirectory(@"C:\\MapFiles\\"); // Will do nothing if Directory already exists
-                string extension = Path.GetExtension(mapfile.FileName);
-                string filepath = "C:\\MapFiles\\" + mapfilepath + extension;
+                string filepath = "C:\\MapFiles\\" + mapfilepath;
                 mapfile.SaveAs(filepath);
                 return new ResponseDTO<bool>()
                 {
@@ -121,11 +120,11 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<Image> GetMapFile(string mapfilepath) // DTO ?
+        public ResponseDTO<Image> GetMapFile(string mapfilepath)
         {
             try
             {
-                string filepath = "C:\\MapFiles\\" + mapfilepath + ".png";
+                string filepath = "C:\\MapFiles\\" + mapfilepath;
                 Image readImage = Image.FromFile(filepath);
                 return new ResponseDTO<Image>()
                 {
@@ -163,13 +162,14 @@ namespace ParkingMaster.DataAccess
                                lot.LotName == lotname
                                select lot).FirstOrDefault();
 
-                    //and remove spots
+                    // Spots should be removed by cascading delete
+
                     context.Lots.Remove(deletelot);
                     context.SaveChanges();
                     
                     dbContextTransaction.Commit();
 
-                    //string filepath = "C:\\MapFiles\\" + lot.MapFilePath;
+                    //string filepath = "C:\\MapFiles\\" + deletelot.MapFilePath;
                     //File.Delete(filepath);
 
                     return new ResponseDTO<bool>()
@@ -190,43 +190,6 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        /*
-        public ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname)
-        {
-            using (var dbContextTransaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    var editlot = (from lot in context.Lots
-                                     where lot.OwnerId == ownerid &&
-                                     lot.LotName == oldlotname
-                                     select lot).FirstOrDefault();
-
-                    editlot.LotName = newlotname;
-
-                    context.SaveChanges();
-
-                    dbContextTransaction.Commit();
-
-                    return new ResponseDTO<bool>()
-                    {
-                        Data = true
-                    };
-                }
-                catch (Exception)
-                {
-                    dbContextTransaction.Rollback();
-
-                    return new ResponseDTO<bool>()
-                    {
-                        Data = false,
-                        Error = "[DATA ACCESS] Failed to edit lot name."
-                    };
-                }
-            }
-        }
-        */
-
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string lotname)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
@@ -238,10 +201,6 @@ namespace ParkingMaster.DataAccess
                                    lot.LotName == lotname
                                    select lot).FirstOrDefault();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<Lot>()
                     {
                         Data = returnlot
@@ -249,7 +208,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<Lot>()
                     {
@@ -286,7 +244,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<Lot>()
                     {
@@ -305,10 +262,6 @@ namespace ParkingMaster.DataAccess
                 {
                     var lots = (from lot in context.Lots select lot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Lot>>()
                     {
                         Data = lots
@@ -316,7 +269,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Lot>>()
                     {
@@ -335,10 +287,6 @@ namespace ParkingMaster.DataAccess
                 {
                     var lots = (from lot in context.Lots where lot.OwnerId == ownerid select lot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Lot>>()
                     {
                         Data = lots
@@ -346,7 +294,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Lot>>()
                     {
@@ -365,10 +312,6 @@ namespace ParkingMaster.DataAccess
                 {
                     var spots = (from spot in context.Spots select spot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = spots
@@ -376,7 +319,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Spot>>()
                     {
@@ -432,10 +374,6 @@ namespace ParkingMaster.DataAccess
                 {
                     List<Spot> lotspots = (from spot in context.Spots where spot.LotId == lotId select spot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = lotspots
@@ -443,7 +381,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Spot>>()
                     {

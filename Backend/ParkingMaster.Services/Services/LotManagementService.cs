@@ -40,8 +40,8 @@ namespace ParkingMaster.Services.Services
                     LotName = lotname,
                     Address = address,
                     Cost = cost,
-                    //UserAccount = useraccount,
-                    MapFilePath = useraccount.Username + "_" + lotname + "_" + Guid.NewGuid().ToString()
+                    //UserAccount = useraccount
+                    MapFilePath = useraccount.Username + "_" + lotname + "_" + Guid.NewGuid().ToString() + Path.GetExtension(mapfile.FileName)
                 };
                 newLot.Spots = ParseSpotsFromFile(newLot.LotId, newLot.LotName, spotfile);
                 ResponseDTO<bool> response = _lotGateway.AddLot(newLot, newLot.Spots);
