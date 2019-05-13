@@ -19,7 +19,7 @@
           item-disabled="IsTaken"
           v-if="!worked"
           persistent-hint
-          offset-y></v-select>
+          menu-props="offsetY"></v-select>
 
         <v-select v-model="selectedVehicle"
           label="Select"
@@ -30,7 +30,7 @@
           item-value="Vin"
           v-if="!worked"
           persistent-hint
-          offset-y></v-select>
+          menu-props="offsetY"></v-select>
 
         <v-text-field id="duration"
           v-model="duration"
