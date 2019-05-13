@@ -6,8 +6,6 @@
         <v-text-field id="lotname" v-model="lotname" class="form-control" placeholder="Lot Name" required></v-text-field>
         <v-text-field id="address" v-model="address" class="form-control" placeholder="Address" required></v-text-field>
         <v-text-field id="cost" v-model="cost" class="form-control" placeholder="Cost" required></v-text-field>
-        <!-- <v-text-field label="Spot File" @click='pickFile' v-model="spotfile" prepend-icon='attach_file'></v-text-field> -->
-        <!-- <v-text-field label="Map" @click='pickFile' v-model="map" prepend-icon='attach_file'></v-text-field> -->
         <div class="file-upload-div">
           <label for="spotfile" class="upload-label">
             <span id="spotfiletext">Upload Parking Spot File</span>
@@ -41,41 +39,54 @@ export default {
       map: '',
       lotname: '',
       address: '',
-      cost: ''
+      cost: '',
+      error: '',
+      errorOn: false,
+      worked: false
     }
   },
   methods: {
     async submitlot () {
+      this.error = ''
+      this.errorOn = false
       let formData = new FormData()
       let token = sessionStorage.getItem('ParkingMasterToken')
       let username = sessionStorage.getItem('ParkingMasterUsername')
       let role = sessionStorage.getItem('ParkingMasterRole')
-      formData.append('file', this.file)
-      formData.append('map', this.map)
-      formData.append('lotname', document.getElementById('lotname').value)
-      formData.append('address', document.getElementById('address').value)
-      formData.append('cost', document.getElementById('cost').value)
-      formData.append('token', token)
-      formData.append('username', username)
-      formData.append('role', role)
+      if (this.lotname == '' || this.address == '' || this.cost == '')
+      {
+        this.error = 'Please fill each field.'
+        this.errorOn = true
+      } else {
+        formData.append('file', this.file)
+        formData.append('map', this.map)
+        formData.append('lotname', document.getElementById('lotname').value)
+        formData.append('address', document.getElementById('address').value)
+        formData.append('cost', document.getElementById('cost').value)
+        formData.append('token', token)
+        formData.append('username', username)
+        formData.append('role', role)
 
-      await axios
-        .put(apiCalls.LOT_REGISTRATION,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
+        await axios
+          .put(apiCalls.LOT_REGISTRATION,
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             }
-          }
-        )
-        .then(function () {
-          console.log('OK')
-          this.file = ''
-          this.map = ''
-        }.bind(this))
-        .catch(e => {
-          auth.invalidSession(this.$router)
-        })
+          )
+          .then(function () {
+            console.log('OK')
+            this.file = ''
+            this.map = ''
+          }.bind(this))
+          .catch(e => {
+            this.error = 'Failed to register parking lot. Please try again later.'
+            this.errorOn = true
+            auth.invalidSession(this.$router)
+          })
+      }
     },
     csvHandler () {
       this.file = this.$refs.spotfile.files[0]
