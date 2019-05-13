@@ -47,18 +47,17 @@ namespace ParkingMaster.Manager.Controllers
 
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("api/lot/delete")]
-        public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
+        public IHttpActionResult DeleteLot([FromBody, Required] LotDeletionDTO request)
         {
             using (var dbcontext = new UserContext())
             {
                 LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
-                var httprequest = HttpContext.Current.Request;
 
                 try
                 {
-                    ResponseDTO<Boolean> response = lotManagementManager.DeleteLot(httprequest);
+                    ResponseDTO<Boolean> response = lotManagementManager.DeleteLot(request);
                     if (response.Data == true)
                     {
                         return Ok(response.Data);
@@ -107,11 +106,10 @@ namespace ParkingMaster.Manager.Controllers
             using (var dbcontext = new UserContext())
             {
                 LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
-                var httprequest = HttpContext.Current.Request;
                 //ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
                 try
                 {
-                    ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(httprequest);
+                    ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(request);
                     if (response.Data != null)
                     {
                         return Ok(response.Data);

@@ -73,11 +73,11 @@ namespace ParkingMaster.Services.Services
             }
         }
 
-        public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<bool> DeleteLot(Guid lotId)
         {
             try
             {
-                ResponseDTO<bool> response = _lotGateway.DeleteLot(ownerid, lotname);
+                ResponseDTO<bool> response = _lotGateway.DeleteLot(lotId);
                 return response;
             }
             catch (Exception)

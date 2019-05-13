@@ -53,8 +53,7 @@ export default {
       let token = sessionStorage.getItem('ParkingMasterToken')
       let username = sessionStorage.getItem('ParkingMasterUsername')
       let role = sessionStorage.getItem('ParkingMasterRole')
-      if (this.lotname == '' || this.address == '' || this.cost == '')
-      {
+      if (this.lotname === '' || this.address === '' || this.cost === '') {
         this.error = 'Please fill each field.'
         this.errorOn = true
       } else {

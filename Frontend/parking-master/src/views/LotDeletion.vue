@@ -13,9 +13,10 @@
           no-data-text="No lots found"
           persistent-hint
           offset-y></v-select>
-        <v-btn depressed color="blue" 
-          v-on:click="deletelot" 
-          type="submit">Delete Lot</v-btn>
+        <v-btn depressed color="primary"
+          v-on:click="deletelot"
+          type="submit"
+          v-if="!worked">Delete Lot</v-btn>
 
         <v-alert :value="errorOn"
           color="error"
@@ -46,33 +47,28 @@ export default {
       worked: false,
       username: '',
       error: '',
-      errorOn: false,
-      worked: false
+      errorOn: false
     }
   },
   methods: {
     async deletelot () {
       this.error = ''
       this.errorOn = false
-      let formData = new FormData()
       let token = sessionStorage.getItem('ParkingMasterToken')
-      let username = sessionStorage.getItem('ParkingMasterUsername')
-      let role = sessionStorage.getItem('ParkingMasterRole')
-      formData.append('token', token)
-      formData.append('username', username)
-      formData.append('role', role)
-      if (this.selectedLot == '') {
+      if (this.selectedLot === '') {
         this.error = 'Please select a lot.'
         this.errorOn = true
       } else {
         await axios
-          .post(apiCalls.LOT_DELETION,
-            formData
+          .post(apiCalls.LOT_DELETION, {
+            Token: token,
+            LotName: this.selectedLot
+          }
           )
           .then(function () {
             console.log('OK')
             this.worked = true
-          })
+          }.bind(this))
           .catch(e => {
             console.log(e.response)
             this.error = 'Failed to delete parking lot. Please try again later.'
@@ -84,23 +80,24 @@ export default {
       }
     }
   },
-  beforeMount() {
+  beforeMount () {
     auth.authorize('lotmanager', this.$router)
   },
-  async mounted() {
-    let u_token = sessionStorage.getItem('ParkingMasterToken')
-    let u_username = sessionStorage.getItem('ParkingMasterUsername')
-    let u_role = sessionStorage.getItem('ParkingMasterRole')
+  async mounted () {
+    let uToken = sessionStorage.getItem('ParkingMasterToken')
+    let uUsername = sessionStorage.getItem('ParkingMasterUsername')
+    let uRole = sessionStorage.getItem('ParkingMasterRole')
     let fData = new FormData()
-    fData.append('token', u_token)
-    fData.append('username', u_username)
-    fData.append('role', u_role)
+    fData.append('Token', uToken)
+    fData.append('Username', uUsername)
+    fData.append('Role', uRole)
     await axios
-      .post(apiCalls.GET_ALL_LOTS_BY_OWNER, fData)
-      .then(function(response)
-      {
+      .post(apiCalls.GET_ALL_LOTS_BY_OWNER, {
+        Token: uToken
+      })
+      .then(function (response) {
         this.lots = response.data
-      }).bind(this)
+      }.bind(this))
       .catch(e => {
         console.log(e)
         this.error = 'Could not retrieve lots. Please try again later.'

@@ -151,15 +151,14 @@ namespace ParkingMaster.DataAccess
             }
         }
 
-        public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<bool> DeleteLot(Guid lotId)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
                 {
                     var deletelot = (from lot in context.Lots
-                               where lot.OwnerId == ownerid &&
-                               lot.LotName == lotname
+                               where lot.LotId == lotId
                                select lot).FirstOrDefault();
 
                     // Spots should be removed by cascading delete
@@ -177,14 +176,14 @@ namespace ParkingMaster.DataAccess
                         Data = true
                     };
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     dbContextTransaction.Rollback();
 
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "[DATA ACCESS] Failed to delete lot from data store."
+                        Error = e.ToString()
                     };
                 }
             }

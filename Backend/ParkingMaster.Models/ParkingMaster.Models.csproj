@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Constants\Roles.cs" />
     <Compile Include="DTO\ClaimDTO.cs" />
+    <Compile Include="DTO\LotDeletionDTO.cs" />
     <Compile Include="DTO\LotResponseDTO.cs" />
     <Compile Include="DTO\ParkingMasterFrontendDTO.cs" />
     <Compile Include="DTO\ReservationDTO.cs" />

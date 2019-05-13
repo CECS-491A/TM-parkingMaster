@@ -93,11 +93,11 @@ namespace ParkingMaster.Manager.Managers
             }
         }
 
-        public ResponseDTO<Boolean> DeleteLot(HttpRequest httprequest)
+        public ResponseDTO<Boolean> DeleteLot(LotDeletionDTO request)
         {
             try
             {
-                var token = httprequest["token"];
+                var token = request.Token;
                 ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
                 if (SessionDTO.Data != null)
                 {
@@ -106,13 +106,12 @@ namespace ParkingMaster.Manager.Managers
                     {
                         new ClaimDTO(new Claim("Action", "DeleteParkingLot"))
                     };
-                    var username = httprequest["username"];
+                    var username = SessionDTO.Data.UserAccount.Username;
                     ResponseDTO<Boolean> authCheck = authorizationClient.Authorize(username, functionClaims);
                     if (authCheck.Data == true)
                     {
-                        var ownerid = SessionDTO.Data.UserAccount.Id;
-                        var lotname = httprequest["lotname"];
-                        ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(ownerid, lotname);
+                        var lotname = request.LotName;
+                        ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(new Guid(lotname));
                         return response;
                     }
                     else
@@ -197,12 +196,12 @@ namespace ParkingMaster.Manager.Managers
             return _lotManagementService.GetAllLots();
         }
 
-        public ResponseDTO<List<Lot>> GetAllLotsByOwner(HttpRequest httprequest)
+        public ResponseDTO<List<Lot>> GetAllLotsByOwner(ParkingMasterFrontendDTO request)
         {
             try
             {
 
-                var token = httprequest["token"];
+                var token = request.Token;
                 ResponseDTO<Session> SessionDTO = _sessionServices.GetSession(new Guid(token));
                 if (SessionDTO.Data != null)
                 {
