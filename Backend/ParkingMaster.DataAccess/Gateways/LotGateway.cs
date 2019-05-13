@@ -6,12 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.IO;
+using System.Drawing;
+using ParkingMaster.Models.Constants;
 
 namespace ParkingMaster.DataAccess
 {
     public class LotGateway : IDisposable
     {
-        UserContext context; // used to be LotContext
+        UserContext context;
 
         public LotGateway()
         {
@@ -29,8 +33,9 @@ namespace ParkingMaster.DataAccess
             {
                 try
                 {
+                    // check for dupe names
                     context.Lots.Add(lot);
-
+ 
                     foreach (Spot spot in spotList)
                     {
                         context.Spots.Add(spot);
@@ -45,88 +50,144 @@ namespace ParkingMaster.DataAccess
                         Data = true
                     };
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     dbContextTransaction.Rollback();
 
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "[DATA ACCESS] Failed to add lot to data store."
+                        Error = e.ToString() + "[DATA ACCESS] Failed to add lot to data store."
                     };
                 }
             }
         }
 
-        public ResponseDTO<bool> DeleteLot(Guid ownerid, string lotname)
+        public ResponseDTO<bool> AddSpots(List<Spot> spotlist) // Not wholly necessary, but here in case spots must be added manually
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    foreach (Spot spot in spotlist)
+                    {
+                        context.Spots.Add(spot);
+                    }
+
+                    context.SaveChanges();
+
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception e)
+                {
+                    dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = e.ToString() + "[DATA ACCESS] Failed to add spots to data store."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<bool> AddMapFile(HttpPostedFile mapfile, string mapfilepath)
+        {
+            try
+            {
+                Directory.CreateDirectory(@"C:\\MapFiles\\"); // Will do nothing if Directory already exists
+                string filepath = "C:\\MapFiles\\" + mapfilepath;
+                mapfile.SaveAs(filepath);
+                return new ResponseDTO<bool>()
+                {
+                    Data = true
+                };
+
+            }
+            catch (HttpException e)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = e.ToString()
+                };
+            }
+        }
+
+        public ResponseDTO<Image> GetMapFile(string mapfilepath)
+        {
+            try
+            {
+                string filepath = "C:\\MapFiles\\" + mapfilepath;
+                Image readImage = Image.FromFile(filepath);
+                return new ResponseDTO<Image>()
+                {
+                    Data = readImage
+                };
+
+            }
+            catch (FileNotFoundException e)
+            {
+                string filepath = "C:\\MapFiles\\Default.png";
+                Image readImage = Image.FromFile(filepath);
+                return new ResponseDTO<Image>()
+                {
+                    Data = readImage
+                };
+            }
+            catch (Exception e)
+            {
+                return new ResponseDTO<Image>()
+                {
+                    Data = null,
+                    Error = ErrorStrings.DATA_ACCESS_ERROR
+                };
+            }
+        }
+
+        public ResponseDTO<bool> DeleteLot(Guid lotId)
         {
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
                 {
                     var deletelot = (from lot in context.Lots
-                               where lot.OwnerId == ownerid &&
-                               lot.LotName == lotname
+                               where lot.LotId == lotId
                                select lot).FirstOrDefault();
+
+                    // Spots should be removed by cascading delete
+
                     context.Lots.Remove(deletelot);
                     context.SaveChanges();
-
+                    
                     dbContextTransaction.Commit();
+
+                    //string filepath = "C:\\MapFiles\\" + deletelot.MapFilePath;
+                    //File.Delete(filepath);
 
                     return new ResponseDTO<bool>()
                     {
                         Data = true
                     };
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     dbContextTransaction.Rollback();
 
                     return new ResponseDTO<bool>()
                     {
                         Data = false,
-                        Error = "[DATA ACCESS] Failed to delete lot from data store."
+                        Error = e.ToString()
                     };
                 }
             }
         }
-
-        /*
-        public ResponseDTO<Boolean> EditLotName(Guid ownerid, string oldlotname, string newlotname)
-        {
-            using (var dbContextTransaction = context.Database.BeginTransaction())
-            {
-                try
-                {
-                    var editlot = (from lot in context.Lots
-                                     where lot.OwnerId == ownerid &&
-                                     lot.LotName == oldlotname
-                                     select lot).FirstOrDefault();
-
-                    editlot.LotName = newlotname;
-
-                    context.SaveChanges();
-
-                    dbContextTransaction.Commit();
-
-                    return new ResponseDTO<bool>()
-                    {
-                        Data = true
-                    };
-                }
-                catch (Exception)
-                {
-                    dbContextTransaction.Rollback();
-
-                    return new ResponseDTO<bool>()
-                    {
-                        Data = false,
-                        Error = "[DATA ACCESS] Failed to edit lot name."
-                    };
-                }
-            }
-        }
-        */
 
         public ResponseDTO<Lot> GetLotByName(Guid ownerid, string lotname)
         {
@@ -139,9 +200,41 @@ namespace ParkingMaster.DataAccess
                                    lot.LotName == lotname
                                    select lot).FirstOrDefault();
 
-                    //context.SaveChanges();
+                    return new ResponseDTO<Lot>()
+                    {
+                        Data = returnlot
+                    };
+                }
+                catch (Exception)
+                {
 
-                    //dbContextTransaction.Commit();
+                    return new ResponseDTO<Lot>()
+                    {
+                        Data = null,
+                        Error = "[DATA ACCESS] Could not fetch lot."
+                    };
+                }
+            }
+        }
+
+        public ResponseDTO<Lot> GetLotByLotId(Guid lotId)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var returnlot = (from lot in context.Lots
+                                     where lot.LotId == lotId
+                                     select lot).FirstOrDefault();
+
+                    if(returnlot == null)
+                    {
+                        return new ResponseDTO<Lot>()
+                        {
+                            Data = returnlot,
+                            Error = ErrorStrings.LOT_NOT_FOUND
+                        };
+                    }
 
                     return new ResponseDTO<Lot>()
                     {
@@ -150,12 +243,11 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<Lot>()
                     {
                         Data = null,
-                        Error = "[DATA ACCESS] Could not fetch lot."
+                        Error = ErrorStrings.DATA_ACCESS_ERROR
                     };
                 }
             }
@@ -169,10 +261,6 @@ namespace ParkingMaster.DataAccess
                 {
                     var lots = (from lot in context.Lots select lot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Lot>>()
                     {
                         Data = lots
@@ -180,7 +268,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Lot>>()
                     {
@@ -199,10 +286,6 @@ namespace ParkingMaster.DataAccess
                 {
                     var lots = (from lot in context.Lots where lot.OwnerId == ownerid select lot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Lot>>()
                     {
                         Data = lots
@@ -210,7 +293,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Lot>>()
                     {
@@ -229,10 +311,6 @@ namespace ParkingMaster.DataAccess
                 {
                     var spots = (from spot in context.Spots select spot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = spots
@@ -240,7 +318,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Spot>>()
                     {
@@ -296,10 +373,6 @@ namespace ParkingMaster.DataAccess
                 {
                     List<Spot> lotspots = (from spot in context.Spots where spot.LotId == lotId select spot).ToList();
 
-                    //context.SaveChanges();
-
-                    //dbContextTransaction.Commit();
-
                     return new ResponseDTO<List<Spot>>()
                     {
                         Data = lotspots
@@ -307,7 +380,6 @@ namespace ParkingMaster.DataAccess
                 }
                 catch (Exception)
                 {
-                    //dbContextTransaction.Rollback();
 
                     return new ResponseDTO<List<Spot>>()
                     {

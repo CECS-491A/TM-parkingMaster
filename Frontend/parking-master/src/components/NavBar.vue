@@ -26,13 +26,15 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items class="hidden-sm-and-down" scroll-toolbar-off-screen clipped-right absolute>
-        <v-btn flat key="Home" to="home"> <v-icon>home</v-icon> </v-btn>
-        <v-btn flat key="UserDashboard" to="userDashboard" v-if="authorized"> User Dashboard </v-btn>
-        <v-btn flat key="ParkingLotDashboard" to="parkingLotDashboard" v-if="role === 'standard'"> Parking Lots </v-btn>
-        <v-btn flat key="VehicleRegistration" to="vehicleRegistration" v-if="role === 'standard'"> Vehicle Registration </v-btn>
-        <v-btn flat key="LotRegistration" to="lotRegistration" v-if="role === 'lotmanager'"> Lot Registration </v-btn>
-        <v-btn flat key="RoleChoice" to="roleChoice" v-if="role === 'unassigned'"> Role Choice </v-btn>
-        <v-btn flat key="Logout" class="logout-tile" @click="navigate('logout')" v-if="authorized"> Logout </v-btn>
+          <v-btn
+            v-for="item in items"
+            :key="item.name"
+            :class="item.class"
+            @click="navigate(item.value)"
+            flat
+          >
+            {{ item.name }}
+          </v-btn>
       </v-toolbar-items>
 
     </v-toolbar>
@@ -52,6 +54,7 @@ export default {
       parkingLots: {name: 'Parking Lots', class: 'parking-lots-tile', value: '/ParkingLotDashboard'},
       vehicleReg: {name: 'Vehicle Registration', class: 'vehicle-registration-tile', value: '/VehicleRegistration'},
       lotReg: {name: 'Lot Registration', class: 'lot-registration-tile', value: '/LotRegistration'},
+      lotDelete: {name: 'Lot Deletion', class: 'lot-deletion-tile', value: '/LotDeletion'},
       roleChoice: {name: 'Choose Account Type', class: 'role-choice-tile', value: '/RoleChoice'},
       logoutTile: {name: 'Logout', class: 'logout-tile', value: 'logout'},
       items: [],
@@ -80,10 +83,12 @@ export default {
       this.items = [this.home,
         this.userDash,
         this.lotReg,
+        this.lotDelete,
         this.logoutTile]
       this.authorized = true
     } else if (this.role === 'unassigned') {
       this.items = [this.home,
+        this.userDash,
         this.roleChoice]
       this.authorized = true
     } else {

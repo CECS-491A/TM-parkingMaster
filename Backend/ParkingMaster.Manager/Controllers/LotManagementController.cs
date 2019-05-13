@@ -9,188 +9,144 @@ using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Manager.Managers;
 using System.Web;
+using ParkingMaster.DataAccess;
 
 namespace ParkingMaster.Manager.Controllers
 {
     public class LotManagementController : ApiController
     {
         [HttpPut]
-        [Route("ParkingMaster/api/lot/register")]
-        public IHttpActionResult CreateLot() // [FromBody, Required] ParkingMasterFrontendDTO request
+        [Route("api/lot/register")]
+        public IHttpActionResult CreateLot()
         {
-            LoginManager loginManager = new LoginManager();
-            LotManagementManager lotManagementManager = new LotManagementManager();
-            var httpRequest = HttpContext.Current.Request;
-
-            try
+            using (var dbcontext = new UserContext())
             {
-                ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(httpRequest["token"]);
+                //LotManagementManager lotManagementManager = new LotManagementManager();
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+                var httprequest = HttpContext.Current.Request;
+
+                try
+                {
+                    ResponseDTO<Boolean> response = lotManagementManager.AddLot(httprequest);
+                    if (response.Data == true)
+                    {
+                        dbcontext.SaveChanges();
+                        return Ok(response.Data);
+                    }
+                    else
+                    {
+                        ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                        return Content(statusResponse.Data, statusResponse.Error);
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Content((HttpStatusCode)400, e.Message);
+                }
+            }
+
+        }
+
+        [HttpPost]
+        [Route("api/lot/delete")]
+        public IHttpActionResult DeleteLot([FromBody, Required] LotDeletionDTO request)
+        {
+            using (var dbcontext = new UserContext())
+            {
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+
+                try
+                {
+                    ResponseDTO<Boolean> response = lotManagementManager.DeleteLot(request);
+                    if (response.Data == true)
+                    {
+                        return Ok(response.Data);
+                    }
+                    else
+                    {
+                        ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                        return Content(statusResponse.Data, statusResponse.Error);
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Content((HttpStatusCode)400, e.Message);
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("api/lotManagement/getAllLots")]
+        public IHttpActionResult GetAllLots([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            using (var dbcontext = new UserContext())
+            {
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+
+                ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
 
                 if (response.Data != null)
                 {
-                    Guid ownerid = new Guid(response.Data.Id);
-                    var username = httpRequest["username"];
-                    var lotname = httpRequest["lotname"];
-                    var address = httpRequest["address"];
-                    var cost = Convert.ToDouble(httpRequest["cost"]);
-                    var spotfile = httpRequest.Files["file"];
-                    var spotmap = httpRequest.Files["map"];
-                    ResponseDTO<Boolean> result = lotManagementManager.AddLot(ownerid, lotname, address, cost, spotfile);
-                    return Ok(result.Data);
+                    return Ok(response.Data);
 
                 }
                 else
                 {
-                    ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                    return Content(statuesResponse.Data, statuesResponse.Error);
+                    ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                    return Content(statusResponse.Data, statusResponse.Error);
                 }
             }
-            catch (Exception e)
-            {
-                return Content((HttpStatusCode)400, e.Message);
-            }
-
+            
         }
 
-        [HttpDelete]
-        [Route("ParkingMaster/api/lot/delete")] // api/user/lot/delete
-        public IHttpActionResult DeleteLot([FromBody, Required] ParkingMasterFrontendDTO request)
-        {
-            LoginManager loginManager = new LoginManager();
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
-
-            if (response.Data != null)
-            {
-                return Ok(response.Data);
-
-            }
-            else
-            {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
-            }
-        }
-
-        /*
-        [HttpPut]
-        [Route("")] // api/user/lot/edit
-        public IHttpActionResult EditLot([FromBody, Required] ParkingMasterFrontendDTO request)
-        {
-            LoginManager loginManager = new LoginManager();
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
-
-            if (response.Data != null)
-            {
-                return Ok(response.Data);
-
-            }
-            else
-            {
-                return Content((HttpStatusCode)404, response.Error);
-            }
-        }
-        */
         [HttpPost]
-        [Route("api/lotManagement/getAllLots")] // api/user/lot
-        public IHttpActionResult GetAllLots([FromBody, Required] ParkingMasterFrontendDTO request)
+        [Route("api/lotManagement/getAllLotsByOwner")]
+        public IHttpActionResult GetAllLotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
         {
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
-
-            if (response.Data != null)
+            using (var dbcontext = new UserContext())
             {
-                return Ok(response.Data);
-
-            }
-            else
-            {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
-            }
-        }
-        /*
-        [HttpGet]
-        [Route("ParkingMaster/api/lot/all/owner")]
-        public IHttpActionResult GetLotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
-        {
-            LoginManager loginManager = new LoginManager();
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
-
-            if (response.Data != null)
-            {
-                return Ok(response.Data);
-
-            }
-            else
-            {
-                return Content((HttpStatusCode)404, response.Error);
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
+                //ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLots(request.Token);
+                try
+                {
+                    ResponseDTO<List<Lot>> response = lotManagementManager.GetAllLotsByOwner(request);
+                    if (response.Data != null)
+                    {
+                        return Ok(response.Data);
+                    }
+                    else
+                    {
+                        ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                        return Content(statusResponse.Data, statusResponse.Error);
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Content((HttpStatusCode)400, e.Message);
+                }
             }
         }
 
-        [HttpGet]
-        [Route("ParkingMaster/api/spot/all")]
-        public IHttpActionResult GetAllSpots([FromBody, Required] ParkingMasterFrontendDTO request)
-        {
-            LoginManager loginManager = new LoginManager();
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
-
-            if (response.Data != null)
-            {
-                return Ok(response.Data);
-
-            }
-            else
-            {
-                return Content((HttpStatusCode)404, response.Error);
-            }
-        }
-
-        [HttpGet]
-        [Route("ParkingMaster/api/spot/all/owner")]
-        public IHttpActionResult GetSpotsByOwner([FromBody, Required] ParkingMasterFrontendDTO request)
-        {
-            LoginManager loginManager = new LoginManager();
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<ParkingMasterFrontendDTO> response = loginManager.SessionChecker(request.Token);
-
-            if (response.Data != null)
-            {
-                return Ok(response.Data);
-
-            }
-            else
-            {
-                return Content((HttpStatusCode)404, response.Error);
-            }
-        }
-        */
         [HttpPost]
         [Route("api/lotManagement/getSpotsByLot")]
         public IHttpActionResult GetSpotsByLot([FromBody, Required] ReservationRequestDTO request)
         {
-            LotManagementManager lotManagementManager = new LotManagementManager();
-
-            ResponseDTO<List<Spot>> response = lotManagementManager.GetAllSpotsByLot(request);
-
-            if (response.Data != null)
+            using (var dbcontext = new UserContext())
             {
-                return Ok(response.Data);
+                LotManagementManager lotManagementManager = new LotManagementManager(dbcontext);
 
-            }
-            else
-            {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
+                ResponseDTO<LotResponseDTO> response = lotManagementManager.GetAllSpotsByLot(request);
+
+                if (response.Data != null)
+                {
+                    return Ok(response.Data);
+
+                }
+                else
+                {
+                    ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                    return Content(statusResponse.Data, statusResponse.Error);
+                }
             }
         }
 

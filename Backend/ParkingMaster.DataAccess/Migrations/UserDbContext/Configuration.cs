@@ -152,13 +152,17 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             functionGateway.StoreFunction(new Function("Logout", true));
             functionGateway.StoreFunction(new Function("Client1Action", true));
             functionGateway.StoreFunction(new Function("Client2Action", true));
+            functionGateway.StoreFunction(new Function("AddParkingLot", true));
+            functionGateway.StoreFunction(new Function("DeleteParkingLot", true));
+
+            functionGateway.StoreFunction(new Function("SetRole", true));
 
             var sessionGateway = new SessionGateway(context);
             sessionGateway.ResetDatabase();
 
             sessionGateway.StoreSession(new Session(user1.Id));
             sessionGateway.StoreSession(new Session(userGateway.GetUserByUsername("pnguyen@gmail.com").Data.Id));
-            
+            ResponseDTO<Session> sessionDTO = sessionGateway.StoreSession(new Session(userGateway.GetUserByUsername("client1@yahoo.com").Data.Id));
 
             UserAccountDTO testUser = userGateway.GetUserByUsername("client1@yahoo.com").Data;
             Lot testLot = new Lot
@@ -168,7 +172,8 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 LotName = "TestLot",
                 Address = "123 Testing St.",
                 Cost = 20.0,
-                UserAccount = testUser
+                UserAccount = sessionDTO.Data.UserAccount,
+                MapFilePath = "client1_TestLot_123"
             };
             List<Spot> testSpots = new List<Spot>
             {

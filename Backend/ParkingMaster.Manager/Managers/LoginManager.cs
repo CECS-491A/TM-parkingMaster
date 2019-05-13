@@ -39,6 +39,14 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
+            // Protect against replay attacks by checking the timestamp
+            if (DateTimeOffset.Now.AddSeconds(5).ToUnixTimeMilliseconds() < request.Timestamp)
+            {
+                response.Data = null;
+                response.Error = ErrorStrings.OLD_SSO_REQUEST;
+                return response;
+            }
+
             // Convert request SsoId into Guid
             Guid ssoId = new Guid(request.SsoUserId);
 

@@ -3,6 +3,11 @@
      <form class="form-reservation">
       <h2 class="form-reservation-heading">Reservations: {{ lotName }}</h2>
       <h3 class="form-reservation-address">Address: {{ lotAddress }}</h3>
+    </form>
+    <div class="map-container">
+      <img class="parking-lot-map-image" :src="map">
+    </div>
+    <form class="form-reservation">
       <v-form ref="form">
 
         <v-select v-model="selectedSpot"
@@ -14,24 +19,25 @@
           item-disabled="IsTaken"
           v-if="!worked"
           persistent-hint
-          offset-y></v-select>
+          menu-props="offsetY"></v-select>
 
         <v-select v-model="selectedVehicle"
           label="Select"
           hint="Select the vehicle you wish to put on the reservation."
+          no-data-text="Please register a vehicle before making a reservation."
           :items="vehicles"
           item-text="Plate"
           item-value="Vin"
           v-if="!worked"
           persistent-hint
-          offset-y></v-select>
+          menu-props="offsetY"></v-select>
 
         <v-text-field id="duration"
           v-model="duration"
           class="form-control"
           hint="Enter the length of your reservation in minutes."
           placeholder="Duration"
-          type="number"
+          mask="#####"
           required v-if="!worked"
           persistent-hint></v-text-field>
         <br />
@@ -93,28 +99,33 @@ export default {
     submitReservation () {
       this.error = ''
       this.errorOn = false
-      axios
-        .post(apiCalls.RESERVE_PARKING_SPOT, {
-          SessionId: sessionStorage.getItem('ParkingMasterToken'),
-          SpotId: this.selectedSpot,
-          VehicleVin: this.selectedVehicle,
-          DurationInMinutes: this.duration
-        })
-        .then(function () {
-          console.log('OK')
-          let now = moment()
-          let endDate = now.add(this.duration, 'm')
-          this.reservationEndsAt = endDate.format('l') + ' at ' + endDate.format('LTS')
-          this.worked = true
-        }.bind(this))
-        .catch(e => {
-          console.log(e)
-          this.error = 'Failed to reserve parking spot.'
-          this.errorOn = true
-          if (e.response.status === 401) {
-            auth.invalidSession(this.$router)
-          }
-        })
+      if (this.selectedSpot === '' || this.selectedVehicle === '' || this.duration === null) {
+        this.error = 'Please fill every box.'
+        this.errorOn = true
+      } else {
+        axios
+          .post(apiCalls.RESERVE_PARKING_SPOT, {
+            SessionId: sessionStorage.getItem('ParkingMasterToken'),
+            SpotId: this.selectedSpot,
+            VehicleVin: this.selectedVehicle,
+            DurationInMinutes: this.duration
+          })
+          .then(function () {
+            console.log('OK')
+            let now = moment()
+            let endDate = now.add(this.duration, 'm')
+            this.reservationEndsAt = endDate.format('l') + ' at ' + endDate.format('LTS')
+            this.worked = true
+          }.bind(this))
+          .catch(e => {
+            console.log(e)
+            this.error = 'Failed to reserve parking spot.'
+            this.errorOn = true
+            if (e.response.status === 401) {
+              auth.invalidSession(this.$router)
+            }
+          })
+      }
     }
   },
   beforeMount () {
@@ -129,7 +140,10 @@ export default {
         SessionId: sessionStorage.getItem('ParkingMasterToken'),
         LotId: this.lotId
       })
-      .then(response => (this.spots = response.data))
+      .then(function (response) {
+        this.spots = response.data.SpotsList
+        this.map = 'data:image/png;base64,' + response.data.LotMap
+      }.bind(this))
     await axios
       .post(apiCalls.GET_ALL_USER_VEHICLES, {
         Token: sessionStorage.getItem('ParkingMasterToken')
@@ -149,6 +163,7 @@ export default {
 .form-reservation {
   max-width: 350px;
   margin: 0 auto;
+
 }
 .button-reservation {
   width: 350px;
@@ -158,5 +173,12 @@ export default {
   width: 400px;
   margin: 0 auto;
 }
-
+.parking-lot-map-image {
+  max-width: 100%;
+  max-height: auto;
+}
+.map-container {
+  width: 600px;
+  margin: 0 auto;
+}
 </style>

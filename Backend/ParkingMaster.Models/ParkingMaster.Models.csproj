@@ -54,6 +54,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Constants\Roles.cs" />
     <Compile Include="DTO\ClaimDTO.cs" />
+    <Compile Include="DTO\LotDeletionDTO.cs" />
+    <Compile Include="DTO\LotResponseDTO.cs" />
     <Compile Include="DTO\ParkingMasterFrontendDTO.cs" />
     <Compile Include="DTO\ReservationDTO.cs" />
     <Compile Include="DTO\ReservationRequestDTO.cs" />

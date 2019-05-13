@@ -9,6 +9,7 @@ using System.Text;
 using System.Collections.Generic;
 using ParkingMaster.Models.Constants;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Security.Authorization;
 
 namespace ParkingMaster.Manager.Managers
 {
@@ -18,12 +19,14 @@ namespace ParkingMaster.Manager.Managers
         private UserManagementService _userManagementService;
         private SessionService _sessionService;
         private ClaimService _claimService;
+        private AuthorizationClient _authorizationClient;
 
         public UserManagementManager()
         {
             _userManagementService = new UserManagementService();
             _sessionService = new SessionService();
             _claimService = new ClaimService();
+            _authorizationClient = new AuthorizationClient();
         }
         /*
         // I am considering moving context.SaveChanges() here, but maybe later
@@ -102,6 +105,13 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
+            // Protect against replay attacks by checking the timestamp
+            if (DateTimeOffset.Now.AddSeconds(5).ToUnixTimeMilliseconds() < request.Timestamp)
+            {
+                response.Data = (HttpStatusCode)425;
+                response.Error = ErrorStrings.OLD_SSO_REQUEST;
+                return response;
+            }
 
             // Check if request id is in guid format
             Guid ssoId;
@@ -187,7 +197,7 @@ namespace ParkingMaster.Manager.Managers
             catch (Exception e)
             {
                 response.Data = null;
-                response.Error = ErrorStrings.REQUEST_FORMAT;
+                response.Error = ErrorStrings.SESSION_NOT_FOUND;
                 return response;
             }
 
@@ -201,13 +211,23 @@ namespace ParkingMaster.Manager.Managers
 
             // Check if session is active and get user information
             ResponseDTO<Session> sessionDTO = _sessionService.GetSession(sessionId);
-
-            // Only users with unassigned role are allowed to perform this action
-            if (sessionDTO.Data.UserAccount.RoleType != Roles.UNASSIGNED)
+            if(sessionDTO.Data == null)
             {
-                //response.Data = null;
-                //response.Error = ErrorStrings.UNAUTHORIZED_ACTION;
-                //return response;
+                response.Data = null;
+                response.Error = ErrorStrings.SESSION_NOT_FOUND;
+            }
+
+            // Check that user has permission to use this function
+            List<ClaimDTO> requiredClaims = new List<ClaimDTO>()
+            {
+                new ClaimDTO("Action", "SetRole")
+            };
+            ResponseDTO<Boolean> authResponse = _authorizationClient.Authorize(sessionDTO.Data.UserAccount.Username, requiredClaims);
+            if (!authResponse.Data)
+            {
+                response.Data = null;
+                response.Error = authResponse.Error;
+                return response;
             }
 
             // Set up user information that will change
@@ -265,6 +285,14 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = (HttpStatusCode)400;
                 response.Error = "Signature not valid";
+                return response;
+            }
+
+            // Protect against replay attacks by checking the timestamp
+            if (DateTimeOffset.Now.AddSeconds(5).ToUnixTimeMilliseconds() < request.Timestamp)
+            {
+                response.Data = (HttpStatusCode)425;
+                response.Error = ErrorStrings.OLD_SSO_REQUEST;
                 return response;
             }
 

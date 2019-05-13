@@ -51,7 +51,6 @@
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\SsoController.cs" />
     <Compile Include="Controllers\TestingController.cs" />
-    <Compile Include="App_Logic\LotManagerController.cs" />
     <Compile Include="App_Start\WebApiConfigure.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
@@ -90,6 +89,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -108,7 +108,9 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Logic\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParkingMaster.DataAccess\ParkingMaster.DataAccess.csproj">
       <Project>{d2c4413b-8029-4148-af13-fcc74963bf33}</Project>
@@ -117,6 +119,10 @@
     <ProjectReference Include="..\ParkingMaster.Models\ParkingMaster.Models.csproj">
       <Project>{7b2bfaea-088e-4361-bf34-90d9d49bda50}</Project>
       <Name>ParkingMaster.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ParkingMaster.Security\ParkingMaster.Security.csproj">
+      <Project>{2442720e-0e32-42a5-a141-67fe8a05fcb0}</Project>
+      <Name>ParkingMaster.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\ParkingMaster.Services\ParkingMaster.Services.csproj">
       <Project>{5543f43b-7227-47b8-84c6-04deea35406f}</Project>

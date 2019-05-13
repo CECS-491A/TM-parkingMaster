@@ -62,13 +62,13 @@
     <Compile Include="Migrations\UserDbContext\201903271917275_Add_Sessions.Designer.cs">
       <DependentUpon>201903271917275_Add_Sessions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\UserDbContext\201904232305592_Add_Lots_AND_Spots_AND_Vehicles.cs" />
-    <Compile Include="Migrations\UserDbContext\201904232305592_Add_Lots_AND_Spots_AND_Vehicles.Designer.cs">
-      <DependentUpon>201904232305592_Add_Lots_AND_Spots_AND_Vehicles.cs</DependentUpon>
+    <Compile Include="Migrations\UserDbContext\201904291726586_Add_Lots_Spots_Vehicles.cs" />
+    <Compile Include="Migrations\UserDbContext\201904291726586_Add_Lots_Spots_Vehicles.Designer.cs">
+      <DependentUpon>201904291726586_Add_Lots_Spots_Vehicles.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\UserDbContext\201904241815027_Fix.cs" />
-    <Compile Include="Migrations\UserDbContext\201904241815027_Fix.Designer.cs">
-      <DependentUpon>201904241815027_Fix.cs</DependentUpon>
+    <Compile Include="Migrations\UserDbContext\201905082044289_Fix-Functions.cs" />
+    <Compile Include="Migrations\UserDbContext\201905082044289_Fix-Functions.Designer.cs">
+      <DependentUpon>201905082044289_Fix-Functions.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +86,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParkingMaster.Models\ParkingMaster.Models.csproj">
@@ -100,11 +102,11 @@
     <EmbeddedResource Include="Migrations\UserDbContext\201903271917275_Add_Sessions.resx">
       <DependentUpon>201903271917275_Add_Sessions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\UserDbContext\201904232305592_Add_Lots_AND_Spots_AND_Vehicles.resx">
-      <DependentUpon>201904232305592_Add_Lots_AND_Spots_AND_Vehicles.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\UserDbContext\201904291726586_Add_Lots_Spots_Vehicles.resx">
+      <DependentUpon>201904291726586_Add_Lots_Spots_Vehicles.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\UserDbContext\201904241815027_Fix.resx">
-      <DependentUpon>201904241815027_Fix.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\UserDbContext\201905082044289_Fix-Functions.resx">
+      <DependentUpon>201905082044289_Fix-Functions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

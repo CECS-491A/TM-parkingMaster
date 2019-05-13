@@ -3,28 +3,35 @@
     <v-btn class="error" v-on:click="ssoDelete">User Deletetion from SSO</v-btn>
     <br />
 
-    <h2>Current Reservations</h2>
-    <v-list>
+    <v-list v-if="role == 'standard'">
+      <h2>Current Reservations</h2>
       <v-list-tile
         v-for="(reservation, index) in reservations"
         :key="reservation.name"
         :id="'reservationTile'+index"
-        :class="{ 'even-reservation-tile' : index%2, 'odd-reservation-tile' : !index%2 }"
+        :class="{ 'even-reservation-tile' : index%2===0, 'odd-reservation-tile' : index%2===1 }"
       >
         <v-list-tile-title v-text="'Lot: ' + reservation.LotName + '  For spot: ' + reservation.SpotName + '    reservation ends at: ' + reservation.EndsAt.format('lll')"></v-list-tile-title>
-        <v-list-tile-content>
-          <v-layout row wrap>
-            <v-flex xs7>
-              <v-text-field :name="index"
-              v-model="duration[index]"
-              class="extension-text-input"
-              hint="Enter time in minutes."
-              placeholder="Extension Time"
-              mask="####"></v-text-field>
-            </v-flex>
+        <v-list-tile-content
+          :id="'content'+index"
+          v-if="true">
+          <v-layout row>
             <v-flex xs5>
+              <v-text-field :name="index"
+                v-model="duration[index]"
+                class="extension-text-input"
+                placeholder="Minutes"
+                input="number"
+                autocomplete="off"
+                mask="####"></v-text-field>
+            </v-flex>
+            <v-flex shrink>
               <v-btn class="extension-btn"
                 v-on:click="submitReservation(reservation.SpotId, reservation.VehicleVin, duration[index], index)">Extend</v-btn>
+            </v-flex>
+            <v-flex shrink>
+              <v-btn class="shorten-btn"
+                v-on:click="submitReservation(reservation.SpotId, reservation.VehicleVin, (-1*duration[index]), index)">Shorten</v-btn>
             </v-flex>
           </v-layout>
         </v-list-tile-content>
@@ -45,7 +52,8 @@ export default {
     return {
       reservations: [],
       duration: [],
-      now: moment()
+      now: moment(),
+      role: ''
     }
   },
   methods: {
@@ -56,15 +64,25 @@ export default {
         })
         .then(resp => {
           alert('Account has been deleted from SSO and its applications!')
-          window.location = 'http://localhost:8081/#/landing'
+          window.location = apiCalls.SSO_LANDING
         })
         .catch(e => {
           alert('Delete failed')
         })
     },
     submitReservation (spotId, vin, length, index) {
+      let element = document.getElementById('reservationTile' + index).getElementsByClassName('v-list__tile__title')
+
       if (length === undefined) {
         alert('Please enter a duration to extend your reservation.')
+
+      // Check if reservation has expired
+      } else if (this.reservations[index].EndsAt.diff(moment(), 'seconds') < 0) {
+        element[0].innerHTML = 'Lot: ' + this.reservations[index].LotName + '  For spot: ' + this.reservations[index].SpotName + '    EXPIRED RESERVATION'
+        document.getElementById('reservationTile' + index).getElementsByClassName('v-list__tile__content')[0].innerHTML = ''
+        alert('That reservation ran out before attempted extension.')
+
+      // Edit reservation
       } else {
         axios
           .post(apiCalls.EXTEND_RESERVATION, {
@@ -73,14 +91,20 @@ export default {
             VehicleVin: vin,
             DurationInMinutes: length
           })
-          .then(function () {
+          .then(resp => {
             console.log('OK')
 
             // Update time on dashboard
-            let element = document.getElementById('reservationTile' + index).getElementsByClassName('v-list__tile__title')
-            this.reservations[index].EndsAt.add(length, 'm')
-            element[0].innerHTML = 'Lot: ' + this.reservations[index].LotName + '  For spot: ' + this.reservations[index].SpotName + '    reservation ends at: ' + this.reservations[index].EndsAt.format('lll')
-          }.bind(this))
+            this.reservations[index].EndsAt = moment().add(resp.data.SecondsLeft, 's')
+
+            // Verify that the reservation is still valid
+            if (this.reservations[index].EndsAt.diff(moment(), 'seconds') > 0) {
+              element[0].innerHTML = 'Lot: ' + this.reservations[index].LotName + '  For spot: ' + this.reservations[index].SpotName + '    reservation ends at: ' + this.reservations[index].EndsAt.format('lll')
+            } else {
+              element[0].innerHTML = 'Lot: ' + this.reservations[index].LotName + '  For spot: ' + this.reservations[index].SpotName + '    EXPIRED RESERVATION'
+              document.getElementById('reservationTile' + index).getElementsByClassName('v-list__tile__content')[0].innerHTML = ''
+            }
+          })
           .catch(e => {
             console.log(e)
             console.log('Failed to extend reservation.')
@@ -93,9 +117,10 @@ export default {
   },
   beforeMount () {
     auth.authorize('authorized', this.$router)
+    this.role = sessionStorage.getItem('ParkingMasterRole')
   },
   mounted () {
-    if (sessionStorage.getItem('ParkingMasterRole') === 'standard') {
+    if (this.role === 'standard') {
       axios
         .post(apiCalls.GET_ALL_RESERVATIONS, {
           Token: sessionStorage.getItem('ParkingMasterToken')
@@ -128,6 +153,10 @@ export default {
   width: 150px;
 }
 .extension-btn {
+  position: relative;
+  top: 9px;
+}
+.shorten-btn {
   position: relative;
   top: 9px;
 }
