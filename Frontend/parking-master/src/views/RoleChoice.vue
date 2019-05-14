@@ -58,8 +58,12 @@ export default {
           console.log(e)
           this.error = 'Failed to set your account type.'
           this.errorOn = true
+
           if (e.response.status === 401) {
             auth.invalidSession(this.$router)
+          } else if (e.response.status === 419) {
+            sessionStorage.setItem('ParkingMasterAcceptedTOS', 'false')
+            this.$router.push('/TOS')
           }
         })
     }

@@ -20,6 +20,6 @@ namespace ParkingMaster.Models.Constants
         public const string RESOURCE_NOT_FOUND = "Requested resource does not exist."; // Error 8
         public const string USER_NOT_FOUND = "User does not exist."; // Error 9
         public const string USER_DISABLED = "User is currently disabled."; // Error 10
-        public const string USER_TOS_NOT_ACCEPTED = "User has yet to accepted the Terms of Service."; // Error 10
+        public const string USER_TOS_NOT_ACCEPTED = "User has yet to accepted the Terms of Service."; // Error 11
     }
 }

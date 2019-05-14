@@ -15,6 +15,7 @@
 <script>
 import axios from 'axios'
 import apiCalls from '@/constants/api-calls'
+import auth from '@/services/Authorization.js'
 
 export default {
   name: 'tos',
@@ -52,6 +53,11 @@ export default {
       .then(resp => {
         console.log(resp)
         document.getElementById('tos-editable').innerHTML = resp.data.Content
+      })
+      .catch(e => {
+        if (e.response.status === 401) {
+          auth.invalidSession(this.$router)
+        }
       })
   }
 }
