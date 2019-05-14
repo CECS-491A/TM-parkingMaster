@@ -25,8 +25,8 @@
       </v-form>
     </form>
     <div id="responseMessage" v-if="worked">
-        <h3>Successfully deleted parking lot.</h3>
-        <h2>Please note that all reservations in this lot have been deleted accordingly.</h2>
+        <h2>Successfully deleted parking lot.</h2>
+        <h3>Please note that all reservations in this lot have been deleted accordingly.</h3>
         <br />
     </div>
   </div>
