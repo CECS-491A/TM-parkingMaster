@@ -125,22 +125,28 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
-            // Check if user is currently disabled
-            if (!sessionResponseDTO.Data.UserAccount.IsActive)
-            {
-                response.Data = null;
-                response.Error = ErrorStrings.USER_DISABLED;
-                return response;
-            }
-
             // Return response info
             response.Data = new ParkingMasterFrontendDTO();
 
-            response.Data.Id = sessionResponseDTO.Data.UserAccount.Id.ToString();
-            response.Data.Username = sessionResponseDTO.Data.UserAccount.Username;
-            response.Data.Role = sessionResponseDTO.Data.UserAccount.RoleType;
-            response.Data.AcceptedTOS = sessionResponseDTO.Data.UserAccount.AcceptedTOS;
-            response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
+            // Check if user is currently disabled
+            if (!sessionResponseDTO.Data.UserAccount.IsActive)
+            {
+                response.Data.Id = sessionResponseDTO.Data.UserAccount.Id.ToString();
+                response.Data.Username = sessionResponseDTO.Data.UserAccount.Username;
+                response.Data.Role = "disabled";
+                response.Data.AcceptedTOS = sessionResponseDTO.Data.UserAccount.AcceptedTOS;
+                response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
+            }
+            else
+            {
+                response.Data.Id = sessionResponseDTO.Data.UserAccount.Id.ToString();
+                response.Data.Username = sessionResponseDTO.Data.UserAccount.Username;
+                response.Data.Role = sessionResponseDTO.Data.UserAccount.RoleType;
+                response.Data.AcceptedTOS = sessionResponseDTO.Data.UserAccount.AcceptedTOS;
+                response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
+            }
+
+            
             return response;
         }
     }

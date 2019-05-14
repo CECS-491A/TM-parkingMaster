@@ -36,6 +36,7 @@ export default {
 
       // Check if user has accepted the TOS
       } else if (acceptedTOS === 'false') {
+        this.authenticated = true
         this.$router.push('/TOS')
         return
       } else if (role !== 'unauthorized') {
