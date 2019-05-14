@@ -18,9 +18,11 @@ export default {
   }
 }
 
+// Set default user values
 let userRole = sessionStorage.getItem('ParkingMasterRole')
 if (userRole === null) {
   sessionStorage.setItem('ParkingMasterRole', 'unauthorized')
+  sessionStorage.setItem('ParkingMasterAcceptedTOS', true)
 }
 </script>
 

@@ -15,6 +15,11 @@ namespace ParkingMaster.Manager.Managers
 
         public static ResponseDTO<HttpStatusCode> ConvertErrorToStatus(string error)
         {
+            /* Custom Status Codes in use:
+             *      401 - Will end user session in the frontend
+             *      418 - User is Disabled
+             *      419 - User has yet to accept TOS
+             */
             switch (error)
             {
                 // Error 0
@@ -82,19 +87,35 @@ namespace ParkingMaster.Manager.Managers
                     };
 
                 // Error 8
-                case ErrorStrings.LOT_NOT_FOUND:
+                case ErrorStrings.RESOURCE_NOT_FOUND:
                     return new ResponseDTO<HttpStatusCode>()
                     {
                         Data = (HttpStatusCode)400,
                         Error = "Resource not found."
                     };
 
-                // Error 8
+                // Error 9
                 case ErrorStrings.USER_NOT_FOUND:
                     return new ResponseDTO<HttpStatusCode>()
                     {
                         Data = (HttpStatusCode)400,
                         Error = "Resource not found."
+                    };
+
+                // Error 10
+                case ErrorStrings.USER_DISABLED:
+                    return new ResponseDTO<HttpStatusCode>()
+                    {
+                        Data = (HttpStatusCode)418,
+                        Error = "User is currently disabled."
+                    };
+
+                // Error 11
+                case ErrorStrings.USER_TOS_NOT_ACCEPTED:
+                    return new ResponseDTO<HttpStatusCode>()
+                    {
+                        Data = (HttpStatusCode)419,
+                        Error = "User must accept the TOS before proceeding."
                     };
 
                 default:

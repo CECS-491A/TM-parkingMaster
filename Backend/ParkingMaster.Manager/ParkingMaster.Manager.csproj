@@ -50,7 +50,7 @@
     <Compile Include="Controllers\LotManagementController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\SsoController.cs" />
-    <Compile Include="Controllers\TestingController.cs" />
+    <Compile Include="Controllers\TermsOfServiceController.cs" />
     <Compile Include="App_Start\WebApiConfigure.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
@@ -63,6 +63,7 @@
     <Compile Include="Managers\LotManagementManager.cs" />
     <Compile Include="Managers\ReservationManager.cs" />
     <Compile Include="Managers\ResponseManager.cs" />
+    <Compile Include="Managers\TermsOfServiceManager.cs" />
     <Compile Include="Managers\UserManagementManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

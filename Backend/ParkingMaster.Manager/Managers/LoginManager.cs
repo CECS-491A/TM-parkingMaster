@@ -71,7 +71,7 @@ namespace ParkingMaster.Manager.Managers
                     SsoId = ssoId,
                     Username = request.Email,
                     IsActive = true,
-                    IsFirstTimeUser = true,
+                    AcceptedTOS = false,
                     RoleType = Roles.UNASSIGNED
                 };
                 List<Claim> newClaims = _claimService.GetUserClaims(Roles.UNASSIGNED, request.Email).Data;
@@ -110,7 +110,7 @@ namespace ParkingMaster.Manager.Managers
             catch
             {
                 response.Data = null;
-                response.Error = "Invalid Token: " + sessionId;
+                response.Error = ErrorStrings.REQUEST_FORMAT;
                 return response;
             }
 
@@ -125,20 +125,21 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
-            // Get user data from data store
-            ResponseDTO<UserAccountDTO> userResponseDTO = _userManagementService.GetUserByUserId(sessionResponseDTO.Data.Id);
-            if(userResponseDTO.Data == null)
+            // Check if user is currently disabled
+            if (!sessionResponseDTO.Data.UserAccount.IsActive)
             {
                 response.Data = null;
-                response.Error = userResponseDTO.Error;
+                response.Error = ErrorStrings.USER_DISABLED;
                 return response;
             }
 
-            response.Data = new ParkingMasterFrontendDTO();
             // Return response info
-            response.Data.Id = userResponseDTO.Data.Id.ToString();
-            response.Data.Username = userResponseDTO.Data.Username;
-            response.Data.Role = userResponseDTO.Data.RoleType;
+            response.Data = new ParkingMasterFrontendDTO();
+
+            response.Data.Id = sessionResponseDTO.Data.UserAccount.Id.ToString();
+            response.Data.Username = sessionResponseDTO.Data.UserAccount.Username;
+            response.Data.Role = sessionResponseDTO.Data.UserAccount.RoleType;
+            response.Data.AcceptedTOS = sessionResponseDTO.Data.UserAccount.AcceptedTOS;
             response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
             return response;
         }

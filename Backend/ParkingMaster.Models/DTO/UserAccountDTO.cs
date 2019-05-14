@@ -15,8 +15,8 @@ namespace ParkingMaster.Models.DTO
         public string Username { get; set; }
         public Guid Id { get; set; }
         public Guid SsoId { get; set; }
-        public bool? IsActive { get; set; }
-        public bool? IsFirstTimeUser { get; set; }
+        public bool IsActive { get; set; }
+        public bool AcceptedTOS { get; set; }
         public string RoleType { get; set; }
 
         // Constructors
@@ -34,7 +34,7 @@ namespace ParkingMaster.Models.DTO
             Username = userAccount.Username;
             SsoId = userAccount.SsoId;
             IsActive = userAccount.IsActive;
-            IsFirstTimeUser = userAccount.IsFirstTimeUser;
+            AcceptedTOS = userAccount.AcceptedTOS;
             RoleType = userAccount.RoleType;
         }
     }

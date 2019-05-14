@@ -9,6 +9,7 @@ import VehicleRegistration from '@/views/VehicleRegistration'
 import ParkingLotDashboard from '@/views/ParkingLotDashboard'
 import UserDashboard from '@/views/UserDashboard'
 import RoleChoice from '@/views/RoleChoice'
+import TOS from '@/views/TOS'
 
 Vue.use(Router)
 
@@ -63,6 +64,11 @@ export default new Router({
       path: '/RoleChoice',
       name: 'roleChoice',
       component: RoleChoice
+    },
+    {
+      path: '/TOS',
+      name: 'tos',
+      component: TOS
     }
   ]
 })
