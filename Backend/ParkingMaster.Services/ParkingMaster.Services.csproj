@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ClaimService.cs" />
     <Compile Include="Services\Contracts\IClaimService.cs" />
+    <Compile Include="Services\Contracts\ILoggerService.cs" />
     <Compile Include="Services\Contracts\IReservationServices.cs" />
     <Compile Include="Services\Contracts\ISessionService.cs" />
     <Compile Include="Services\Contracts\ILotManagementService.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Services\Contracts\ISignatureService.cs" />
     <Compile Include="Services\Contracts\IUserManagementService.cs" />
     <Compile Include="Services\DatabaseCheckerService.cs" />
+    <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Services\LotManagementService.cs" />
     <Compile Include="Services\PasswordService.cs" />
     <Compile Include="Services\PwnedPasswords.cs" />
@@ -101,6 +103,9 @@
       <Version>2.10.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>
