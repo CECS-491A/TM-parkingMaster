@@ -23,7 +23,7 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 		//Seed method
 		protected override void Seed(ParkingMaster.DataAccess.UserContext context)
 		{
-            ResetDatabaseProductionSeed(context);
+
         }
 
         private void ResetDatabaseProductionSeed(ParkingMaster.DataAccess.UserContext context)

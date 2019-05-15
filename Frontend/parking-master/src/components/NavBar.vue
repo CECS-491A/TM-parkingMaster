@@ -67,7 +67,7 @@ export default {
 
       if (location === 'logout') {
         auth.logout(this.$router)
-      } else if (!acceptedTOS) {
+      } else if (acceptedTOS === 'false') {
         this.$router.push('/TOS')
       } else {
         this.$router.push(location)

@@ -40,7 +40,7 @@ export default {
     let acceptedTOS = sessionStorage.getItem('ParkingMasterAcceptedTOS')
 
     // User must have yet to accept current TOS to access this page
-    if (acceptedTOS === 'true') {
+    if (acceptedTOS !== 'false') {
       alert('Unauthorized to access requested page.')
       this.$router.push('/Home')
     }

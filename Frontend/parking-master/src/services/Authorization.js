@@ -61,11 +61,14 @@ const logout = (router) => {
     .post(apiCalls.LOGOUT, {
       Token: sessionStorage.getItem('ParkingMasterToken')
     })
-  sessionStorage.clear()
-  sessionStorage.setItem('ParkingMasterRefresh', true)
-  sessionStorage.setItem('ParkingMasterRole', 'unauthorized')
-  alert('Logout successful.')
-  router.push('/Home')
+    .then(resp => {
+      sessionStorage.clear()
+      sessionStorage.setItem('ParkingMasterRefresh', true)
+      sessionStorage.setItem('ParkingMasterRole', 'unauthorized')
+      sessionStorage.setItem('ParkingMasterAcceptedTOS', true)
+      alert('Logout successful.')
+      router.push('/Home')
+    })
 }
 
 const invalidSession = (router) => {
