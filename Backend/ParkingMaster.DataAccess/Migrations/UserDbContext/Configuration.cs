@@ -24,7 +24,12 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 		//Seed method
 		protected override void Seed(ParkingMaster.DataAccess.UserContext context)
 		{
+            // Uncomment any code you wish to run
 
+            //ResetDatabase(context);                   // Completely Resets the Database (Except for TOS)
+            //ResetThenAddFunctions(context);           // Just resets functions and adds all specified functions
+            //AddTOS(context);                          // Adds in a TOS (only run this once, if you already have a TOS do not rerun even after ResetDatabase())
+            //CreateAdminFromExistingUser(context);     // Manually changes a user into an admin, must manually change userId for admin
         }
 
         private void CreateAdminFromExistingUser(ParkingMaster.DataAccess.UserContext context)
@@ -43,18 +48,10 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             userGateway.ResetUserClaims(adminId, claimsList);
         }
 
-        private void ResetDatabaseProductionSeed(ParkingMaster.DataAccess.UserContext context)
+        private void ResetThenAddFunctions(ParkingMaster.DataAccess.UserContext context)
         {
-            // Reset Database
-            var userGateway = new UserGateway(context);
-            userGateway.ResetDatabase();
             var functionGateway = new FunctionGateway(context);
             functionGateway.ResetDatabase();
-            var lotGateway = new LotGateway(context);
-            lotGateway.ResetDatabase();
-            var sessionGateway = new SessionGateway(context);
-            sessionGateway.ResetDatabase();
-            var tosGateway = new TosGateway(context);
 
             // Add Functions For Authorizarion
             functionGateway.StoreFunction(new Function("SetRole", true));
@@ -65,6 +62,13 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
             functionGateway.StoreFunction(new Function("AddVehicle", true));
             functionGateway.StoreFunction(new Function("ReserveParkingSpot", true));
             functionGateway.StoreFunction(new Function("UpdateReservation", true));
+            functionGateway.StoreFunction(new Function("UsageDashboard", true));
+            functionGateway.StoreFunction(new Function("ViewLogs", true));
+        }
+
+        private void AddTOS(ParkingMaster.DataAccess.UserContext context)
+        {
+            var tosGateway = new TosGateway(context);
 
             // Add TOS
             string filepath = "C:\\TOS\\default.txt";
@@ -75,6 +79,19 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
                 TosName = "Initial TOS"
             };
             tosGateway.AddAndSetNewTos(tos);
+        }
+
+        private void ResetDatabase(ParkingMaster.DataAccess.UserContext context)
+        {
+            // Reset Database
+            var userGateway = new UserGateway(context);
+            userGateway.ResetDatabase();
+            var functionGateway = new FunctionGateway(context);
+            functionGateway.ResetDatabase();
+            var lotGateway = new LotGateway(context);
+            lotGateway.ResetDatabase();
+            var sessionGateway = new SessionGateway(context);
+            sessionGateway.ResetDatabase();
         }
 
         private void UnitTestSeed(ParkingMaster.DataAccess.UserContext context)
