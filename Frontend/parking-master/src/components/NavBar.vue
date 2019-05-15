@@ -65,10 +65,9 @@ export default {
   methods: {
     navigate (location) {
       let acceptedTOS = sessionStorage.getItem('ParkingMasterAcceptedTOS')
-
       if (location === 'logout') {
         auth.logout(this.$router)
-      } else if (!acceptedTOS) {
+      } else if (acceptedTOS === 'false') {
         this.$router.push('/TOS')
       } else {
         this.$router.push(location)
@@ -78,40 +77,35 @@ export default {
   beforeMount () {
     this.role = sessionStorage.getItem('ParkingMasterRole')
     if (this.role === 'standard') {
-      this.items = [
-        this.home,
+      this.items = [this.home,
         this.userDash,
         this.parkingLots,
         this.vehicleReg,
         this.logoutTile]
       this.authorized = true
     } else if (this.role === 'lotmanager') {
-      this.items = [
-        this.home,
+      this.items = [this.home,
         this.userDash,
         this.lotReg,
         this.lotDelete,
         this.logoutTile]
       this.authorized = true
     }
-    else if (this.role === 'admin') {
-      this.items = [this.logs]
+    else if (this.role === 'administrator') {
+      this.items = [this.home,
+      this.userDash,
+      this.logoutTile,
+      this.logs]
       this.authorized = true
     } 
     else if (this.role === 'unassigned') {
       this.items = [this.home,
         this.userDash,
-        this.roleChoice,
-        this.logoutTile]
+        this.roleChoice]
       this.authorized = true
-    } else if (this.role === 'disabled') {
-      this.items = [
-        this.home,
-        this.logoutTile]
-      this.authorized = true
-    } else {
-      this.items = [
-        this.home]
+    } 
+    else {
+      this.items = [this.home]
       this.authorized = false
     }
   }
