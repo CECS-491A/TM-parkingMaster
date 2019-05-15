@@ -2,7 +2,7 @@
   <div class="view-lot-registration">
      <form class="form-lot-registration">
       <h2 class="form-lot-registration-heading">Lot Registration</h2>
-      <v-form ref="form">
+      <v-form ref="form" v-if="!worked">
         <v-text-field id="lotname" v-model="lotname" class="form-control" placeholder="Lot Name" required></v-text-field>
         <v-text-field id="address" v-model="address" class="form-control" placeholder="Address" required></v-text-field>
         <v-text-field id="cost" v-model="cost" class="form-control" placeholder="Cost" required></v-text-field>
@@ -20,9 +20,17 @@
           </label>
           <input type="file" class="file-upload" id="spotmap" ref="spotmap" accept=".png" v-on:change="imageHandler()"/>
         </div>
-        <v-btn depressed color="primary" v-on:click="submitlot" type="submit">Submit Lot</v-btn>
+        <v-btn depressed color="primary" v-on:click="submitlot" type="submit" v-if="!worked">Submit Lot</v-btn>
+        <v-alert :value="errorOn"
+          color="error"
+          transition="scale-transition">
+            <h3> {{error}} </h3></v-alert>
       </v-form>
     </form>
+    <div id="responseMessage" v-if="worked">
+        <h2>Successfully added parking lot.</h2>
+        <br />
+    </div>
   </div>
 </template>
 
@@ -79,6 +87,7 @@ export default {
             console.log('OK')
             this.file = ''
             this.map = ''
+            this.worked = true
           }.bind(this))
           .catch(e => {
             this.error = 'Failed to register parking lot. Please try again later.'
