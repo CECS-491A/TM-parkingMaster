@@ -99,9 +99,16 @@ export default {
         this.roleChoice,
         this.logoutTile]
       this.authorized = true
+    } else if (this.role === 'administrator') {
+      this.items = [
+        this.home,
+        this.userDash,
+        this.logoutTile]
+      this.authorized = true
     } else if (this.role === 'disabled') {
       this.items = [
         this.home,
+        this.userDash,
         this.logoutTile]
       this.authorized = true
     } else {

@@ -69,6 +69,11 @@ export default new Router({
       path: '/TOS',
       name: 'tos',
       component: TOS
+    },
+    {
+      path: '*',
+      name: 'default',
+      component: Home
     }
   ]
 })
