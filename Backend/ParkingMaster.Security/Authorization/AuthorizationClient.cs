@@ -26,6 +26,7 @@ namespace ParkingMaster.Security.Authorization
         public ResponseDTO<Boolean> Authorize(string username, List<ClaimDTO> functionClaims)
         {
             ResponseDTO<Boolean> response = new ResponseDTO<bool>();
+
             // Check for null inputs
             if (functionClaims == null || username == null)
             {
@@ -33,6 +34,9 @@ namespace ParkingMaster.Security.Authorization
                 response.Error = "Input was Null";
                 return response;
             }
+
+            // Check if user is disabled/accepted TOS
+            response = CheckUser(username);
 
             // Check if function is disabled
             response = AuthorizeFunction(functionClaims);
@@ -126,6 +130,37 @@ namespace ParkingMaster.Security.Authorization
 
             // Check if function is active
             response = functionGateway.IsFunctionActive(functionName);
+            return response;
+        }
+
+        private ResponseDTO<Boolean> CheckUser(string username)
+        {
+            ResponseDTO<UserAccountDTO> userResponse = userGateway.GetUserByUsername(username);
+            ResponseDTO<bool> response = new ResponseDTO<bool>()
+            {
+                Data = false
+            };
+
+            if (userResponse.Data == null)
+            {
+                response.Error = userResponse.Error;
+                return response;
+            }
+
+            if (!userResponse.Data.IsActive)
+            {
+                response.Error = ErrorStrings.USER_DISABLED;
+                return response;
+            }
+
+            if (!userResponse.Data.AcceptedTOS)
+            {
+                response.Error = ErrorStrings.USER_TOS_NOT_ACCEPTED;
+                return response;
+            }
+
+            // If everything about the user is fine, return true
+            response.Data = true;
             return response;
         }
 

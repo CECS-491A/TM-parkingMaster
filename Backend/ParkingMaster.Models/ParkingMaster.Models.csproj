@@ -85,6 +85,7 @@
     <Compile Include="Models\Session.cs" />
     <Compile Include="Models\Lot.cs" />
     <Compile Include="Models\Spot.cs" />
+    <Compile Include="Models\TermsOfService.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Models\UserClaims.cs" />
     <Compile Include="Models\Vehicle.cs" />

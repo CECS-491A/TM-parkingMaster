@@ -31,8 +31,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
             }
         }
 
@@ -54,8 +54,8 @@ namespace ParkingMaster.Manager.Controllers
                 }
                 else
                 {
-                    ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                    return Content(statuesResponse.Data, statuesResponse.Error);
+                    ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                    return Content(statusResponse.Data, statusResponse.Error);
                 }
             }
 
@@ -76,8 +76,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
             }
         }
 
@@ -95,8 +95,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
             }
         }
 

@@ -17,7 +17,9 @@ namespace ParkingMaster.Models.Constants
         public const string DATA_ACCESS_ERROR = "Error when interacting with the data store."; // Error 5
         public const string OLD_SSO_REQUEST = "Timestamp on request is too old to be processed."; // Error 6
         public const string NO_FUNCTION_TO_AUTHORIZE = "No function claim provided to authorization client."; // Error 7
-        public const string LOT_NOT_FOUND = "Parking lot does not exist."; // Error 8
-        public const string USER_NOT_FOUND = "Username does not exist."; // Error 9
+        public const string RESOURCE_NOT_FOUND = "Requested resource does not exist."; // Error 8
+        public const string USER_NOT_FOUND = "User does not exist."; // Error 9
+        public const string USER_DISABLED = "User is currently disabled."; // Error 10
+        public const string USER_TOS_NOT_ACCEPTED = "User has yet to accepted the Terms of Service."; // Error 11
     }
 }

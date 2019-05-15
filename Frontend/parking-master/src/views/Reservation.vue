@@ -121,8 +121,16 @@ export default {
             console.log(e)
             this.error = 'Failed to reserve parking spot.'
             this.errorOn = true
+
             if (e.response.status === 401) {
               auth.invalidSession(this.$router)
+            } else if (e.response.status === 418) {
+              sessionStorage.setItem('ParkingMasterRole', 'disabled')
+              sessionStorage.setItem('ParkingMasterRefresh', 'true')
+              this.$router.push('/Home')
+            } else if (e.response.status === 419) {
+              sessionStorage.setItem('ParkingMasterAcceptedTOS', 'false')
+              this.$router.push('/TOS')
             }
           })
       }

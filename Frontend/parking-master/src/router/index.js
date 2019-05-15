@@ -9,6 +9,7 @@ import VehicleRegistration from '@/views/VehicleRegistration'
 import ParkingLotDashboard from '@/views/ParkingLotDashboard'
 import UserDashboard from '@/views/UserDashboard'
 import RoleChoice from '@/views/RoleChoice'
+import TOS from '@/views/TOS'
 import UsageDashboard from '@/Views/UsageDashboard'
 import LogDashboard from '@/Views/LogDashboard'
 
@@ -75,6 +76,11 @@ export default new Router({
       path: '/LogDashboard',
       name: 'logDashboard',
       component: LogDashboard
+    },
+    {
+      path: '/TOS',
+      name: 'tos',
+      component: TOS
     }
   ]
 })

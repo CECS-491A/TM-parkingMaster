@@ -18,5 +18,6 @@ namespace ParkingMaster.DataAccess
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Lot> Lots { get; set; }
         public DbSet<Spot> Spots { get; set; }
+        public DbSet<TermsOfService> TOS { get; set; }
     }
 }

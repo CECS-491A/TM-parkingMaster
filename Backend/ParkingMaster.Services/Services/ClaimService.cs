@@ -54,8 +54,10 @@ namespace ParkingMaster.Services.Services
             List<Claim> claimsList = new List<Claim>();
 
             claimsList.Add(new Claim("Action", "ReserveParkingSpot"));
-            claimsList.Add(new Claim("Action", "UpdateParkingSpot"));
-            claimsList.Add(new Claim("Action", "ViewParkingLots"));
+            claimsList.Add(new Claim("Action", "UpdateReservation"));
+            claimsList.Add(new Claim("Action", "ViewParkingLot"));
+            claimsList.Add(new Claim("Action", "ViewAllParkingLots"));
+            claimsList.Add(new Claim("Action", "AddVehicle"));
 
             response.Data = claimsList;
             return response;

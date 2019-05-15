@@ -6,6 +6,7 @@ using ParkingMaster.Models.Constants;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Services.Services;
+using ParkingMaster.Security.Authorization;
 
 namespace ParkingMaster.Manager.Managers
 {
@@ -13,12 +14,14 @@ namespace ParkingMaster.Manager.Managers
     {
         private ReservationServices _reservationServices;
         private SessionService _sessionServices;
+        private AuthorizationClient _authorizationClient;
         private ILoggerService _loggerService;
 
         public ReservationManager()
         {
             _reservationServices = new ReservationServices();
             _sessionServices = new SessionService();
+            _authorizationClient = new AuthorizationClient();
             _loggerService = new LoggerService();
         }
 
@@ -62,7 +65,21 @@ namespace ParkingMaster.Manager.Managers
                 {
                     Data = false,
                     Error = sessionDTO.Error
+                };
+            }
 
+            // Check that user has permission to use this function
+            List<ClaimDTO> requiredClaims = new List<ClaimDTO>()
+            {
+                new ClaimDTO("Action", "ReserveParkingSpot")
+            };
+            ResponseDTO<Boolean> authResponse = _authorizationClient.Authorize(sessionDTO.Data.UserAccount.Username, requiredClaims);
+            if (!authResponse.Data)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = authResponse.Error
                 };
             }
 
@@ -121,6 +138,21 @@ namespace ParkingMaster.Manager.Managers
                     Data = null,
                     Error = sessionDTO.Error
 
+                };
+            }
+
+            // Check that user has permission to use this function
+            List<ClaimDTO> requiredClaims = new List<ClaimDTO>()
+            {
+                new ClaimDTO("Action", "UpdateReservation")
+            };
+            ResponseDTO<Boolean> authResponse = _authorizationClient.Authorize(sessionDTO.Data.UserAccount.Username, requiredClaims);
+            if (!authResponse.Data)
+            {
+                return new ResponseDTO<UserSpotDTO>()
+                {
+                    Data = null,
+                    Error = authResponse.Error
                 };
             }
 

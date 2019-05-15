@@ -43,15 +43,15 @@ namespace ParkingMaster.DataAccess
 				return new ResponseDTO<UserAccountDTO>()
 				{
 					Data = new UserAccountDTO(userAccount)
-
                 };
+
 			}
 			catch (Exception)
 			{
 				return new ResponseDTO<UserAccountDTO>()
 				{
 					Data = null,
-                    Error =ErrorStrings.DATA_ACCESS_ERROR
+                    Error = ErrorStrings.DATA_ACCESS_ERROR
                 };
 			}
 		}
@@ -215,8 +215,42 @@ namespace ParkingMaster.DataAccess
 			}
 		}
 
-		//Delete user by username
-		public ResponseDTO<bool> DeleteUser(Guid userId)
+        public ResponseDTO<bool> AcceptTOS(Guid id)
+        {
+            using (var dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    //Queries for the user account based on username.
+                    var user = (from account in context.UserAccounts
+                                        where account.Id == id
+                                        select account).SingleOrDefault();
+
+                    user.AcceptedTOS = true;
+                    context.SaveChanges();
+                    dbContextTransaction.Commit();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = true
+                    };
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+
+                    return new ResponseDTO<bool>()
+                    {
+                        Data = false,
+                        Error = ErrorStrings.DATA_ACCESS_ERROR
+
+                    };
+                }
+            }
+        }
+
+        //Delete user by username
+        public ResponseDTO<bool> DeleteUser(Guid userId)
 		{
             using (var dbContextTransaction = context.Database.BeginTransaction())
             {
