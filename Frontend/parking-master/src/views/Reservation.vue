@@ -121,8 +121,16 @@ export default {
             console.log(e)
             this.error = 'Failed to reserve parking spot.'
             this.errorOn = true
+
             if (e.response.status === 401) {
               auth.invalidSession(this.$router)
+            } else if (e.response.status === 418) {
+              sessionStorage.setItem('ParkingMasterRole', 'disabled')
+              sessionStorage.setItem('ParkingMasterRefresh', 'true')
+              this.$router.push('/Home')
+            } else if (e.response.status === 419) {
+              sessionStorage.setItem('ParkingMasterAcceptedTOS', 'false')
+              this.$router.push('/TOS')
             }
           })
       }
@@ -143,12 +151,16 @@ export default {
       .then(function (response) {
         this.spots = response.data.SpotsList
         this.map = 'data:image/png;base64,' + response.data.LotMap
+        this.spots.sort((a, b) => (a.SpotName > b.SpotName) ? 1 : -1)
       }.bind(this))
     await axios
       .post(apiCalls.GET_ALL_USER_VEHICLES, {
         Token: sessionStorage.getItem('ParkingMasterToken')
       })
-      .then(response => (this.vehicles = response.data))
+      .then(response => {
+        this.vehicles = response.data
+        this.vehicles.sort((a, b) => (a.Plate > b.Plate) ? 1 : -1)
+      })
       .catch(e => {
         console.log(e)
         if (e.response.status === 401) {

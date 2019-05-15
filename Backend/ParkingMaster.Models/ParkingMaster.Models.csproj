@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\LogConstants.cs" />
     <Compile Include="Constants\Roles.cs" />
     <Compile Include="DTO\ClaimDTO.cs" />
     <Compile Include="DTO\LotDeletionDTO.cs" />
@@ -79,9 +80,12 @@
     <Compile Include="Constants\ErrorStrings.cs" />
     <Compile Include="Models\Claim.cs" />
     <Compile Include="Models\Function.cs" />
+    <Compile Include="Models\Log.cs" />
+    <Compile Include="Models\LogFailureCount.cs" />
     <Compile Include="Models\Session.cs" />
     <Compile Include="Models\Lot.cs" />
     <Compile Include="Models\Spot.cs" />
+    <Compile Include="Models\TermsOfService.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Models\UserClaims.cs" />
     <Compile Include="Models\Vehicle.cs" />

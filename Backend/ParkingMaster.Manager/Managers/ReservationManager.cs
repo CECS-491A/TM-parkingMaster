@@ -6,6 +6,7 @@ using ParkingMaster.Models.Constants;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
 using ParkingMaster.Services.Services;
+using ParkingMaster.Security.Authorization;
 
 namespace ParkingMaster.Manager.Managers
 {
@@ -13,11 +14,15 @@ namespace ParkingMaster.Manager.Managers
     {
         private ReservationServices _reservationServices;
         private SessionService _sessionServices;
+        private AuthorizationClient _authorizationClient;
+        private ILoggerService _loggerService;
 
         public ReservationManager()
         {
             _reservationServices = new ReservationServices();
             _sessionServices = new SessionService();
+            _authorizationClient = new AuthorizationClient();
+            _loggerService = new LoggerService();
         }
 
         public ResponseDTO<bool> ReserveSpot(ReservationRequestDTO request)
@@ -60,7 +65,21 @@ namespace ParkingMaster.Manager.Managers
                 {
                     Data = false,
                     Error = sessionDTO.Error
+                };
+            }
 
+            // Check that user has permission to use this function
+            List<ClaimDTO> requiredClaims = new List<ClaimDTO>()
+            {
+                new ClaimDTO("Action", "ReserveParkingSpot")
+            };
+            ResponseDTO<Boolean> authResponse = _authorizationClient.Authorize(sessionDTO.Data.UserAccount.Username, requiredClaims);
+            if (!authResponse.Data)
+            {
+                return new ResponseDTO<bool>()
+                {
+                    Data = false,
+                    Error = authResponse.Error
                 };
             }
 
@@ -74,6 +93,7 @@ namespace ParkingMaster.Manager.Managers
                 SpotId = spotId
             };
 
+            _loggerService.LogAction(LogConstants.ACTION_ADD_RESERVATION, sessionDTO.Data.Id.ToString(), sessionDTO.Data.SessionId.ToString());
             return _reservationServices.ReserveSpot(reservationDTO);
         }
 
@@ -121,13 +141,28 @@ namespace ParkingMaster.Manager.Managers
                 };
             }
 
+            // Check that user has permission to use this function
+            List<ClaimDTO> requiredClaims = new List<ClaimDTO>()
+            {
+                new ClaimDTO("Action", "UpdateReservation")
+            };
+            ResponseDTO<Boolean> authResponse = _authorizationClient.Authorize(sessionDTO.Data.UserAccount.Username, requiredClaims);
+            if (!authResponse.Data)
+            {
+                return new ResponseDTO<UserSpotDTO>()
+                {
+                    Data = null,
+                    Error = authResponse.Error
+                };
+            }
+
             ReservationDTO reservationDTO = new ReservationDTO()
             {
                 DurationInMinutes = request.DurationInMinutes,
                 UserId = sessionDTO.Data.UserAccount.Id,
                 SpotId = spotId
             };
-
+            _loggerService.LogAction(LogConstants.ACTION_EXTEND_RESERVATION, sessionDTO.Data.Id.ToString(), sessionDTO.Data.SessionId.ToString());
             return _reservationServices.ExtendReservation(reservationDTO);
         }
 

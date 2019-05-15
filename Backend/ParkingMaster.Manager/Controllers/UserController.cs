@@ -18,27 +18,8 @@ namespace ParkingMaster.Manager.Controllers
     public class UserController : ApiController
     {
         [HttpPost]
-        [Route("")]
-        public IHttpActionResult SsoLogin([FromBody, Required] SsoUserRequestDTO request)
-        {
-            LoginManager loginManager = new LoginManager();
-
-            ResponseDTO<Session> response = loginManager.SsoLogin(request);
-
-            if (response.Data != null)
-            {
-                return Redirect("http://localhost:8080/#/login?token=" + response.Data.SessionId.ToString("D"));
-            }
-            else
-            {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
-            }
-        }
-
-        [HttpPost]
         [Route("api/user/deleteallapps")]
-        public async Task<IHttpActionResult> Delete([FromBody, Required] ParkingMasterFrontendDTO request)
+        public async Task<IHttpActionResult> DeleteFromAll([FromBody, Required] ParkingMasterFrontendDTO request)
         {
             LoginManager loginManager = new LoginManager();
             UserManagementManager userManager = new UserManagementManager();
@@ -54,12 +35,35 @@ namespace ParkingMaster.Manager.Controllers
                 }
                 else
                 {
-                    ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                    return Content(statuesResponse.Data, statuesResponse.Error);
+                    ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                    return Content(statusResponse.Data, statusResponse.Error);
                 }
             }
 
             return Content((HttpStatusCode)404, response.Error);
+        }
+
+        [HttpPost]
+        [Route("api/user/delete")]
+        public IHttpActionResult Delete([FromBody, Required] ParkingMasterFrontendDTO request)
+        {
+            if (request == null)
+            {
+                return Content((HttpStatusCode)400, "Request is null.");
+            }
+
+            UserManagementManager userManager = new UserManagementManager();
+            ResponseDTO<bool> managerResponse = userManager.DeleteUser(request);
+
+            if (managerResponse.Data)
+            {
+                return Ok();
+            }
+            else
+            {
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(managerResponse.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
+            }
         }
 
         [HttpPost]
@@ -76,8 +80,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
             }
         }
 
@@ -95,8 +99,8 @@ namespace ParkingMaster.Manager.Controllers
             }
             else
             {
-                ResponseDTO<HttpStatusCode> statuesResponse = ResponseManager.ConvertErrorToStatus(response.Error);
-                return Content(statuesResponse.Data, statuesResponse.Error);
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
             }
         }
 

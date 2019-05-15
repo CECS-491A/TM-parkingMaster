@@ -1,6 +1,31 @@
 <template>
   <div class = "view-user-dashboard">
-    <v-btn class="error" v-on:click="ssoDelete">User Deletetion from SSO</v-btn>
+
+    <v-menu :nudge-width="100" offset-y>
+      <template v-slot:activator="{ on }"
+        color="error">
+        <v-btn v-on="on"
+          color="error">
+          Delete Account
+          <v-icon v-text="'keyboard_arrow_down'"></v-icon>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-tile
+          class="delete-btn"
+          @click="ssoDelete"
+        >
+          <v-list-tile-title v-text="'Delete from all SSO Applications'"></v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile
+          class="delete-btn"
+          @click="pmDelete"
+        >
+          <v-list-tile-title v-text="'Delete from only Parking Master'"></v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
     <br />
 
     <v-list v-if="role == 'standard'">
@@ -70,6 +95,24 @@ export default {
           alert('Delete failed')
         })
     },
+    pmDelete () {
+      axios
+        .post(apiCalls.DELETE_FROM_PARKINGMASTER, {
+          Token: sessionStorage.getItem('ParkingMasterToken')
+        })
+        .then(resp => {
+          alert('Account has been deleted from Parking Master')
+
+          sessionStorage.clear()
+          sessionStorage.setItem('ParkingMasterRefresh', true)
+          sessionStorage.setItem('ParkingMasterRole', 'unauthorized')
+          sessionStorage.setItem('ParkingMasterAcceptedTOS', true)
+          this.$router.push('/Home')
+        })
+        .catch(e => {
+          alert('Delete failed')
+        })
+    },
     submitReservation (spotId, vin, length, index) {
       let element = document.getElementById('reservationTile' + index).getElementsByClassName('v-list__tile__title')
 
@@ -108,8 +151,16 @@ export default {
           .catch(e => {
             console.log(e)
             console.log('Failed to extend reservation.')
+
             if (e.response.status === 401) {
               auth.invalidSession(this.$router)
+            } else if (e.response.status === 418) {
+              sessionStorage.setItem('ParkingMasterRole', 'disabled')
+              sessionStorage.setItem('ParkingMasterRefresh', 'true')
+              this.$router.push('/Home')
+            } else if (e.response.status === 419) {
+              sessionStorage.setItem('ParkingMasterAcceptedTOS', 'false')
+              this.$router.push('/TOS')
             }
           })
       }
@@ -133,8 +184,16 @@ export default {
         })
         .catch(e => {
           console.log(e)
+
           if (e.response.status === 401) {
             auth.invalidSession(this.$router)
+          } else if (e.response.status === 418) {
+            sessionStorage.setItem('ParkingMasterRole', 'disabled')
+            sessionStorage.setItem('ParkingMasterRefresh', 'true')
+            this.$router.push('/Home')
+          } else if (e.response.status === 419) {
+            sessionStorage.setItem('ParkingMasterAcceptedTOS', 'false')
+            this.$router.push('/TOS')
           }
         })
     }

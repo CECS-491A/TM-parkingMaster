@@ -25,9 +25,21 @@ export default {
   },
   methods: {
     checkLocalStorage () {
-      console.log(sessionStorage.getItem('ParkingMasterRole'))
-      var username = sessionStorage.getItem('ParkingMasterUsername')
-      if (username !== null) {
+      let acceptedTOS = sessionStorage.getItem('ParkingMasterAcceptedTOS')
+      let username = sessionStorage.getItem('ParkingMasterUsername')
+      let role = sessionStorage.getItem('ParkingMasterRole')
+
+      // Most importantly, check if the user account is currently disabled
+      if (role === 'disabled') {
+        this.pageTitle = 'Sorry ' + username + ' it seems your account is currently disabled.'
+        this.authenticated = true
+
+      // Check if user has accepted the TOS
+      } else if (acceptedTOS === 'false') {
+        this.authenticated = true
+        this.$router.push('/TOS')
+        return
+      } else if (role !== 'unauthorized') {
         this.pageTitle = 'Welcome ' + username
         this.authenticated = true
       } else {

@@ -20,6 +20,7 @@ namespace ParkingMaster.Manager.Managers
         private SessionService _sessionService;
         private ClaimService _claimService;
         private AuthorizationClient _authorizationClient;
+        private ILoggerService _loggerService;
 
         public UserManagementManager()
         {
@@ -27,6 +28,7 @@ namespace ParkingMaster.Manager.Managers
             _sessionService = new SessionService();
             _claimService = new ClaimService();
             _authorizationClient = new AuthorizationClient();
+            _loggerService = new LoggerService();
         }
         /*
         // I am considering moving context.SaveChanges() here, but maybe later
@@ -76,7 +78,7 @@ namespace ParkingMaster.Manager.Managers
             HttpClient client = new HttpClient();
             ISignatureService _signatureService = new SignatureService();
             // NEED A BETTER PLACE TO HOLD THIS... 
-            string appID = "4850df59-831f-4b2c-a035-9de6ad324d76";
+            string appID = "B1CC61FD-6902-4796-BC05-D5E477FE91C8";
 
             ResponseDTO<UserAccountDTO> user = _userManagementService.GetUserByUserId(id);
 
@@ -163,6 +165,46 @@ namespace ParkingMaster.Manager.Managers
                 response.Error = boolResponse.Error;
                 return response;
             }
+        }
+
+        // Delete User From ParkingMaster request
+        public ResponseDTO<bool> DeleteUser(ParkingMasterFrontendDTO request)
+        {
+            ResponseDTO<bool> response = new ResponseDTO<bool>();
+
+            // Check if request id is in guid format
+            Guid token;
+            try
+            {
+                token = new Guid(request.Token);
+            }
+            catch (Exception e)
+            {
+                response.Data = false;
+                response.Error = ErrorStrings.REQUEST_FORMAT;
+                return response;
+            }
+
+            ResponseDTO<Session> sessionDTO = _sessionService.GetSession(token);
+            if (sessionDTO.Data == null)
+            {
+                response.Data = false;
+                response.Error = ErrorStrings.SESSION_NOT_FOUND;
+            }
+
+            ResponseDTO<bool> boolResponse;
+            try
+            {
+                response = _userManagementService.DeleteUser(sessionDTO.Data.UserAccount.Id);
+            }
+            catch (Exception e)
+            {
+                response.Data = false;
+                response.Error = "Failed to delete userID: " + sessionDTO.Data.UserAccount.Id + "\n" + e.Message;
+                return response;
+            }
+
+            return response;
         }
 
         /*
@@ -364,7 +406,8 @@ namespace ParkingMaster.Manager.Managers
                 response.Error = ErrorStrings.REQUEST_FORMAT;
                 return response;
             }
-
+            var userId = _sessionService.GetSession(sessionId);
+            _loggerService.LogAction(LogConstants.ACTION_LOGOUT, userId.Data.Id.ToString(), request.Token);
             return _sessionService.DeleteSession(sessionId);
         }
     }

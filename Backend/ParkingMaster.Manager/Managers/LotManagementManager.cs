@@ -19,12 +19,14 @@ namespace ParkingMaster.Manager.Managers
     {
         private readonly LotManagementService _lotManagementService;
         private readonly SessionService _sessionServices;
+        private ILoggerService _loggerService;
         UserContext _dbcontext;
 
         public LotManagementManager()
         {
             _lotManagementService = new LotManagementService();
             _sessionServices = new SessionService();
+            _loggerService = new LoggerService();
         }
 
         public LotManagementManager(UserContext context)
@@ -32,6 +34,7 @@ namespace ParkingMaster.Manager.Managers
             _dbcontext = context;
             _lotManagementService = new LotManagementService(_dbcontext);
             _sessionServices = new SessionService();
+            _loggerService = new LoggerService();
         }
 
         public ResponseDTO<Boolean> AddLot(HttpRequest httprequest)
@@ -62,6 +65,7 @@ namespace ParkingMaster.Manager.Managers
                         var spotfile = httprequest.Files["file"];
                         var mapfile = httprequest.Files["map"];
                         ResponseDTO<Boolean> response = _lotManagementService.AddLot(ownerid, lotname, address, cost, useraccount, spotfile, mapfile);
+                        _loggerService.LogAction(LogConstants.ACTION_REGISTER_LOT, SessionDTO.Data.Id.ToString(), SessionDTO.Data.SessionId.ToString());
                         return response;
                     }
                     else
@@ -112,6 +116,7 @@ namespace ParkingMaster.Manager.Managers
                     {
                         var lotname = request.LotName;
                         ResponseDTO<Boolean> response = _lotManagementService.DeleteLot(new Guid(lotname));
+                        _loggerService.LogAction(LogConstants.ACTION_DELETE_LOT, SessionDTO.Data.Id.ToString(), SessionDTO.Data.SessionId.ToString());
                         return response;
                     }
                     else

@@ -52,6 +52,7 @@
     <Compile Include="Gateways\FunctionGateway.cs" />
     <Compile Include="Gateways\SessionGateway.cs" />
     <Compile Include="Gateways\LotGateway.cs" />
+    <Compile Include="Gateways\TosGateway.cs" />
     <Compile Include="Gateways\UserGateway.cs" />
     <Compile Include="Gateways\VehicleGateway.cs" />
     <Compile Include="Migrations\UserDbContext\201903170516359_Initial.cs" />
@@ -69,6 +70,14 @@
     <Compile Include="Migrations\UserDbContext\201905082044289_Fix-Functions.cs" />
     <Compile Include="Migrations\UserDbContext\201905082044289_Fix-Functions.Designer.cs">
       <DependentUpon>201905082044289_Fix-Functions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\UserDbContext\201905141919244_Edit_TOS_Flag.cs" />
+    <Compile Include="Migrations\UserDbContext\201905141919244_Edit_TOS_Flag.Designer.cs">
+      <DependentUpon>201905141919244_Edit_TOS_Flag.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\UserDbContext\201905142029122_Add_TOS_Model.cs" />
+    <Compile Include="Migrations\UserDbContext\201905142029122_Add_TOS_Model.Designer.cs">
+      <DependentUpon>201905142029122_Add_TOS_Model.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\UserDbContext\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +116,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\UserDbContext\201905082044289_Fix-Functions.resx">
       <DependentUpon>201905082044289_Fix-Functions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserDbContext\201905141919244_Edit_TOS_Flag.resx">
+      <DependentUpon>201905141919244_Edit_TOS_Flag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserDbContext\201905142029122_Add_TOS_Model.resx">
+      <DependentUpon>201905142029122_Add_TOS_Model.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

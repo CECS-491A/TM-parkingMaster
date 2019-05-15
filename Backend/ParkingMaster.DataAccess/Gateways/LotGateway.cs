@@ -232,7 +232,7 @@ namespace ParkingMaster.DataAccess
                         return new ResponseDTO<Lot>()
                         {
                             Data = returnlot,
-                            Error = ErrorStrings.LOT_NOT_FOUND
+                            Error = ErrorStrings.RESOURCE_NOT_FOUND
                         };
                     }
 

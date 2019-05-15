@@ -3,6 +3,7 @@ using ParkingMaster.DataAccess;
 using ParkingMaster.DataAccess.Gateways;
 using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Models.Constants;
 using ParkingMaster.Services.Services;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,13 @@ namespace ParkingMaster.Manager.Managers
     {
         private VehicleService _vehicleServices;
         private SessionService _sessionServices;
+        private ILoggerService _loggerService;
 
         public VehicleManager()
         {
             _vehicleServices = new VehicleService();
             _sessionServices = new SessionService();
+            _loggerService = new LoggerService();
         }
 
         public ResponseDTO<List<Vehicle>> GetAllUserVehicles(ParkingMasterFrontendDTO request)
@@ -120,6 +123,7 @@ namespace ParkingMaster.Manager.Managers
                 State = request.State,
                 Vin = request.Vin
             };
+            _loggerService.LogAction(LogConstants.ACTION_ADD_VEHICLE, sessionDTO.Data.Id.ToString(), sessionDTO.Data.SessionId.ToString());
             return _vehicleServices.StoreVehicle(userVehicle);
         }
     }

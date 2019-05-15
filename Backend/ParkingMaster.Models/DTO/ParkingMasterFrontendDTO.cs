@@ -9,6 +9,6 @@ namespace ParkingMaster.Models.DTO
         public string Token { get; set; }
         public string Username { get; set; }
         public string Role { get; set; }
-        public long Timestamp { get; set; }
+        public bool AcceptedTOS { get; set; }
     }
 }

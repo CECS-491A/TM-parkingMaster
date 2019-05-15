@@ -19,8 +19,8 @@ namespace ParkingMaster.Models.Models
         [StringLength(350)]
         [Index(IsUnique=true)]
 		public string Username { get; set; }
-		public bool? IsActive { get; set; }
-		public bool? IsFirstTimeUser { get; set; }
+		public bool IsActive { get; set; }
+		public bool AcceptedTOS { get; set; }
 		public string RoleType { get; set; }
 
 		// Navigation Properties
@@ -31,24 +31,24 @@ namespace ParkingMaster.Models.Models
         {
             Id = Guid.NewGuid();
             IsActive = true;
-            IsFirstTimeUser = true;
+            AcceptedTOS = true;
         }
 
 		public UserAccount(string username)
 		{
             Id = Guid.NewGuid();
             IsActive = true;
-            IsFirstTimeUser = true;
+            AcceptedTOS = true;
             Username = username;
 		}
 
-		public UserAccount(Guid ssoId, string username, bool isActive, bool isFirstTimeUser, string roleType)
+		public UserAccount(Guid ssoId, string username, bool isActive, bool acceptedTOS, string roleType)
 		{
             Id = Guid.NewGuid();
             SsoId = ssoId;
             Username = username;
 			IsActive = isActive;
-			IsFirstTimeUser = isFirstTimeUser;
+            AcceptedTOS = acceptedTOS;
 			RoleType = roleType;
 		}
 	}

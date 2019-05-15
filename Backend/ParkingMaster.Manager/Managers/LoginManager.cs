@@ -18,6 +18,7 @@ namespace ParkingMaster.Manager.Managers
         private IUserManagementService _userManagementService;
         private ISignatureService _signatureService;
         private IClaimService _claimService;
+        private ILoggerService _loggerService;
 
         public LoginManager()
         {
@@ -25,6 +26,7 @@ namespace ParkingMaster.Manager.Managers
             _userManagementService = new UserManagementService();
             _signatureService = new SignatureService();
             _claimService = new ClaimService();
+            _loggerService = new LoggerService();
         }
 
         public ResponseDTO<Session> SsoLogin(SsoUserRequestDTO request)
@@ -36,6 +38,7 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = null;
                 response.Error = "My signature: " + _signatureService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
+                _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                 return response;
             }
 
@@ -44,6 +47,7 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = null;
                 response.Error = ErrorStrings.OLD_SSO_REQUEST;
+                _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                 return response;
             }
 
@@ -62,6 +66,7 @@ namespace ParkingMaster.Manager.Managers
                 {
                     response.Data = null;
                     response.Error = "User email may not be null.";
+                    _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                     return response;
                 }
 
@@ -71,7 +76,7 @@ namespace ParkingMaster.Manager.Managers
                     SsoId = ssoId,
                     Username = request.Email,
                     IsActive = true,
-                    IsFirstTimeUser = true,
+                    AcceptedTOS = false,
                     RoleType = Roles.UNASSIGNED
                 };
                 List<Claim> newClaims = _claimService.GetUserClaims(Roles.UNASSIGNED, request.Email).Data;
@@ -84,6 +89,7 @@ namespace ParkingMaster.Manager.Managers
                 {
                     response.Data = null;
                     response.Error = createUserResponse.Error;
+                    _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                     return response;
                 }
 
@@ -93,6 +99,8 @@ namespace ParkingMaster.Manager.Managers
 
             // Create session for user
             ResponseDTO<Session> sessionResponseDTO = _sessionService.CreateSession(userDTO.Id);
+
+            _loggerService.LogAction(LogConstants.ACTION_LOGIN, userDTO.SsoId.ToString(), sessionResponseDTO.Data.SessionId.ToString());
 
             return sessionResponseDTO;
         }
@@ -110,7 +118,7 @@ namespace ParkingMaster.Manager.Managers
             catch
             {
                 response.Data = null;
-                response.Error = "Invalid Token: " + sessionId;
+                response.Error = ErrorStrings.REQUEST_FORMAT;
                 return response;
             }
 
@@ -125,21 +133,28 @@ namespace ParkingMaster.Manager.Managers
                 return response;
             }
 
-            // Get user data from data store
-            ResponseDTO<UserAccountDTO> userResponseDTO = _userManagementService.GetUserByUserId(sessionResponseDTO.Data.Id);
-            if(userResponseDTO.Data == null)
+            // Return response info
+            response.Data = new ParkingMasterFrontendDTO();
+
+            // Check if user is currently disabled
+            if (!sessionResponseDTO.Data.UserAccount.IsActive)
             {
-                response.Data = null;
-                response.Error = userResponseDTO.Error;
-                return response;
+                response.Data.Id = sessionResponseDTO.Data.UserAccount.Id.ToString();
+                response.Data.Username = sessionResponseDTO.Data.UserAccount.Username;
+                response.Data.Role = "disabled";
+                response.Data.AcceptedTOS = sessionResponseDTO.Data.UserAccount.AcceptedTOS;
+                response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
+            }
+            else
+            {
+                response.Data.Id = sessionResponseDTO.Data.UserAccount.Id.ToString();
+                response.Data.Username = sessionResponseDTO.Data.UserAccount.Username;
+                response.Data.Role = sessionResponseDTO.Data.UserAccount.RoleType;
+                response.Data.AcceptedTOS = sessionResponseDTO.Data.UserAccount.AcceptedTOS;
+                response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
             }
 
-            response.Data = new ParkingMasterFrontendDTO();
-            // Return response info
-            response.Data.Id = userResponseDTO.Data.Id.ToString();
-            response.Data.Username = userResponseDTO.Data.Username;
-            response.Data.Role = userResponseDTO.Data.RoleType;
-            response.Data.Token = sessionResponseDTO.Data.SessionId.ToString();
+            
             return response;
         }
     }

@@ -188,6 +188,11 @@ namespace ParkingMaster.Services.Services
             return _userGateway.GetUserClaims(username);
         }
 
+        public ResponseDTO<bool> AcceptTOS(Guid id)
+        {
+            return _userGateway.AcceptTOS(id);
+        }
+
         public ResponseDTO<List<UserAccountDTO>> GetAllUsers()
         {
             throw new NotImplementedException();
