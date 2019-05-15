@@ -18,6 +18,7 @@ namespace ParkingMaster.Manager.Managers
         private IUserManagementService _userManagementService;
         private ISignatureService _signatureService;
         private IClaimService _claimService;
+        private ILoggerService _loggerService;
 
         public LoginManager()
         {
@@ -25,6 +26,7 @@ namespace ParkingMaster.Manager.Managers
             _userManagementService = new UserManagementService();
             _signatureService = new SignatureService();
             _claimService = new ClaimService();
+            _loggerService = new LoggerService();
         }
 
         public ResponseDTO<Session> SsoLogin(SsoUserRequestDTO request)
@@ -36,6 +38,7 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = null;
                 response.Error = "My signature: " + _signatureService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
+                _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                 return response;
             }
 
@@ -44,6 +47,7 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = null;
                 response.Error = ErrorStrings.OLD_SSO_REQUEST;
+                _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                 return response;
             }
 
@@ -62,6 +66,7 @@ namespace ParkingMaster.Manager.Managers
                 {
                     response.Data = null;
                     response.Error = "User email may not be null.";
+                    _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                     return response;
                 }
 
@@ -84,6 +89,7 @@ namespace ParkingMaster.Manager.Managers
                 {
                     response.Data = null;
                     response.Error = createUserResponse.Error;
+                    _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                     return response;
                 }
 
@@ -93,6 +99,8 @@ namespace ParkingMaster.Manager.Managers
 
             // Create session for user
             ResponseDTO<Session> sessionResponseDTO = _sessionService.CreateSession(userDTO.Id);
+
+            _loggerService.LogAction(LogConstants.ACTION_LOGIN, userDTO.SsoId.ToString(), sessionResponseDTO.Data.SessionId.ToString());
 
             return sessionResponseDTO;
         }

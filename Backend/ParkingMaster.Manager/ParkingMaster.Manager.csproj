@@ -47,6 +47,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\LotManagementController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\SsoController.cs" />
@@ -57,9 +58,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Managers\AnalysisDashboardManager.cs" />
     <Compile Include="Managers\Contracts\ILoginManager.cs" />
     <Compile Include="Managers\Contracts\IReservationManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
+    <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\LotManagementManager.cs" />
     <Compile Include="Managers\ReservationManager.cs" />
     <Compile Include="Managers\ResponseManager.cs" />

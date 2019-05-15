@@ -21,6 +21,7 @@ const EXTEND_RESERVATION = PARKINGMASTER_BASE_URL + '/api/reservation/extend'
 const GET_CURRENT_TOS = PARKINGMASTER_BASE_URL + '/api/tos/current'
 const ACCEPT_TOS = PARKINGMASTER_BASE_URL + '/api/tos/useraccepted'
 const SSO_LANDING = SSO_FRONTEND_URL + '/#/landing'
+const GET_ALL_LOGS = PARKINGMASTER_BASE_URL + '/api/admin/logs'
 
 export default {
   BASE_URL: PARKINGMASTER_BASE_URL,
@@ -44,5 +45,6 @@ export default {
   EXTEND_RESERVATION,
   GET_CURRENT_TOS,
   ACCEPT_TOS,
-  SSO_LANDING
+  SSO_LANDING,
+  GET_ALL_LOGS
 }

@@ -15,12 +15,14 @@ namespace ParkingMaster.Manager.Managers
         private ReservationServices _reservationServices;
         private SessionService _sessionServices;
         private AuthorizationClient _authorizationClient;
+        private ILoggerService _loggerService;
 
         public ReservationManager()
         {
             _reservationServices = new ReservationServices();
             _sessionServices = new SessionService();
             _authorizationClient = new AuthorizationClient();
+            _loggerService = new LoggerService();
         }
 
         public ResponseDTO<bool> ReserveSpot(ReservationRequestDTO request)
@@ -91,6 +93,7 @@ namespace ParkingMaster.Manager.Managers
                 SpotId = spotId
             };
 
+            _loggerService.LogAction(LogConstants.ACTION_ADD_RESERVATION, sessionDTO.Data.Id.ToString(), sessionDTO.Data.SessionId.ToString());
             return _reservationServices.ReserveSpot(reservationDTO);
         }
 
@@ -159,7 +162,7 @@ namespace ParkingMaster.Manager.Managers
                 UserId = sessionDTO.Data.UserAccount.Id,
                 SpotId = spotId
             };
-
+            _loggerService.LogAction(LogConstants.ACTION_EXTEND_RESERVATION, sessionDTO.Data.Id.ToString(), sessionDTO.Data.SessionId.ToString());
             return _reservationServices.ExtendReservation(reservationDTO);
         }
 

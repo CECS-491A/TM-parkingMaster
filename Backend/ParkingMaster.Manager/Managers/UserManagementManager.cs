@@ -20,6 +20,7 @@ namespace ParkingMaster.Manager.Managers
         private SessionService _sessionService;
         private ClaimService _claimService;
         private AuthorizationClient _authorizationClient;
+        private ILoggerService _loggerService;
 
         public UserManagementManager()
         {
@@ -27,6 +28,7 @@ namespace ParkingMaster.Manager.Managers
             _sessionService = new SessionService();
             _claimService = new ClaimService();
             _authorizationClient = new AuthorizationClient();
+            _loggerService = new LoggerService();
         }
         /*
         // I am considering moving context.SaveChanges() here, but maybe later
@@ -404,7 +406,8 @@ namespace ParkingMaster.Manager.Managers
                 response.Error = ErrorStrings.REQUEST_FORMAT;
                 return response;
             }
-
+            var userId = _sessionService.GetSession(sessionId);
+            _loggerService.LogAction(LogConstants.ACTION_LOGOUT, userId.Data.Id.ToString(), request.Token);
             return _sessionService.DeleteSession(sessionId);
         }
     }
