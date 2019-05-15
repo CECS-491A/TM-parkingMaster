@@ -1,5 +1,6 @@
 ﻿using ParkingMaster.Models.Models;
 using ParkingMaster.Models.DTO;
+using ParkingMaster.Models.Constants;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,6 +25,22 @@ namespace ParkingMaster.DataAccess.Migrations.UserDbContext
 		protected override void Seed(ParkingMaster.DataAccess.UserContext context)
 		{
 
+        }
+
+        private void CreateAdminFromExistingUser(ParkingMaster.DataAccess.UserContext context)
+        {
+            var userGateway = new UserGateway(context);
+            Guid adminId = new Guid("C0651A73-D8A4-4FDB-A5B3-032E4F9442EA");
+            List<Claim> claimsList = new List<Claim>();
+
+            UserAccountDTO adminAccount = userGateway.GetUserByUserId(adminId).Data;
+            claimsList.Add(new Claim("Action", "UsageDashboard"));
+            claimsList.Add(new Claim("Action", "ViewLogs"));
+            claimsList.Add(new Claim("User", adminAccount.Username));
+
+            adminAccount.RoleType = Roles.ADMINISTRATOR;
+            userGateway.SetRole(adminAccount);
+            userGateway.ResetUserClaims(adminId, claimsList);
         }
 
         private void ResetDatabaseProductionSeed(ParkingMaster.DataAccess.UserContext context)
