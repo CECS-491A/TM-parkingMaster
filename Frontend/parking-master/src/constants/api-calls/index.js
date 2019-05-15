@@ -7,6 +7,7 @@ const LOT_DELETION = PARKINGMASTER_BASE_URL + '/api/lot/delete'
 const VEHICLE_REGISTRATION = PARKINGMASTER_BASE_URL + '/api/vehicle/register'
 const SESSION_CHECK = PARKINGMASTER_BASE_URL + '/api/user/session'
 const SSO_LOGIN = SSO_BASE_URL + '/api/users/login'
+const DELETE_FROM_PARKINGMASTER = PARKINGMASTER_BASE_URL + '/api/user/delete'
 const DELETE_FROM_APPS = PARKINGMASTER_BASE_URL + '/api/user/deleteallapps'
 const GET_ALL_LOTS = PARKINGMASTER_BASE_URL + '/api/lotManagement/getAllLots'
 const GET_ALL_LOTS_BY_OWNER = PARKINGMASTER_BASE_URL + '/api/lotManagement/getAllLotsByOwner'
@@ -29,6 +30,7 @@ export default {
   VEHICLE_REGISTRATION,
   SSO_LOGIN,
   SESSION_CHECK,
+  DELETE_FROM_PARKINGMASTER,
   DELETE_FROM_APPS,
   GET_ALL_LOTS,
   GET_ALL_LOTS_BY_OWNER,

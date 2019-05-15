@@ -16,6 +16,25 @@ namespace ParkingMaster.Manager.Controllers
     public class SsoController : ApiController
     {
         [HttpPost]
+        [Route("")]
+        public IHttpActionResult SsoLogin([FromBody, Required] SsoUserRequestDTO request)
+        {
+            LoginManager loginManager = new LoginManager();
+
+            ResponseDTO<Session> response = loginManager.SsoLogin(request);
+
+            if (response.Data != null)
+            {
+                return Redirect("http://localhost:8080/#/login?token=" + response.Data.SessionId.ToString("D"));
+            }
+            else
+            {
+                ResponseDTO<HttpStatusCode> statusResponse = ResponseManager.ConvertErrorToStatus(response.Error);
+                return Content(statusResponse.Data, statusResponse.Error);
+            }
+        }
+
+        [HttpPost]
         [Route("api/sso/deleteuser")]
         public IHttpActionResult DeleteUser([FromBody, Required] SsoUserRequestDTO request)
         {
