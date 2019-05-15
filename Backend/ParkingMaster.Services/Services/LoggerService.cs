@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using ParkingMaster.Services.Services;
 using ParkingMaster.Models.Models;
+using ParkingMaster.Models.DTO;
 using ParkingMaster.Models.Constants;
 using Newtonsoft.Json;
+using System.Net.Mail;
 
 using System.IO;
+using System.Net;
 
 namespace ParkingMaster.Services.Services
 {
@@ -41,24 +44,32 @@ namespace ParkingMaster.Services.Services
 
         }
 
-        public List<Log> GetLogs()
+        public ResponseDTO<List<Log>> GetLogs()
         {
-            var logs = new List<Log>();
-            if (new FileInfo(LogConstants.PATH_LOG_CURRENT).Length != 0)
+            try
             {
-                using (StreamReader sr = new StreamReader(LogConstants.PATH_LOG_CURRENT))
+                var logs = new List<Log>();
+                if (new FileInfo(LogConstants.PATH_LOG_CURRENT).Length != 0)
                 {
-                    var file = sr.ReadToEnd();
-                    logs = JsonConvert.DeserializeObject<List<Log>>(file);
+                    using (StreamReader sr = new StreamReader(LogConstants.PATH_LOG_CURRENT))
+                    {
+                        var file = sr.ReadToEnd();
+                        logs = JsonConvert.DeserializeObject<List<Log>>(file);
+                    }
                 }
+                return new ResponseDTO<List<Log>>()
+                {
+                    Data = logs
+                };
             }
-            return logs;
-        }
-
-        public List<Log> GetLogs(string month, string year)
-        {
-            var logs = new List<Log>();
-            return logs;
+            catch (Exception ex)
+            {
+                return new ResponseDTO<List<Log>>()
+                {
+                    Data = null,
+                    Error = "Failed to get logs"
+                };
+            }
         }
 
         public bool LogError(string action, string userId, string errorSite, string errorMsg, string sessId)
@@ -74,11 +85,10 @@ namespace ParkingMaster.Services.Services
                 SessionId = sessId
             };
 
-            var logList = GetLogs();
-            logList.Add(log);
-
-            logWritten = WriteToLogFile(logList);
-
+            ResponseDTO<List<Log>> logList = GetLogs();
+            logList.Data.Add(log);
+            logWritten = WriteToLogFile(logList.Data);
+            //TODO: If failed to write to log, increment failErrorLog counter
             return logWritten;
             
         }
@@ -95,10 +105,9 @@ namespace ParkingMaster.Services.Services
                 Description = action + " occured. " + errorMsg // FailLogin occured
             };
 
-            var logList = GetLogs();
-            logList.Add(log);
-
-            logWritten = WriteToLogFile(logList);
+            ResponseDTO<List<Log>> logList = GetLogs();
+            logList.Data.Add(log);
+            logWritten = WriteToLogFile(logList.Data);
 
             return logWritten;
         }
@@ -116,12 +125,34 @@ namespace ParkingMaster.Services.Services
                 SessionId = sessId
             };
 
-            var logList = GetLogs();
-            logList.Add(log);
-
-            logWritten = WriteToLogFile(logList);
-
+            ResponseDTO<List<Log>> logList = GetLogs();
+            logList.Data.Add(log);
+            logWritten = WriteToLogFile(logList.Data);
+            //TODO: If failed to write to log, increment failTelemetryLog counter
             return logWritten;
+        }
+
+        public bool EmailAdmin()
+        {
+            MailMessage mailMessage = new MailMessage("fourmuskateers2018@gmail.com", "assoths@gmail.com");
+            mailMessage.Subject = "This is a test email";
+            mailMessage.Body = "This is a test email. Please reply if you receive it.";
+
+            SmtpClient smtpClient = new SmtpClient();
+            //smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.EnableSsl = true;
+            smtpClient.Host = "smtp.gmail.com";
+            smtpClient.Port = 587;
+
+            smtpClient.Credentials = new System.Net.NetworkCredential()
+            {
+                UserName = "fourmuskateers2018@gmail.com",
+                Password = "a3h5j3l1"
+            };
+            //smtpClient.UseDefaultCredentials = false;
+            smtpClient.Send(mailMessage);
+
+            return true;
         }
     }
 }

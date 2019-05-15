@@ -38,7 +38,7 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = null;
                 response.Error = "My signature: " + _signatureService.Sign(request.GetStringToSign()) + " Compared to: " + request.Signature;
-                _loggerService.LogBadRequest(LogConstants.FAIL_LOGIN, request.SsoUserId, response.Error);
+                _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                 return response;
             }
 
@@ -47,7 +47,7 @@ namespace ParkingMaster.Manager.Managers
             {
                 response.Data = null;
                 response.Error = ErrorStrings.OLD_SSO_REQUEST;
-                _loggerService.LogBadRequest(LogConstants.FAIL_LOGIN, request.SsoUserId, response.Error);
+                _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                 return response;
             }
 
@@ -66,7 +66,7 @@ namespace ParkingMaster.Manager.Managers
                 {
                     response.Data = null;
                     response.Error = "User email may not be null.";
-                    _loggerService.LogBadRequest(LogConstants.FAIL_LOGIN, userDTO.SsoId.ToString(), response.Error);
+                    _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                     return response;
                 }
 
@@ -89,7 +89,7 @@ namespace ParkingMaster.Manager.Managers
                 {
                     response.Data = null;
                     response.Error = createUserResponse.Error;
-                    _loggerService.LogBadRequest(LogConstants.FAIL_LOGIN, userDTO.SsoId.ToString(), response.Error);
+                    _loggerService.LogError(LogConstants.FAIL_LOGIN, request.SsoUserId, "", response.Error, "");
                     return response;
                 }
 

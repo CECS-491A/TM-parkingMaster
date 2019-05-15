@@ -18,6 +18,7 @@ const ROLE_SELECTION = PARKINGMASTER_BASE_URL + '/api/user/setrole'
 const GET_ALL_RESERVATIONS = PARKINGMASTER_BASE_URL + '/api/reservation/getall'
 const EXTEND_RESERVATION = PARKINGMASTER_BASE_URL + '/api/reservation/extend'
 const SSO_LANDING = SSO_FRONTEND_URL + '/#/landing'
+const GET_ALL_LOGS = PARKINGMASTER_BASE_URL + '/api/admin/logs'
 
 export default {
   BASE_URL: PARKINGMASTER_BASE_URL,
@@ -38,5 +39,6 @@ export default {
   ROLE_SELECTION,
   GET_ALL_RESERVATIONS,
   EXTEND_RESERVATION,
-  SSO_LANDING
+  SSO_LANDING,
+  GET_ALL_LOGS
 }

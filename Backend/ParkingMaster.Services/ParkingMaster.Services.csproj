@@ -63,6 +63,7 @@
     <Compile Include="Services\ReservationServices.cs" />
     <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\SignatureService.cs" />
+    <Compile Include="Services\UADService.cs" />
     <Compile Include="Services\UserManagementService.cs" />
     <Compile Include="Services\VehicleService.cs" />
   </ItemGroup>

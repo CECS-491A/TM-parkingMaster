@@ -57,6 +57,7 @@ export default {
       lotDelete: {name: 'Lot Deletion', class: 'lot-deletion-tile', value: '/LotDeletion'},
       roleChoice: {name: 'Choose Account Type', class: 'role-choice-tile', value: '/RoleChoice'},
       logoutTile: {name: 'Logout', class: 'logout-tile', value: 'logout'},
+      logs: {name: 'Log Dashboard', class: 'log-dashboard-tile', value: '/LogDashboard'},
       items: [],
       authorized: false
     }
@@ -86,12 +87,18 @@ export default {
         this.lotDelete,
         this.logoutTile]
       this.authorized = true
-    } else if (this.role === 'unassigned') {
+    }
+    else if (this.role === 'admin') {
+      this.items = [this.logs]
+      this.authorized = true
+    } 
+    else if (this.role === 'unassigned') {
       this.items = [this.home,
         this.userDash,
         this.roleChoice]
       this.authorized = true
-    } else {
+    } 
+    else {
       this.items = [this.home]
       this.authorized = false
     }

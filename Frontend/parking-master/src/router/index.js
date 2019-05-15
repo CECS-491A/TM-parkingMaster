@@ -9,6 +9,8 @@ import VehicleRegistration from '@/views/VehicleRegistration'
 import ParkingLotDashboard from '@/views/ParkingLotDashboard'
 import UserDashboard from '@/views/UserDashboard'
 import RoleChoice from '@/views/RoleChoice'
+import UsageDashboard from '@/Views/UsageDashboard'
+import LogDashboard from '@/Views/LogDashboard'
 
 Vue.use(Router)
 
@@ -63,6 +65,16 @@ export default new Router({
       path: '/RoleChoice',
       name: 'roleChoice',
       component: RoleChoice
+    },
+    {
+      path: '/UsageDashboard',
+      name: 'usageDashboard',
+      component: UsageDashboard
+    },
+    {
+      path: '/LogDashboard',
+      name: 'logDashboard',
+      component: LogDashboard
     }
   ]
 })
